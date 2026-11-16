@@ -28,7 +28,6 @@ const TARGET_FPS = 40;
 const MAX_PIXEL_RATIO = 1.5;
 const TARGET_MODEL_HEIGHT = 2.0; // 归一化后的模型世界高度，取景稳定
 const CAMERA_FOV = 30;
-const CAMERA_MARGIN = 1.12;
 
 const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
 
@@ -107,8 +106,6 @@ export function createPomPomStage(options) {
         : null,
       blinkChannels: blinkTargets.length,
       armsPosedDown,
-      bindBounds: debugBounds.bind || null,
-      posedBounds: debugBounds.posed || null,
       hasAnimation: !!(mixer && mixer._actions && mixer._actions.length),
     }),
     /** 调试：列出模型全部 blendShape 通道名。 */
@@ -168,7 +165,6 @@ export function createPomPomStage(options) {
   let basePivotY = TARGET_MODEL_HEIGHT * 0.5;
 
   let armsPosedDown = 0;
-  const debugBounds = {};
   let lastRenderAt = 0;
   let startedAt = 0;
   let nextBlinkAt = 0;
@@ -334,7 +330,7 @@ export function createPomPomStage(options) {
   function applyBlink(t) {
     if (!blinkTargets.length) return;
     if (blinkStartedAt < 0) {
-      if (nextBlinkAt === 0) nextBlinkAt = t + 1.4 + Math.random() * 1.6;
+      if (nextBlinkAt === 0) nextBlinkAt = t + 2.2 + Math.random() * 2.0;
       if (t >= nextBlinkAt) {
         blinkStartedAt = t;
         blinkDouble = Math.random() < 0.22;
@@ -381,12 +377,9 @@ export function createPomPomStage(options) {
     const tan = Math.tan(fovRad / 2);
     const heightDist = modelHeight / (2 * tan);
     const widthDist = modelWidth / (2 * tan * aspect);
-    // 宽容器：完整入镜；竖长栏（游戏内左栏比例 <0.75）：优先填满高度，允许两侧
-    // 裁掉一点披风/帽檐（游戏内立绘也是这样裁的），但保证不裁掉手臂。
-    const dist =
-      aspect >= 0.75
-        ? Math.max(heightDist, widthDist) * CAMERA_MARGIN
-        : Math.max(heightDist * 1.05, widthDist * 0.94);
+    // 优先填满高度；容器足够宽时完整入镜，竖长栏（游戏内左栏）允许左右裁掉
+    // 少量披风/帽檐——游戏内立绘本来就是这样裁的，手臂与头部保持在画面内。
+    const dist = Math.max(heightDist * 1.06, widthDist * (aspect >= 0.75 ? 0.88 : 0.8));
     camera.position.set(0, basePivotY, dist);
     camera.lookAt(0, basePivotY, 0);
     camera.near = Math.max(0.05, dist * 0.02);
@@ -582,6 +575,16 @@ export function createPomPomStage(options) {
   }
 
   // ---- 模型后处理 ---------------------------------------------------------
+  /** FBXLoader 会把骨骼名里的空格转成下划线（"Left arm" -> "Left_arm"），按归一化名查找。 */
+  function findBone(root, canonicalName) {
+    const target = canonicalName.replace(/\s+/g, "_");
+    let found = null;
+    root.traverse((object) => {
+      if (found || !object.isBone) return;
+      if (object.name.replace(/\s+/g, "_") === target) found = object;
+    });
+    return found;
+  }
   function prepareModel(THREE, fbx) {
     fbx.updateMatrixWorld(true);
 
@@ -614,17 +617,14 @@ export function createPomPomStage(options) {
     });
     if (meshCount === 0) throw new Error("FBX 中未找到可渲染网格");
 
-    // 2) 绑定姿势若是 T-pose / A-pose，把手臂自然放下（只做一次，不参与每帧）
+    // 2) 绑定姿势若是 T-pose，把手臂自然放下（A-pose 保持原样；只做一次，不参与每帧）
     poseArmsDown(THREE, fbx);
 
     // 3) 归一化尺寸 + 居中，适配任意 FBX 单位（本模型 UnitScaleFactor=100）
     // 注意：Box3.setFromObject 用的是 bind-pose 的 geometry.boundingBox，
     // 若绑定姿势是 T-pose 而我们把手臂放下了，包围盒会偏宽导致取景过远。
     // 这里按蒙皮后的真实顶点位置算一次精确包围盒（~1 万顶点，毫秒级）。
-    const bindBox = new THREE.Box3().setFromObject(fbx);
-    debugBounds.bind = [bindBox.min.toArray(), bindBox.max.toArray()];
     const bounds = computePosedBounds(THREE, fbx);
-    debugBounds.posed = [bounds.min.toArray(), bounds.max.toArray()];
     if (!Number.isFinite(bounds.min.x) || bounds.isEmpty()) throw new Error("模型包围盒为空");
     const size = bounds.getSize(new THREE.Vector3());
     const center = bounds.getCenter(new THREE.Vector3());
@@ -648,7 +648,7 @@ export function createPomPomStage(options) {
     }
 
     // 4) 头部骨骼轻微摆动的基准
-    const head = fbx.getObjectByName("Head");
+    const head = findBone(fbx, "Head");
     if (head) headBone = { bone: head, base: head.quaternion.clone() };
 
     // 5) 眨眼：模型无 AnimationClip，靠 shape key「まばたき」
@@ -708,8 +708,8 @@ export function createPomPomStage(options) {
     const wristPos = new THREE.Vector3();
     let posed = 0;
     for (const pair of pairs) {
-      const upper = fbx.getObjectByName(pair.upper);
-      const wrist = fbx.getObjectByName(pair.wrist) || fbx.getObjectByName(pair.elbow);
+      const upper = findBone(fbx, pair.upper);
+      const wrist = findBone(fbx, pair.wrist) || findBone(fbx, pair.elbow);
       if (!upper || !wrist) continue;
       upper.getWorldPosition(shoulderPos);
       wrist.getWorldPosition(wristPos);
@@ -724,7 +724,7 @@ export function createPomPomStage(options) {
       while (delta < -Math.PI) delta += Math.PI * 2;
       const axis = new THREE.Vector3(0, 0, 1);
       upper.rotateOnWorldAxis(axis, delta);
-      const elbow = fbx.getObjectByName(pair.elbow);
+      const elbow = findBone(fbx, pair.elbow);
       if (elbow) elbow.rotateOnWorldAxis(axis, pair.sign * 0.16);
       fbx.updateMatrixWorld(true);
       posed += 1;

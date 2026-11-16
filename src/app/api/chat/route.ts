@@ -23,8 +23,14 @@ export async function POST(req: Request) {
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
+      let closed = false;
       const send = (event: AgentEvent) => {
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+        if (closed) return;
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+        } catch {
+          closed = true; // 客户端已断开
+        }
       };
       try {
         const abort = new AbortController();
@@ -36,7 +42,13 @@ export async function POST(req: Request) {
       } catch (err) {
         send({ type: "error", message: err instanceof Error ? err.message : String(err) });
       } finally {
-        controller.close();
+        if (!closed) {
+          try {
+            controller.close();
+          } catch {
+            /* 已关闭 */
+          }
+        }
       }
     },
   });
@@ -45,7 +57,6 @@ export async function POST(req: Request) {
     headers: {
       "content-type": "text/event-stream; charset=utf-8",
       "cache-control": "no-cache, no-transform",
-      connection: "keep-alive",
       "x-accel-buffering": "no",
     },
   });

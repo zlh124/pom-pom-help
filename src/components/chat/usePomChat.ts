@@ -122,7 +122,12 @@ export function usePomChat() {
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         setError(message);
-        patchLast({ status: "error", content: fullSafeMessage(message) });
+        patchLast((m) => ({
+          status: "error",
+          content: m.content
+            ? `${m.content}\n\n（帕姆的通讯被列车隧道切断了……开拓者再发一次试试帕！）`
+            : fullSafeMessage(message),
+        }));
         setStatus("error");
       } finally {
         busyRef.current = false;

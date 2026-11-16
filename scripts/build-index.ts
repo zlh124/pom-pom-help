@@ -171,6 +171,10 @@ function main() {
     });
   }
 
+  // 外部内容表（content='chunks'）不会随 INSERT 自动更新，必须显式 rebuild
+  db.exec("INSERT INTO chunks_fts(chunks_fts) VALUES('rebuild');");
+  console.log("FTS 索引已重建");
+
   console.log(`文档：${docs.length}，分块：${chunkCount}`);
   const byKind = db.prepare("SELECT kind, COUNT(*) c FROM chunks GROUP BY kind ORDER BY c DESC").all() as Array<{ kind: string; c: number }>;
   for (const row of byKind) console.log(`  ${row.kind}: ${row.c}`);

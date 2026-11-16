@@ -103,6 +103,7 @@ export default function QuizFlow({ week }: { week: QuizWeek }) {
 
       {phase === "question" ? (
         <div className="flex flex-1 flex-col">
+          <div className="flex flex-1 flex-col justify-center">
           <div className="mb-3 flex items-center justify-between text-[12px] text-white/45">
             <span>
               第 <span className="text-gold">{index + 1}</span> / {total} 题
@@ -162,7 +163,8 @@ export default function QuizFlow({ week }: { week: QuizWeek }) {
             ) : null}
           </div>
 
-          <div className="mt-auto pt-4 text-center">
+          </div>
+          <div className="pt-4 text-center">
             <a href="/" className="text-[11px] text-white/30 underline decoration-white/20 underline-offset-4 hover:text-gold">
               暂时离开（去问帕姆帮帮）— 进度会保留
             </a>

@@ -454,8 +454,8 @@ async function captureWithCdp({ chrome, url, out, width, height, timeoutMs, debu
         console.log("[record-pompom] debug 读取失败:", error.message);
       }
     }
-    // 再等 1200ms 让海报淡出过渡结束，避免截图出现重影
-    await sleep(1200);
+    // 再等 650ms 让海报淡出过渡结束（poster fade 500ms），同时避开首次眨眼
+    await sleep(650);
     const shot = await send("Page.captureScreenshot", { format: "png", fromSurface: true });
     await fs.writeFile(out, Buffer.from(shot.data, "base64"));
     try {
