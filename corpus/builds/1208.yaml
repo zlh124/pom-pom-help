@@ -1,0 +1,67 @@
+# 符玄 build v1（community：BWIKI 攻略页施工中，套装依据官方遗器使用率快照）
+id: builds/1208
+type: build
+title: 符玄 · 配装与配队
+character_id: "1208"
+character_name: 符玄
+position: 生存
+version: "4.7"
+tags: [存护, 量子, 生存]
+confidence: community
+sources:
+  - https://wiki.biligame.com/sr/符玄
+  - https://wiki.biligame.com/sr/角色遗器使用率
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+
+relics:
+  sets:
+    - {name: 宝命长存的莳者, pieces: 4, note: 生命套；使用率快照中常以 2+2 出现}
+    - {name: 折断的龙骨, pieces: 2, note: 使用率快照中最常用位面饰品}
+  main_stats:
+    - {slot: 躯干, stats: [生命值百分比]}
+    - {slot: 脚部, stats: [速度]}
+    - {slot: 位面球, stats: [生命值百分比]}
+    - {slot: 连结绳, stats: [能量恢复效率, 生命值百分比]}
+  sub_stats: [速度, 生命值百分比, 效果抵抗]
+  alternatives:
+    - {name: 戍卫风雪的铁卫, pieces: 2, note: 2+2（莳者 + 铁卫）为快照中占比最高的组合}
+    - {name: 骇域漫游的信使, pieces: 2, note: 2+2（莳者 + 信使）速度向过渡}
+    - {name: 不老者的仙舟, pieces: 2, note: 内圈备选}
+
+light_cones:
+  - {name: 她已闭上双眼, rank: S, obtain: 限定跃迁（专武）, note: 毕业光锥}
+  - {name: 朗道的选择, rank: A, obtain: 4星跃迁, note: 四星替代，防御向}
+  - {name: 余生的第一天, rank: B, obtain: 4星跃迁, note: 四星替代，减伤向}
+
+teams:
+  - archetype: 直伤单核
+    slots:
+      - {name: 镜流, role: 主C}
+      - {name: 花火, role: 辅助}
+      - {name: 阮•梅, role: 辅助}
+      - {name: 符玄, role: 生存}
+    note: 替全队分摊伤害并提高暴击率，适合长线作战
+  - archetype: 三拐一（高压替代）
+    slots:
+      - {name: 丹恒•饮月, role: 主C}
+      - {name: 花火, role: 辅助}
+      - {name: 知更鸟, role: 辅助}
+      - {name: 符玄, role: 生存}
+    note: 需要生存位时替换一位拐
+
+body: |
+  ## 定位
+  量子存护：替全队分摊伤害、降低我方受到的伤害并提高暴击率；生命值低于一定比例时回复自身生命。
+
+  ## 遗器
+  外圈「宝命长存的莳者」4 件（快照中常以 2+2 出现）；内圈「折断的龙骨」2 件。
+  主词条生命衣、速度鞋、生命球、充能/生命绳；副词条速度 > 生命 > 效果抵抗。
+
+  ## 光锥
+  专武「她已闭上双眼」；四星「朗道的选择」「余生的第一天」。
+
+  ## 置信度说明
+  BWIKI「符玄/攻略」页为空模板。套装来自官方遗器使用率统计快照（2024-12-09），
+  可能滞后于 4.7 版本。符玄更适合长线作战。

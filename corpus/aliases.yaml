@@ -1,0 +1,140 @@
+# 别名词典增量 v1
+# 作用：把玩家黑话 / 繁简 / 错字映射到 StarRailRes 标准名，供检索与实体对齐使用。
+# 规则：
+#   1. canonical 必须与 StarRailRes index_min/cn/characters.json 的 name 完全一致（含「•」间隔号）。
+#   2. id 优先使用 StarRailRes 角色 id；不确定或数据集未收录时留空字符串，并在 note 说明。
+#   3. 歧义别名（如「火花」「冷面小青龙」）必须写 note，禁止静默合并。
+id: aliases
+type: aliases
+title: 别名词典增量（社区黑话 / 繁简 / 错字）
+version: "4.7"
+tags: [别名, 黑话, 实体对齐]
+confidence: curated
+sources:
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/nickname.json
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json
+  - https://wiki.biligame.com/sr/花火
+  - https://wiki.biligame.com/sr/帕姆
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+
+aliases:
+  # ---- 社区黑话 / 角色昵称（StarRailRes nickname + BWIKI 角色页交叉核对）----
+  - {alias: "龙丹", canonical: "丹恒•饮月", kind: character, id: "1213", note: "社区黑话：饮月形态的丹恒"}
+  - {alias: "饮月君", canonical: "丹恒•饮月", kind: character, id: "1213"}
+  - {alias: "饮月", canonical: "丹恒•饮月", kind: character, id: "1213"}
+  - {alias: "冷面大青龙", canonical: "丹恒•饮月", kind: character, id: "1213"}
+  - {alias: "丹宝", canonical: "丹恒•饮月", kind: character, id: "1213", note: "风堇对丹恒•饮月的称呼"}
+  - {alias: "冷面小青龙", canonical: "丹恒", kind: character, id: "1002", note: "也常被用来指丹恒•饮月，需结合上下文判断"}
+  - {alias: "闷葫芦", canonical: "丹恒", kind: character, id: "1002"}
+  - {alias: "龙尊", canonical: "白露", kind: character, id: "1211", note: "持明龙尊；丹恒相关语境中也出现，优先按上下文"}
+  - {alias: "小神医", canonical: "白露", kind: character, id: "1211"}
+  - {alias: "衔药龙女", canonical: "白露", kind: character, id: "1211"}
+  - {alias: "卡妈", canonical: "卡芙卡", kind: character, id: "1005"}
+  - {alias: "小板鸭", canonical: "银狼", kind: character, id: "1006"}
+  - {alias: "酷鸭", canonical: "银狼", kind: character, id: "1006"}
+  - {alias: "狼尊", canonical: "银狼", kind: character, id: "1006"}
+  - {alias: "大鸭", canonical: "布洛妮娅", kind: character, id: "1101"}
+  - {alias: "大板鸭", canonical: "布洛妮娅", kind: character, id: "1101"}
+  - {alias: "兰德鸭", canonical: "布洛妮娅", kind: character, id: "1101"}
+  - {alias: "鸭鸭", canonical: "布洛妮娅", kind: character, id: "1101", note: "一般指布洛妮娅；银狼别称是小板鸭"}
+  - {alias: "火子姐", canonical: "花火", kind: character, id: "1306", note: "花火娃娃家具「可爱火子姐」得名；不是姬子"}
+  - {alias: "花火大师", canonical: "花火", kind: character, id: "1306"}
+  - {alias: "欢愉主", canonical: "开拓者（欢愉）", kind: character, id: "", note: "4.x 开拓者命途形态；StarRailRes 暂未收录对应 id"}
+  - {alias: "记忆主", canonical: "开拓者（记忆）", kind: character, id: "8007", note: "记忆命途开拓者；8007/8008 分男女，按队伍中实际形态取 id"}
+  - {alias: "同谐主", canonical: "开拓者（同谐）", kind: character, id: "8005"}
+  - {alias: "虚数主", canonical: "开拓者（同谐）", kind: character, id: "8005", note: "同谐开拓者的属性为虚数"}
+  - {alias: "火主", canonical: "开拓者（存护）", kind: character, id: "8003"}
+  - {alias: "物主", canonical: "开拓者（毁灭）", kind: character, id: "8001"}
+  - {alias: "爷", canonical: "开拓者", kind: character, id: "", note: "玩家对开拓者的通用戏称，命途形态需结合上下文"}
+  - {alias: "星爷", canonical: "开拓者", kind: character, id: "", note: "玩家戏称，常指开拓者本人"}
+  - {alias: "灰牡丹", canonical: "开拓者", kind: character, id: ""}
+  - {alias: "银河球棒侠", canonical: "开拓者", kind: character, id: ""}
+  - {alias: "萨姆", canonical: "流萤", kind: character, id: "1310", note: "流萤的机甲 SAM；玩家常用「萨姆」代指流萤"}
+  - {alias: "萤火虫", canonical: "流萤", kind: character, id: "1310"}
+  - {alias: "义父", canonical: "真理医生", kind: character, id: "1305"}
+  - {alias: "拉帝奥教授", canonical: "真理医生", kind: character, id: "1305"}
+  - {alias: "石膏头男人", canonical: "真理医生", kind: character, id: "1305"}
+  - {alias: "软妹", canonical: "阮•梅", kind: character, id: "1303"}
+  - {alias: "梅神", canonical: "阮•梅", kind: character, id: "1303"}
+  - {alias: "阮梅", canonical: "阮•梅", kind: character, id: "1303", note: "输入法常省略间隔号「•」"}
+  - {alias: "天才俱乐部#81", canonical: "阮•梅", kind: character, id: "1303"}
+  - {alias: "丑小鸭", canonical: "黑天鹅", kind: character, id: "1307"}
+  - {alias: "神秘出手女", canonical: "黑天鹅", kind: character, id: "1307"}
+  - {alias: "芽衣", canonical: "黄泉", kind: character, id: "1308", note: "同位体梗（雷电芽衣），非本作角色名，仅在玩家语境使用"}
+  - {alias: "周天哥", canonical: "星期日", kind: character, id: "1313"}
+  - {alias: "符卿", canonical: "符玄", kind: character, id: "1208", note: "景元对符玄的称呼"}
+  - {alias: "符太卜", canonical: "符玄", kind: character, id: "1208"}
+  - {alias: "太卜大人", canonical: "符玄", kind: character, id: "1208"}
+  - {alias: "Type-C", canonical: "符玄", kind: character, id: "1208"}
+  - {alias: "无罅飞光", canonical: "镜流", kind: character, id: "1212", note: "镜流称号"}
+  - {alias: "萌嘤身", canonical: "镜流", kind: character, id: "1212"}
+  - {alias: "大姐姐", canonical: "镜流", kind: character, id: "1212", note: "彦卿对镜流的称呼，语境有限"}
+  - {alias: "点刀哥", canonical: "刃", kind: character, id: "1205"}
+  - {alias: "应星", canonical: "刃", kind: character, id: "1205", note: "刃的本名（剧情称呼）"}
+  - {alias: "云骑将军", canonical: "景元", kind: character, id: "1204"}
+  - {alias: "景元元", canonical: "景元", kind: character, id: "1204"}
+  - {alias: "屑狐狸", canonical: "停云", kind: character, id: "1202"}
+  - {alias: "李大枕头", canonical: "素裳", kind: character, id: "1206"}
+  - {alias: "司舵", canonical: "驭空", kind: character, id: "1207"}
+  - {alias: "马彦卿", canonical: "彦卿", kind: character, id: "1209"}
+  - {alias: "小桂子", canonical: "桂乃芬", kind: character, id: "1210"}
+  - {alias: "桂师傅", canonical: "桂乃芬", kind: character, id: "1210"}
+  - {alias: "青总", canonical: "青雀", kind: character, id: "1201"}
+  - {alias: "富婆", canonical: "艾丝妲", kind: character, id: "1009"}
+  - {alias: "黑塔女士", canonical: "黑塔", kind: character, id: "1013", note: "与「大黑塔」（1401）不是同一角色"}
+  - {alias: "小三月", canonical: "三月七", kind: character, id: "1001"}
+  - {alias: "冷面小粉龙", canonical: "三月七", kind: character, id: "1001"}
+  - {alias: "赵相机", canonical: "三月七", kind: character, id: "1001"}
+  - {alias: "杰哥", canonical: "杰帕德", kind: character, id: "1104"}
+  - {alias: "玲宝", canonical: "玲可", kind: character, id: "1110"}
+  - {alias: "史瓦罗", canonical: "克拉拉", kind: character, id: "1107", note: "克拉拉的守护者史瓦罗，常被当作克拉拉代称"}
+  - {alias: "深蓝帅哥", canonical: "桑博", kind: character, id: "1108"}
+  - {alias: "漆黑的虎克大人", canonical: "虎克", kind: character, id: "1109"}
+  - {alias: "尾巴", canonical: "藿藿", kind: character, id: "1217", note: "藿藿的尾巴「尾巴大爷」；单独说「尾巴」也可能指配音梗"}
+  - {alias: "小怂包", canonical: "藿藿", kind: character, id: "1217"}
+  - {alias: "抹茶小蛋糕", canonical: "藿藿", kind: character, id: "1217"}
+  - {alias: "主教", canonical: "罗刹", kind: character, id: "1203"}
+  - {alias: "判官大人", canonical: "雪衣", kind: character, id: "1214"}
+  - {alias: "寒冷乌鸦", canonical: "寒鸦", kind: character, id: "1215"}
+  - {alias: "花火", canonical: "花火", kind: character, id: "1306", note: "标准名"}
+  # ---- 错字 / 输入法变体 ----
+  - {alias: "卡夫卡", canonical: "卡芙卡", kind: character, id: "1005", note: "常见错字"}
+  - {alias: "希尔", canonical: "希儿", kind: character, id: "1102", note: "常见错字"}
+  - {alias: "霍霍", canonical: "藿藿", kind: character, id: "1217", note: "常见错字"}
+  - {alias: "静流", canonical: "镜流", kind: character, id: "1212", note: "常见错字"}
+  - {alias: "火花", canonical: "火花", kind: character, id: "1501", note: "注意：4.x 另一位火属性五星「火花」（1501），与同谐「花火」（1306）不是同一角色"}
+  # ---- 繁体 / 异体字 ----
+  - {alias: "丹恆", canonical: "丹恒", kind: character, id: "1002"}
+  - {alias: "丹恆•飲月", canonical: "丹恒•饮月", kind: character, id: "1213"}
+  - {alias: "飲月君", canonical: "丹恒•饮月", kind: character, id: "1213"}
+  - {alias: "鏡流", canonical: "镜流", kind: character, id: "1212"}
+  - {alias: "銀狼", canonical: "银狼", kind: character, id: "1006"}
+  - {alias: "黃泉", canonical: "黄泉", kind: character, id: "1308"}
+  - {alias: "黑天鵝", canonical: "黑天鹅", kind: character, id: "1307"}
+  - {alias: "知更鳥", canonical: "知更鸟", kind: character, id: "1309"}
+  - {alias: "緹寶", canonical: "缇宝", kind: character, id: "1403"}
+  - {alias: "布洛妮婭", canonical: "布洛妮娅", kind: character, id: "1101"}
+  - {alias: "傑帕德", canonical: "杰帕德", kind: character, id: "1104"}
+  - {alias: "希兒", canonical: "希儿", kind: character, id: "1102"}
+  - {alias: "停雲", canonical: "停云", kind: character, id: "1202"}
+  - {alias: "羅剎", canonical: "罗刹", kind: character, id: "1203"}
+  - {alias: "馭空", canonical: "驭空", kind: character, id: "1207"}
+  - {alias: "彥卿", canonical: "彦卿", kind: character, id: "1209"}
+  - {alias: "寒鴉", canonical: "寒鸦", kind: character, id: "1215"}
+  - {alias: "銀枝", canonical: "银枝", kind: character, id: "1302"}
+  - {alias: "真理醫生", canonical: "真理医生", kind: character, id: "1305"}
+  - {alias: "雲璃", canonical: "云璃", kind: character, id: "1221"}
+  - {alias: "飛霄", canonical: "飞霄", kind: character, id: "1220"}
+  - {alias: "亂破", canonical: "乱破", kind: character, id: "1317"}
+  - {alias: "波提歐", canonical: "波提欧", kind: character, id: "1315"}
+  - {alias: "忘歸人", canonical: "忘归人", kind: character, id: "1225"}
+  - {alias: "靈砂", canonical: "灵砂", kind: character, id: "1222"}
+  - {alias: "風堇", canonical: "风堇", kind: character, id: "1409"}
+  - {alias: "長夜月", canonical: "长夜月", kind: character, id: "1413"}
+  - {alias: "昔漣", canonical: "昔涟", kind: character, id: "1415"}
+  - {alias: "萬敵", canonical: "万敌", kind: character, id: "1404"}
+  - {alias: "賽飛兒", canonical: "赛飞儿", kind: character, id: "1406"}
+  - {alias: "阿格萊雅", canonical: "阿格莱雅", kind: character, id: "1402"}
+  - {alias: "丹恆•騰荒", canonical: "丹恒•腾荒", kind: character, id: "1414"}
+  - {alias: "開拓者", canonical: "开拓者", kind: character, id: ""}

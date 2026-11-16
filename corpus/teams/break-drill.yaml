@@ -1,0 +1,42 @@
+# 常规击破队 v1（community：击破机制 + 官方遗器使用率推导）
+id: teams/break-drill
+type: team
+title: 常规击破队
+archetype: 常规击破
+version: "4.7"
+tags: [击破, 波提欧, 乱破, 削韧]
+confidence: community
+sources:
+  - https://wiki.biligame.com/sr/弱点击破教学
+  - https://wiki.biligame.com/sr/角色遗器使用率
+  - https://wiki.biligame.com/sr/流萤/攻略
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+
+core: 以击破伤害为主、超击破为辅的击破队：快速削韧打出弱点击破，用击破伤害与击破异常收尾。
+
+slots:
+  - {name: 波提欧, role: 主C}
+  - {name: 开拓者•同谐, role: 增益}
+  - {name: 阮•梅, role: 辅助}
+  - {name: 灵砂, role: 生存}
+
+variants:
+  - {note: 主C可换 乱破（智识群攻击破），对群环境更舒服}
+  - {note: 生存位可换 加拉赫，平稳削韧更稳}
+  - {note: 没有同谐主时，可用 忘归人 提供击破增益，但超击破转化能力不同}
+
+body: |
+  ## 核心思路
+  常规击破与超击破不同：先靠削韧打出弱点击破，再吃击破触发伤害与属性异常。
+  全队堆击破特攻与速度，保证稳定快速破韧。
+
+  ## 站位与分工
+  波提欧：物理巡猎击破C，单体削韧强。
+  开拓者•同谐：提供击破特攻/击破效率，并把部分击破转化为超击破。
+  阮•梅：击破效率+抗性穿透+行动延后。
+  灵砂：治疗与追加攻击，兼顾削韧。
+
+  ## 注意
+  此配队为社区通用共识（BWIKI 未给出该完整阵容），置信度 community。
+  击破伤害与击破特攻、削韧值、敌方韧性相关，配装前先读机制页。

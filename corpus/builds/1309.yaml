@@ -1,0 +1,67 @@
+# 知更鸟 build v1（来源：BWIKI 角色攻略页，更新时间 2.8；数值以游戏内为准）
+id: builds/1309
+type: build
+title: 知更鸟 · 配装与配队
+character_id: "1309"
+character_name: 知更鸟
+position: 辅助
+version: "4.7"
+tags: [同谐, 物理, 辅助, 追击]
+confidence: curated
+sources:
+  - https://wiki.biligame.com/sr/知更鸟/攻略
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+
+relics:
+  sets:
+    - {name: 幽锁深牢的系囚, pieces: 2, note: 2+2 攻击套之一（与快枪手/勇烈/凯歌同属攻击 2 件套）}
+    - {name: 野穗伴行的快枪手, pieces: 2, note: 2+2 攻击套之一}
+    - {name: 生命的翁瓦克, pieces: 2, note: 内圈位面饰品：提前行动，辅助全队}
+  main_stats:
+    - {slot: 躯干, stats: [攻击力百分比]}
+    - {slot: 脚部, stats: [攻击力百分比]}
+    - {slot: 位面球, stats: [攻击力百分比, 物理属性伤害提高]}
+    - {slot: 连结绳, stats: [能量恢复效率]}
+  sub_stats: [速度, 攻击力百分比, 生命值百分比, 防御力百分比]
+  alternatives:
+    - {name: 风举云飞的勇烈, pieces: 2, note: 攻击 2 件套替代}
+    - {name: 凯歌祝捷的英豪, pieces: 2, note: 攻击 2 件套替代}
+
+light_cones:
+  - {name: 夜色流光溢彩, rank: S, obtain: 限定跃迁（专武）, note: 增益效果契合机制}
+  - {name: 但战斗还未结束, rank: A, obtain: 常驻跃迁 / 星芒兑换, note: 提供回能与较高基础攻击力}
+  - {name: 镂月裁云之意, rank: A, obtain: 4星跃迁, note: 需凹回能效果}
+  - {name: 轮契, rank: B, obtain: 3星跃迁, note: 回能强但基础攻击力极低}
+
+teams:
+  - archetype: 追击队
+    slots:
+      - {name: 飞霄, role: 主C}
+      - {name: 托帕&账账, role: 副C}
+      - {name: 知更鸟, role: 辅助}
+      - {name: 砂金, role: 生存}
+    note: 追击频率高，终结技让全队立即行动集中爆发
+  - archetype: 三拐一
+    slots:
+      - {name: 白厄, role: 主C}
+      - {name: 刻律德菈, role: 增益}
+      - {name: 星期日, role: 增益}
+      - {name: 知更鸟, role: 辅助}
+    note: 知更鸟为泛用群拐，注意充能轴
+
+body: |
+  ## 定位
+  物理同谐辅助，追击队拐力最强，非追击队也是强力群辅。终结技让全队立即行动，
+  但需要先排好速度轴与充能轴，比较吃操作理解。
+
+  ## 遗器
+  2+2 攻击套（幽锁深牢的系囚 / 野穗伴行的快枪手 / 风举云飞的勇烈 / 凯歌祝捷的英豪任选其二），
+  内圈「生命的翁瓦克」。主词条攻击衣、攻击鞋、攻击球、充能绳；副词条速度 > 攻击 > 生存。
+
+  ## 光锥
+  专武「夜色流光溢彩」；常驻「但战斗还未结束」；四星「镂月裁云之意」。
+
+  ## 注意
+  终结技期间免疫控制类负面效果，效果抵抗与双暴词条不重要；全队行动后立刻开大收益最高。

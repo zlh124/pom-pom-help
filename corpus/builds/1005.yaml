@@ -1,0 +1,70 @@
+# 卡芙卡 build v1（来源：BWIKI 角色攻略页，更新时间 4.0；数值以游戏内为准）
+id: builds/1005
+type: build
+title: 卡芙卡 · 配装与配队
+character_id: "1005"
+character_name: 卡芙卡
+position: 副C
+version: "4.7"
+tags: [虚无, 雷, DoT, 辅C]
+confidence: curated
+sources:
+  - https://wiki.biligame.com/sr/卡芙卡/攻略
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+
+relics:
+  sets:
+    - {name: 晨昏交界的翔鹰, pieces: 4, note: 引爆辅C 流派：靠终结技拉条提高引爆频率}
+    - {name: 沉陆海域露莎卡, pieces: 2, note: 内圈位面饰品}
+  main_stats:
+    - {slot: 躯干, stats: [效果命中, 攻击力百分比]}
+    - {slot: 脚部, stats: [速度]}
+    - {slot: 位面球, stats: [雷属性伤害提高, 攻击力百分比]}
+    - {slot: 连结绳, stats: [能量恢复效率]}
+  sub_stats: [效果命中（未达 75% 时）, 速度, 攻击力百分比, 效果命中（达标后）]
+  alternatives:
+    - {name: 幽锁深牢的系囚, pieces: 4, note: 经典副C 流派：走自身输出}
+    - {name: 生命的翁瓦克, pieces: 2, note: 内圈备选}
+    - {name: 繁星竞技场, pieces: 2, note: 经典副C 内圈备选}
+    - {name: 停转的萨尔索图, pieces: 2, note: 经典副C 内圈备选}
+
+light_cones:
+  - {name: 谎言在风中飘扬, rank: S, obtain: 限定跃迁（光锥池）, note: 引爆辅C 毕业：速度与减防}
+  - {name: 只需等待, rank: S, obtain: 限定跃迁（专武）, note: 经典副C 毕业：增伤、速度及额外触电}
+  - {name: 新手任务开始前, rank: A, obtain: 活动获取, note: 四星毕业：高额效果命中与回能}
+  - {name: 晚安与睡颜, rank: A, obtain: 4星跃迁, note: 四星毕业：高额增伤}
+  - {name: 那无数个春天, rank: A, obtain: 限定跃迁（光锥池）, note: 效果命中与易伤}
+  - {name: 孤独的疗愈, rank: B, obtain: 常驻跃迁 / 星芒兑换, note: 对群特化，DoT 增伤与回能}
+
+teams:
+  - archetype: 持续伤害（DoT）
+    slots:
+      - {name: 黑天鹅, role: 主C}
+      - {name: 卡芙卡, role: 副C}
+      - {name: 阮•梅, role: 辅助}
+      - {name: 藿藿, role: 生存}
+    note: 卡芙卡负责引爆队友 DoT，全队效果命中瞄准 75% 档
+  - archetype: 黄泉混搭
+    slots:
+      - {name: 黄泉, role: 主C}
+      - {name: 卡芙卡, role: 副C}
+      - {name: 椒丘, role: 辅助}
+      - {name: 砂金, role: 生存}
+    note: 非 2 魂黄泉凑虚无队友的混伤队，现已较少使用
+
+body: |
+  ## 定位
+  雷属性虚无，DoT 体系的引爆器：能立即触发队友的持续伤害，4.0 加强后还能为效果命中达标的队友提供攻击力加成。
+  自身 DoT 占比不高，通常作为辅C 培养。
+
+  ## 遗器
+  引爆辅C：外圈「晨昏交界的翔鹰」4 件；经典副C：外圈「幽锁深牢的系囚」4 件。
+  主词条效果命中/攻击衣、速度鞋、雷伤球、充能（或攻击）绳。
+
+  ## 光锥
+  引爆辅C 用「谎言在风中飘扬」；经典副C 用「只需等待」；四星「新手任务开始前」「晚安与睡颜」。
+
+  ## 注意
+  效果命中 75% 是吃满加强加成的关键档位；速度决定引爆频率，比单纯堆攻击力更实用。

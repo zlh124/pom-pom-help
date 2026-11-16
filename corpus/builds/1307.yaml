@@ -1,0 +1,66 @@
+# 黑天鹅 build v1（community：BWIKI 攻略页施工中，套装依据官方遗器使用率快照）
+id: builds/1307
+type: build
+title: 黑天鹅 · 配装与配队
+character_id: "1307"
+character_name: 黑天鹅
+position: 主C
+version: "4.7"
+tags: [虚无, 风, DoT, 主C]
+confidence: community
+sources:
+  - https://wiki.biligame.com/sr/黑天鹅
+  - https://wiki.biligame.com/sr/角色遗器使用率
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+
+relics:
+  sets:
+    - {name: 幽锁深牢的系囚, pieces: 4, note: 官方遗器使用率快照中占比最高（DoT套）}
+    - {name: 泛银河商业公司, pieces: 2, note: 使用率快照中最常用位面饰品}
+  main_stats:
+    - {slot: 躯干, stats: [效果命中]}
+    - {slot: 脚部, stats: [速度]}
+    - {slot: 位面球, stats: [风属性伤害提高, 攻击力百分比]}
+    - {slot: 连结绳, stats: [攻击力百分比, 能量恢复效率]}
+  sub_stats: [效果命中, 攻击力百分比, 速度]
+  alternatives:
+    - {name: 苍穹战线格拉默, pieces: 2, note: 内圈备选}
+    - {name: 太空封印站, pieces: 2, note: 内圈备选}
+
+light_cones:
+  - {name: 重塑时光之忆, rank: S, obtain: 限定跃迁（专武）, note: 毕业光锥}
+  - {name: 晚安与睡颜, rank: A, obtain: 4星跃迁, note: 四星替代：增伤}
+  - {name: 延长记号, rank: B, obtain: 4星跃迁, note: 四星替代：DoT 向}
+
+teams:
+  - archetype: 持续伤害（DoT）
+    slots:
+      - {name: 黑天鹅, role: 主C}
+      - {name: 卡芙卡, role: 副C}
+      - {name: 阮•梅, role: 辅助}
+      - {name: 藿藿, role: 生存}
+    note: 卡芙卡引爆、黑天鹅叠【奥迹】，长线作战
+  - archetype: 持续伤害（多C）
+    slots:
+      - {name: 海瑟音, role: 主C}
+      - {name: 卡芙卡, role: 副C}
+      - {name: 黑天鹅, role: 辅助}
+      - {name: 藿藿, role: 生存}
+    note: 多 DoT 手阵容，层数与引爆都更稳
+
+body: |
+  ## 定位
+  风属性虚无DoT主C：通过多种方式施加【奥迹】，根据层数触发额外效果，越打越痛。
+
+  ## 遗器
+  外圈「幽锁深牢的系囚」4 件（官方使用率快照最高）；内圈「泛银河商业公司」2 件。
+  主词条效果命中衣、速度鞋、风伤球、攻击/充能绳；副词条效果命中 > 攻击 > 速度。
+
+  ## 光锥
+  专武「重塑时光之忆」；四星「晚安与睡颜」「延长记号」。
+
+  ## 置信度说明
+  BWIKI「黑天鹅/攻略」页为空模板。套装来自官方遗器使用率统计快照（2024-12-09），
+  可能滞后于 4.7 版本；效果命中档位以当前技能说明为准。

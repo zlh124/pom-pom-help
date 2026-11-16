@@ -1,0 +1,47 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next
+.next/
+out/
+next-env.d.ts
+
+# data & build artifacts (语料/索引/抓取结果都不入库)
+data/
+*.sqlite
+*.sqlite-journal
+*.db
+
+# env
+.env
+.env.local
+.env.*.local
+
+# logs & misc
+*.log
+.DS_Store
+tsconfig.tsbuildinfo
+coverage/
+
+# pnpm/npm local caches
+.npm-cache/
+.pnpm-store/
+
+# corpus 抓取缓存（不进仓库）
+corpus/.cache/
+
+# 第三方模型/参考截图不随仓库分发（版权归原作者）
+assets/model/
+refs/
+*.zip
+
+# 本地工作目录
+.xdg/
+public/model/.preview/
+docs/screens/debug.png
+
+# 模型文件与贴图不随仓库分发（版权归原作者；本地自行放入 public/model/）
+public/model/PomPom.fbx
+public/model/textures/
+public/model/pompom-poster.png

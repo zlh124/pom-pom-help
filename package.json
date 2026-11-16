@@ -1,0 +1,37 @@
+{
+  "name": "pompom-helphelp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "「帕姆帮帮」非官方网页复刻 — 崩坏：星穹铁道 AI 列车长助手",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "data:sync": "tsx scripts/sync-data.ts",
+    "wiki:sync": "tsx scripts/sync-wiki.ts",
+    "corpus:check": "tsx scripts/check-corpus.ts",
+    "corpus:index": "tsx scripts/build-index.ts",
+    "data:all": "pnpm data:sync && pnpm wiki:sync && pnpm corpus:index"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "three": "0.187.0",
+    "yaml": "2.9.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.5",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.4",
+    "@types/three": "0.187.0",
+    "playwright-core": "^1.65.1",
+    "tailwindcss": "4.3.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}
