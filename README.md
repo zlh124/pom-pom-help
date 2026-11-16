@@ -39,6 +39,31 @@ npm run build && npm start  # http://127.0.0.1:3000
 
 开发模式：`npm run dev`。数据/索引都是可重建的 `data/`（已 gitignore）。
 
+### 评测
+
+```bash
+npm run eval            # 对本地服务跑 eval/questions.yaml（40 题），输出 eval/report.md
+npm run eval -- --filter=relic --limit=5
+```
+
+指标：实体命中 / 关键词命中 / 卡片命中 / 引用率 / 人设（客服腔禁用词）/ 未收录诚实率 / P50·P95 延迟。
+
+**v0.1 基线（2026-11，40 题）**：通过 40/40 · 实体命中 100% · 关键词命中 94.6% · 卡片 100% · 引用 100% · 诚实降级 100% · 人设 100%（0 次客服腔）· P50 2.9s / P95 5.7s。详见 [eval/report.md](eval/report.md)。
+
+### Docker
+
+```bash
+npm run data:all                     # 宿主机先准备好 data/（含 sqlite）
+docker build -t pompom-helphelp .
+docker run --rm -p 3000:3000 --env-file .env.local -v "$PWD/data:/app/data" pompom-helphelp
+```
+
+容器内 `corpus/` 随镜像分发（语料即代码）；`data/` 建议挂载卷，避免每次重建索引。健康检查：`GET /api/health`。
+
+> 注：仓库内提供了 Dockerfile 与 CI（typecheck/corpus:check/build），但开发机没有 Docker daemon，**镜像构建尚未在本机实测**；如遇问题请反馈。
+
+移动端：390×844 实测无横向溢出、输入框常驻底部（截图 `docs/screens/mobile-home.png`）。
+
 ## 目录
 
 ```

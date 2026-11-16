@@ -28,11 +28,12 @@ type WikiRow = {
   game_version: string | null;
 };
 
+/** 统一各种间隔号/标点：· • ・ ‧ ∙ 等一律去掉，避免「阮·梅」vs「阮•梅」匹配失败 */
 function normalizeName(input: string): string {
   return input
     .normalize("NFKC")
     .toLowerCase()
-    .replace(/[\s\u3000·・「」『』“”"'()（）\[\]【】]/g, "");
+    .replace(/[\s\u3000·•・‧∙「」『』“”"'()（）\[\]【】、,，.。!！?？:：;；]/g, "");
 }
 
 function cleanWikiText(input: string | null | undefined): string {
@@ -47,32 +48,64 @@ function cleanWikiText(input: string | null | undefined): string {
 
 export type EntityMatch = { kind: string; id: string; name: string; alias?: string };
 
+type AliasRow = { alias: string; kind: string; target_id: string; canonical: string };
+
+let aliasCache: AliasRow[] | null = null;
+
+function getAliasRows(): AliasRow[] {
+  if (aliasCache) return aliasCache;
+  const db = openStructured();
+  aliasCache = db.prepare("SELECT alias, kind, target_id, canonical FROM aliases").all() as AliasRow[];
+  return aliasCache;
+}
+
+/**
+ * 实体解析（确定性，不调 LLM）
+ * 规则：精确别名 > 精确官名 > 前缀/包含，且优先短名 —— 避免「银狼」被
+ * 变体角色「银狼LV.999」、「砂金」被「砂金•戏浪」抢走。
+ */
 export function resolveEntity(query: string): EntityMatch | null {
   const db = openStructured();
-  const normalized = normalizeName(query);
-  if (!normalized) return null;
+  const nq = normalizeName(query);
+  if (!nq) return null;
 
-  const rows = db
-    .prepare(
-      `SELECT a.alias, a.kind, a.target_id, a.canonical FROM aliases a
-       WHERE a.alias = ? OR a.canonical = ? OR a.alias LIKE ? ORDER BY length(a.alias) DESC LIMIT 8`,
-    )
-    .all(query.trim(), query.trim(), `%${query.trim()}%`) as Array<{ alias: string; kind: string; target_id: string; canonical: string }>;
+  const rows = getAliasRows();
+  const kindRank: Record<string, number> = { character: 0, light_cone: 1, relic_set: 2 };
 
-  if (rows.length) {
-    // 优先角色，其次光锥/遗器
-    const order = ["character", "light_cone", "relic_set"];
-    rows.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind) || b.alias.length - a.alias.length);
-    const hit = rows[0];
+  const pick = (list: AliasRow[]): AliasRow | null => {
+    if (!list.length) return null;
+    return [...list].sort((a, b) => {
+      const ka = kindRank[a.kind] ?? 9;
+      const kb = kindRank[b.kind] ?? 9;
+      if (ka !== kb) return ka - kb;
+      // 同类型：别名越短越可能是玩家真正想指的角色（变体名通常更长）
+      if (a.alias.length !== b.alias.length) return a.alias.length - b.alias.length;
+      return a.target_id.localeCompare(b.target_id);
+    })[0];
+  };
+
+  // 1) 精确别名
+  let hit = pick(rows.filter((r) => normalizeName(r.alias) === nq));
+  // 2) 精确官名
+  if (!hit) hit = pick(rows.filter((r) => normalizeName(r.canonical) === nq));
+  // 3) 别名前缀 / 包含（优先短名）
+  if (!hit) hit = pick(rows.filter((r) => normalizeName(r.alias).startsWith(nq) && nq.length >= 2));
+  if (!hit) hit = pick(rows.filter((r) => normalizeName(r.alias).includes(nq) && nq.length >= 2));
+
+  if (hit) {
     return { kind: hit.kind, id: hit.target_id, name: hit.canonical, alias: hit.alias };
   }
 
+  // 4) 兜底：角色表模糊
   const chars = db.prepare("SELECT id, name FROM characters").all() as Array<{ id: string; name: string }>;
-  const found = chars.find((c) => normalizeName(c.name) === normalized || normalizeName(c.name).includes(normalized));
+  const found =
+    chars.find((c) => normalizeName(c.name) === nq) ??
+    chars.find((c) => normalizeName(c.name).startsWith(nq) && nq.length >= 2) ??
+    chars.find((c) => normalizeName(c.name).includes(nq) && nq.length >= 2);
   if (found) return { kind: "character", id: found.id, name: found.name };
 
   const lcs = db.prepare("SELECT id, name FROM light_cones").all() as Array<{ id: string; name: string }>;
-  const lc = lcs.find((c) => normalizeName(c.name) === normalized || normalizeName(c.name).includes(normalized));
+  const lc = lcs.find((c) => normalizeName(c.name) === nq) ?? lcs.find((c) => normalizeName(c.name).includes(nq) && nq.length >= 2);
   if (lc) return { kind: "light_cone", id: lc.id, name: lc.name };
 
   return null;
@@ -86,7 +119,13 @@ function getCharacterRow(idOrName: string): CharRow | null {
   if (row) return row;
   const all = db.prepare("SELECT id,name,rarity,path,element,version FROM characters").all() as CharRow[];
   const target = normalizeName(idOrName);
-  return all.find((c) => normalizeName(c.name).includes(target) || target.includes(normalizeName(c.name))) ?? null;
+  if (!target) return null;
+  return (
+    all.find((c) => normalizeName(c.name) === target) ??
+    all.find((c) => normalizeName(c.name).startsWith(target) && target.length >= 2) ??
+    all.find((c) => normalizeName(c.name).includes(target) && target.length >= 2) ??
+    null
+  );
 }
 
 function getWikiRow(charId: string): WikiRow | null {
@@ -201,7 +240,8 @@ export function getCharacter(input: string): ToolResult {
 
 export function getBuild(input: string): ToolResult {
   const entity = resolveEntity(input);
-  const row = getCharacterRow(entity?.kind === "character" ? entity.id : input);
+  const row =
+    (entity?.kind === "character" ? getCharacterRow(entity.id) : null) ?? getCharacterRow(input) ?? (entity ? getCharacterRow(entity.name) : null);
   if (!row) return { ok: false, summary: `没有找到角色「${input}」，无法查询配装。` };
   const corpus = loadCorpus();
   const doc = findBuild(corpus, { characterId: row.id, characterName: row.name });
@@ -232,7 +272,8 @@ export function getBuild(input: string): ToolResult {
 
 export function getTeam(input: string): ToolResult {
   const entity = resolveEntity(input);
-  const row = entity?.kind === "character" ? getCharacterRow(entity.id) : getCharacterRow(input);
+  const row =
+    (entity?.kind === "character" ? getCharacterRow(entity.id) : null) ?? getCharacterRow(input) ?? (entity ? getCharacterRow(entity.name) : null);
   const corpus = loadCorpus();
   const teams = findTeams(corpus, { characterName: row?.name ?? input, archetype: row ? undefined : input, limit: 3 });
   if (!teams.length) {
@@ -262,7 +303,8 @@ export function getTeam(input: string): ToolResult {
 
 export function getMaterials(input: string): ToolResult {
   const entity = resolveEntity(input);
-  const row = getCharacterRow(entity?.kind === "character" ? entity.id : input);
+  const row =
+    (entity?.kind === "character" ? getCharacterRow(entity.id) : null) ?? getCharacterRow(input) ?? (entity ? getCharacterRow(entity.name) : null);
   if (!row) return { ok: false, summary: `没有找到角色「${input}」。` };
   const db = openStructured();
   const wiki = getWikiRow(row.id);

@@ -13,7 +13,8 @@
     "wiki:sync": "tsx scripts/sync-wiki.ts",
     "corpus:check": "tsx scripts/check-corpus.ts",
     "corpus:index": "tsx scripts/build-index.ts",
-    "data:all": "pnpm data:sync && pnpm wiki:sync && pnpm corpus:index"
+    "data:all": "pnpm data:sync && pnpm wiki:sync && pnpm corpus:index",
+    "eval": "node scripts/eval.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

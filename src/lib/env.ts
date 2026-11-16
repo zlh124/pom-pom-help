@@ -49,7 +49,7 @@ export const config = {
     return v === "enabled" ? "enabled" : "disabled";
   },
   get maxToolRounds() {
-    return Number(env().MAX_TOOL_ROUNDS ?? 2);
+    return Number(env().MAX_TOOL_ROUNDS ?? 3);
   },
   get maxChunks() {
     return Number(env().MAX_CHUNKS ?? 8);

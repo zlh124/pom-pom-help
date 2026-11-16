@@ -1,0 +1,1857 @@
+{
+  "summary": {
+    "at": "2026-11-16T16:20:19.289Z",
+    "base": "http://127.0.0.1:3000",
+    "total": 40,
+    "passed": 40,
+    "passRate": 1,
+    "entityRate": 1,
+    "keywordAvg": 0.9460784313725492,
+    "cardRate": 1,
+    "citationRate": 1,
+    "honestRate": 1,
+    "personaRate": 1,
+    "forbiddenCount": 0,
+    "latency": {
+      "p50": 2.921,
+      "p95": 5.66,
+      "max": 7.622
+    }
+  },
+  "results": [
+    {
+      "question": {
+        "id": "relic-1310",
+        "category": "relic",
+        "question": "流萤带什么遗器？",
+        "expect_entity": "流萤",
+        "expect_keywords": [
+          "荡除蠹灾的铁骑",
+          "劫火莲灯铸炼宫"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "流萤的遗器帕姆查好啦～\n\n**荡除蠹灾的铁骑4件 + 劫火莲灯铸炼宫2件**\n主词条：躯干攻击力%、脚部速度、位面球攻击力%、连结绳击破特攻\n副词条：速度 > 击破特攻 > 攻击力%\n\n光锥优先「梦应归于何处」，配队走超击破队最顺～需要材料清单也跟帕姆说一声！",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/流萤/攻略",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 130,
+        "latency": 7.622,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1308",
+        "category": "relic",
+        "question": "黄泉的遗器怎么搭配？",
+        "expect_entity": "黄泉",
+        "expect_keywords": [
+          "死水深潜的先驱",
+          "出云显世与高天神国"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "黄泉的遗器帕姆查好啦～\n\n**死水深潜的先驱4件 + 出云显世与高天神国2件**。\n主词条：躯干暴击率/暴击伤害，脚部攻击力%或速度，位面球雷伤/攻击力%，连结绳攻击力%。\n副词条：暴击率 > 暴击伤害 > 攻击力%。\n\n光锥优先「行于流逝的岸」，其次「晚安与睡颜」。配队走虚无队，帕姆把模板也放上来了，乘客自己看～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/黄泉/攻略",
+            "url": "https://wiki.biligame.com/sr/黄泉/攻略"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 158,
+        "latency": 2.51,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1306",
+        "category": "relic",
+        "question": "花火应该带什么遗器和光锥？",
+        "expect_entity": "花火",
+        "expect_keywords": [
+          "骇域漫游的信使",
+          "折断的龙骨",
+          "游戏尘寰"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "花火带**骇域漫游的信使4件 + 折断的龙骨2件**哦～\n\n主词条：躯干暴伤、脚部速度、位面球生命%、连结绳能量恢复效率；副词条速度 > 暴伤 > 生命%。\n\n光锥：游戏尘寰(S) > 舞！舞！舞！(A) > 镂月裁云之意(B)。帕姆提醒一句，速度堆高些她才能多给队友拉条～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/花火",
+            "url": "https://wiki.biligame.com/sr/花火"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 3,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 137,
+        "latency": 2.681,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1213",
+        "category": "relic",
+        "question": "丹恒·饮月的遗器怎么选？",
+        "expect_entity": "丹恒",
+        "expect_keywords": [
+          "野穗伴行的快枪手",
+          "繁星竞技场"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆帮你查好啦～\n\n饮月带**野穗伴行的快枪手4件 + 繁星竞技场2件**。躯干选暴击率或暴击伤害，脚部攻击力百分比或速度，位面球虚数属性伤害，连结绳攻击力百分比。副词条优先暴击率 > 暴击伤害 > 攻击力百分比。\n\n光锥推荐「比阳光更明亮的」，四星可用「在蓝天下」或「记一位星神的陨落」。配队走直伤单核，花火、阮•梅、符玄那套很稳～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/丹恒•饮月",
+            "url": "https://wiki.biligame.com/sr/丹恒•饮月"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 167,
+        "latency": 2.972,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1006",
+        "category": "relic",
+        "question": "银狼带什么遗器？",
+        "expect_entity": "银狼",
+        "expect_keywords": [
+          "繁星璀璨的天才",
+          "泛银河商业公司"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "银狼的遗器帕姆查到啦～\n\n**繁星璀璨的天才4件 + 泛银河商业公司2件**\n主词条：躯干效果命中、脚部速度、位面球量子伤害/攻击、连结绳能量恢复效率\n副词条：效果命中 > 速度 > 暴击率 > 暴击伤害\n\n光锥推荐「雨一直下」，平民可用「新手任务开始前」。配队可以走黄泉虚无队哦～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/银狼",
+            "url": "https://wiki.biligame.com/sr/银狼"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 141,
+        "latency": 2.417,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1304",
+        "category": "relic",
+        "question": "砂金的遗器怎么带？",
+        "expect_entity": "砂金",
+        "expect_keywords": [
+          "净庭教宗的圣骑士",
+          "折断的龙骨"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "砂金是虚数存护，遗器推荐**净庭教宗的圣骑士4件 + 折断的龙骨2件**。\n\n主词条：躯干防御力%、脚部速度、位面球防御力%、连结绳防御力%或能量恢复效率。副词条优先速度 > 防御力%。\n\n光锥首选「命运从未公平」，其次「制胜的瞬间」。配队上他常进黄泉虚无队或追击队，帕姆觉得他挺省心的～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/砂金/攻略",
+            "url": "https://wiki.biligame.com/sr/砂金/攻略"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 144,
+        "latency": 2.921,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1309",
+        "category": "relic",
+        "question": "知更鸟的配装推荐？",
+        "expect_entity": "知更鸟",
+        "expect_keywords": [
+          "幽锁深牢的系囚",
+          "野穗伴行的快枪手",
+          "夜色流光溢彩"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "知更鸟的配装帕姆帮你查好啦～\n\n遗器用幽锁深牢的系囚2件、野穗伴行的快枪手2件和生命的翁瓦克2件；主词条选攻击力百分比，连结绳选能量恢复效率，副词条优先速度，其次攻击力百分比。光锥首选夜色流光溢彩，其次但战斗还未结束、镂月裁云之意。\n\n配队可以走追击队，也可以走三拐一，具体细节看卡片就好～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/知更鸟/攻略",
+            "url": "https://wiki.biligame.com/sr/知更鸟/攻略"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 3,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 145,
+        "latency": 2.666,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1303",
+        "category": "relic",
+        "question": "阮·梅带什么遗器？",
+        "expect_entity": "阮",
+        "expect_keywords": [
+          "流星追迹的怪盗",
+          "生命的翁瓦克"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "阮·梅的配装帕姆查到啦～\n\n遗器推荐**流星追迹的怪盗4件 + 生命的翁瓦克2件**。主词条：躯干生命值%、脚部速度、位面球生命值%或击破特攻、连结绳击破特攻。副词条优先击破特攻 > 速度 > 生命值%。\n\n光锥可以带镜中故我、记忆中的模样或舞！舞！舞！配队上超击破队和DoT队都很合适哦～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/阮•梅",
+            "url": "https://wiki.biligame.com/sr/阮•梅"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 145,
+        "latency": 2.198,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1212",
+        "category": "relic",
+        "question": "镜流的遗器和光锥怎么配？",
+        "expect_entity": "镜流",
+        "expect_keywords": [
+          "密林卧雪的猎人",
+          "此身为剑"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "镜流的配装帕姆查到啦～\n\n遗器：密林卧雪的猎人4件 + 繁星竞技场2件。躯干选暴击伤害或暴击率，脚部选攻击力百分比或速度，位面球选冰属性伤害提高，连结绳选攻击力百分比。副词条优先暴击伤害，其次暴击率，再到攻击力百分比。\n\n光锥：此身为剑（S）最优，其次秘密誓心、记一位星神的陨落。\n\n配队模板也一并给乘客看啦，需要帕姆再细说哪部分吗？",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/镜流",
+            "url": "https://wiki.biligame.com/sr/镜流"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 167,
+        "latency": 3.418,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "relic-1307",
+        "category": "relic",
+        "question": "黑天鹅的遗器推荐？",
+        "expect_entity": "黑天鹅",
+        "expect_keywords": [
+          "幽锁深牢的系囚",
+          "泛银河商业公司"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "黑天鹅的遗器推荐来啦，帕姆帮你查好了～\n\n**幽锁深牢的系囚4件 + 泛银河商业公司2件**。躯干选效果命中，脚部速度，位面球风伤或攻击，连结绳攻击或充能。副词条优先效果命中 > 攻击 > 速度。\n\n光锥的话，重塑时光之忆最合适，其次晚安与睡颜。配队走DoT队，和卡芙卡一起很搭哦～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/黑天鹅",
+            "url": "https://wiki.biligame.com/sr/黑天鹅"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 141,
+        "latency": 2.654,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-superbreak",
+        "category": "team",
+        "question": "超击破队怎么组？",
+        "expect_keywords": [
+          "流萤",
+          "阮",
+          "加拉赫"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "超击破队是流萤主C、同谐开拓者增益、阮·梅辅助、加拉赫保命这套帕！核心是堆击破特攻，让流萤打出超击破伤害～需要帕姆再讲讲遗器和光锥吗？",
+        "cards": [
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/流萤/攻略",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 3,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 67,
+        "latency": 3.533,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-acheron",
+        "category": "team",
+        "question": "黄泉队怎么配？",
+        "expect_entity": "黄泉",
+        "expect_keywords": [
+          "黄泉",
+          "佩拉",
+          "砂金"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "黄泉队帕姆帮你查好啦～\n\n**经典虚无队**：黄泉 / 椒丘 / 佩拉 / 砂金\n**高配版**：黄泉 / 银狼 / 缇宝 / 砂金\n**混搭**：黄泉 / 卡芙卡 / 椒丘 / 砂金\n\n遗器带死水深潜4件+出云显世2件，光锥优先「行于流逝的岸」。虚无队友越多，黄泉的终结技充能越顺哦～",
+        "cards": [
+          "team",
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/卡芙卡/攻略",
+            "url": "https://wiki.biligame.com/sr/卡芙卡/攻略"
+          },
+          {
+            "label": "wiki.biligame.com/sr/黄泉/攻略",
+            "url": "https://wiki.biligame.com/sr/黄泉/攻略"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 3,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 143,
+        "latency": 2.175,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-dot",
+        "category": "team",
+        "question": "持续伤害队怎么配？",
+        "expect_keywords": [
+          "黑天鹅",
+          "卡芙卡"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆帮你查到啦～\n\n**持续伤害队**：黑天鹅（主C）、卡芙卡（副C）、阮•梅（辅助）、藿藿（生存）\n\n核心思路是「持续伤害 × 引爆频率」：卡芙卡能立刻引爆队友的 DoT，把伤害提前兑现；黑天鹅负责施加和叠层。\n\n注意两点：卡芙卡 4.0 加强后，效果命中 ≥75% 的队友能吃到大量攻击力加成，配装要凑这个档位；DoT 队偏长线，短线速攻不如超击破队哦～",
+        "cards": [
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/卡芙卡/攻略",
+            "url": "https://wiki.biligame.com/sr/卡芙卡/攻略"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "忘却之庭与虚构叙事简介",
+            "url": "https://wiki.biligame.com/sr/忘却之庭"
+          },
+          {
+            "label": "超击破队",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "直伤单核队",
+            "url": "https://wiki.biligame.com/sr/镜流"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 179,
+        "latency": 4.313,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-followup",
+        "category": "team",
+        "question": "追击队有哪些成员？",
+        "expect_keywords": [
+          "飞霄",
+          "托帕",
+          "知更鸟",
+          "砂金"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆查到了！追击队是：飞霄（主C）、托帕&账账（副C）、知更鸟（辅助）、砂金（生存）。\n\n不过帕姆提醒一句，队伍搭配要看你的角色池和敌人哦～",
+        "cards": [
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/知更鸟/攻略",
+            "url": "https://wiki.biligame.com/sr/知更鸟/攻略"
+          },
+          {
+            "label": "wiki.biligame.com/sr/砂金/攻略",
+            "url": "https://wiki.biligame.com/sr/砂金/攻略"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 4,
+        "keywordsTotal": 4,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 70,
+        "latency": 2.184,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-summon",
+        "category": "team",
+        "question": "记忆召唤队怎么组？",
+        "expect_keywords": [
+          "记忆"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "记忆召唤队是：遐蝶（主C）＋长夜月（副C）＋缇宝（辅助）＋风堇（生存）。\n\n帕姆提醒一句：遐蝶的伤害几乎全靠召唤的忆灵「死龙·玻吕刻斯」，【新蕊】能量来自全队生命值变动，所以队里必须有治疗位，配装也尽量堆生命值哦～",
+        "cards": [
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/遐蝶/攻略",
+            "url": "https://wiki.biligame.com/sr/遐蝶/攻略"
+          },
+          {
+            "label": "wiki.biligame.com/sr/风堇/攻略",
+            "url": "https://wiki.biligame.com/sr/风堇/攻略"
+          },
+          {
+            "label": "黄泉虚无队",
+            "url": "https://wiki.biligame.com/sr/黄泉/攻略"
+          },
+          {
+            "label": "开拓等级、体力与开荒节奏",
+            "url": "https://wiki.biligame.com/sr/开拓等级"
+          },
+          {
+            "label": "白厄三拐一",
+            "url": "https://wiki.biligame.com/sr/白厄/攻略"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 1,
+        "keywordsTotal": 1,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 107,
+        "latency": 2.572,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-phainon",
+        "category": "team",
+        "question": "白厄怎么配队？",
+        "expect_entity": "白厄",
+        "expect_keywords": [
+          "白厄"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "白厄的配队帕姆查到啦～\n\n**三拐一**：白厄（主C）+ 刻律德菈 + 星期日 + 花火\n**平民低配**：白厄 + 停云 + 开拓者·记忆 + 阮·梅\n\n遗器走恶海逐波的船长4件 + 妖精织梦的乐园2件，躯干暴击率、脚和绳攻击力、球物理伤害，副词条暴击率优先。光锥首选黎明恰如此燃烧～\n\n需要材料清单也跟帕姆说一声！",
+        "cards": [
+          "team",
+          "relic",
+          "lightcone",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/白厄/攻略",
+            "url": "https://wiki.biligame.com/sr/白厄/攻略"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 1,
+        "keywordsTotal": 1,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 159,
+        "latency": 4.758,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-hypercarry",
+        "category": "team",
+        "question": "直伤单核队怎么配？",
+        "expect_keywords": [
+          "镜流"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆查到了！直伤单核队的通用模板是：镜流（主C）+ 花火 + 阮•梅 + 符玄（生存）。\n\n思路是「主C面板 × 增益覆盖 × 出手次数」——拉条和增伤要集中砸在主C的输出窗口里。不过这套是社区共识版，具体主C可以按你手上的角色换哦～",
+        "cards": [
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/镜流",
+            "url": "https://wiki.biligame.com/sr/镜流"
+          },
+          {
+            "label": "wiki.biligame.com/sr/符玄",
+            "url": "https://wiki.biligame.com/sr/符玄"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "忘却之庭与虚构叙事简介",
+            "url": "https://wiki.biligame.com/sr/忘却之庭"
+          },
+          {
+            "label": "超击破队",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 1,
+        "keywordsTotal": 1,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 117,
+        "latency": 2.771,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "team-break",
+        "category": "team",
+        "question": "常规击破队怎么组？",
+        "expect_keywords": [
+          "波提欧"
+        ],
+        "expect_card": "team",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆帮你查到啦～\n\n**常规击破队**：波提欧（主C）／开拓者·同谐（增益）／阮·梅（辅助）／灵砂（生存）\n\n思路是先用削韧打出弱点击破，再吃击破触发伤害和属性异常。全队堆**击破特攻和速度**，等级也要拉满——击破伤害只看等级、击破特攻、削韧值，攻击力和双暴没用哦。\n\n要是想玩超击破，主C换成流萤、生存位换加拉赫就行～",
+        "cards": [
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/弱点击破教学",
+            "url": "https://wiki.biligame.com/sr/弱点击破教学"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "wiki.biligame.com/sr/流萤/攻略",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "忘却之庭与虚构叙事简介",
+            "url": "https://wiki.biligame.com/sr/忘却之庭"
+          },
+          {
+            "label": "阮•梅 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/阮•梅"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 1,
+        "keywordsTotal": 1,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 161,
+        "latency": 2.589,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "mat-1310",
+        "category": "material",
+        "question": "流萤的养成材料在哪刷？",
+        "expect_entity": "流萤",
+        "expect_keywords": [
+          "忿火之心",
+          "同愿的遗音",
+          "忆域",
+          "拟造花萼"
+        ],
+        "expect_card": "material",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "流萤的材料清单帕姆查好啦，卡片上有完整明细～\n\n简单说：晋阶要忿火之心和忆域系列，行迹材料是月狂獠牙、狼毒锯牙、欲念碎镜这些，周本材料是同愿的遗音。刷取地点卡片里也标了，记得别把信用点花光哦，帕姆可不会借你钱！",
+        "cards": [
+          "material"
+        ],
+        "sources": [
+          {
+            "label": "BWIKI · 流萤",
+            "url": "https://wiki.biligame.com/sr/%E6%B5%81%E8%90%A4"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 4,
+        "keywordsTotal": 4,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 105,
+        "latency": 2.301,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "mat-1308",
+        "category": "material",
+        "question": "黄泉要刷什么材料？",
+        "expect_entity": "黄泉",
+        "expect_keywords": [
+          "炼形者雷枝",
+          "蛀星孕灾的旧恶",
+          "梦境"
+        ],
+        "expect_card": "material",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "黄泉的材料清单帕姆都查好啦，卡片上有～刷取地点也一并列出来了，记得先攒够信用点哦，行迹那边要三百万呢！",
+        "cards": [
+          "material"
+        ],
+        "sources": [
+          {
+            "label": "BWIKI · 黄泉",
+            "url": "https://wiki.biligame.com/sr/%E9%BB%84%E6%B3%89"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 3,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 51,
+        "latency": 2.025,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "mat-1306",
+        "category": "material",
+        "question": "花火的行迹材料在哪刷？",
+        "expect_entity": "花火",
+        "expect_keywords": [
+          "炙梦喷枪",
+          "蛀星孕灾的旧恶",
+          "拟造花萼"
+        ],
+        "expect_card": "material",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "花火的行迹材料帕姆查到啦：天外乐章×278、空际小节×138、欲念碎镜×116、印象残晶×112、思绪末屑×82，还有信用点×600万。周本要「蛀星孕灾的旧恶」，晋阶用炙梦喷枪和忆域系列。刷取地点卡片上有写，记得别把车厢地板弄脏哦～",
+        "cards": [
+          "material"
+        ],
+        "sources": [
+          {
+            "label": "BWIKI · 花火",
+            "url": "https://wiki.biligame.com/sr/%E8%8A%B1%E7%81%AB"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 3,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 116,
+        "latency": 2.606,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "mat-general",
+        "category": "material",
+        "question": "行迹材料一般去哪刷？",
+        "expect_keywords": [
+          "拟造花萼",
+          "行迹"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "行迹材料主要靠「拟造花萼」刷，一次 40 点开拓力，按角色需要的属性挑对应花萼就好。另外历战余响（周本）也会掉一些行迹材料，每周顺手清掉比较划算。要查某个角色具体缺什么材料，告诉帕姆名字就行～",
+        "cards": [],
+        "sources": [
+          {
+            "label": "开拓等级、体力与开荒节奏",
+            "url": "https://wiki.biligame.com/sr/开拓等级"
+          },
+          {
+            "label": "遗器主副词条怎么选",
+            "url": "https://wiki.biligame.com/sr/遗器"
+          },
+          {
+            "label": "花火 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/花火"
+          },
+          {
+            "label": "帕姆问问 · 2026-W47 · 味觉故障的天才",
+            "url": "https://wiki.biligame.com/sr/椒丘"
+          },
+          {
+            "label": "黑天鹅 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/黑天鹅"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 96,
+        "latency": 3.209,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-substats",
+        "category": "guide",
+        "question": "遗器主副词条怎么选？",
+        "expect_keywords": [
+          "主词条",
+          "副词条"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆得先知道你说的是哪位乘客呀～不同角色词条差很多呢：\n\n- 输出型（黄泉、镜流）：双暴衣、属性伤球，副词条双暴 > 攻击\n- 击破型（流萤）：攻击衣、击破绳，副词条速度 > 击破特攻\n- 辅助型（知更鸟）：攻击衣、充能绳，副词条速度优先\n- 生存型（砂金、符玄）：防御/生命衣，副词条速度 > 防御/生命\n\n告诉帕姆角色名，帕姆帮你查具体的～",
+        "cards": [],
+        "sources": [
+          {
+            "label": "知更鸟 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/知更鸟/攻略"
+          },
+          {
+            "label": "砂金 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/砂金/攻略"
+          },
+          {
+            "label": "黄泉 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/黄泉/攻略"
+          },
+          {
+            "label": "白厄 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/白厄/攻略"
+          },
+          {
+            "label": "遐蝶 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/遐蝶/攻略"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 0.5,
+        "keywordsHit": 1,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 172,
+        "latency": 3.307,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-break",
+        "category": "guide",
+        "question": "击破伤害是怎么算的？",
+        "expect_keywords": [
+          "击破特攻",
+          "韧性"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "击破触发伤害 ≈ 基础伤害（看角色等级）× 属性系数 × 韧性系数 × (1 + 击破特攻)；击破持续伤害 ≈ 基础伤害 × 属性持续伤害系数 × (1 + 击破特攻)，物理持续伤害按百分比生命算。\n\n所以击破队要拉等级、堆击破特攻，攻击力和双暴没用哦。还有，击破特攻≠削韧效率，别搞混啦～",
+        "cards": [],
+        "sources": [
+          {
+            "label": "击破与持续伤害机制",
+            "url": "https://wiki.biligame.com/sr/弱点击破教学"
+          },
+          {
+            "label": "流萤 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 145,
+        "latency": 2.791,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-superbreak",
+        "category": "guide",
+        "question": "超击破是什么机制？",
+        "expect_keywords": [
+          "超击破"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "超击破是击破体系的延伸机制，帕姆给你讲讲～\n\n普通击破是敌人韧性被打空时触发的那一下伤害；而**超击破**是在敌人韧性已经空了（处于击破状态）时，继续用攻击削韧，把削韧值转化成额外伤害。\n\n关键点：\n- 伤害只看**击破特攻**和**削韧值**，不吃双暴、不吃常规增伤（所以「记一位星神的陨落」那种增伤对它无效）。\n- 需要队友持续削韧，所以超击破队讲究全员 80 级、堆击破特攻。\n- 遇到锁韧性或高抗性的敌人，这套思路就不好使了，得换打法。\n\n想查具体配队的话，帕姆可以帮你调出来哦～",
+        "cards": [],
+        "sources": [
+          {
+            "label": "常规击破队",
+            "url": "https://wiki.biligame.com/sr/弱点击破教学"
+          },
+          {
+            "label": "超击破队",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "跃迁与保底怎么算",
+            "url": "https://wiki.biligame.com/sr/跃迁"
+          },
+          {
+            "label": "白厄三拐一",
+            "url": "https://wiki.biligame.com/sr/白厄/攻略"
+          },
+          {
+            "label": "持续伤害队",
+            "url": "https://wiki.biligame.com/sr/卡芙卡/攻略"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 1,
+        "keywordsTotal": 1,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 244,
+        "latency": 2.97,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-pity",
+        "category": "guide",
+        "question": "跃迁保底要多少抽？",
+        "expect_keywords": [
+          "保底",
+          90,
+          80
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆来报数～\n\n- 角色池（限定/常驻/始发）：**90 抽**内必出 5 星；始发池 8 折、最多 50 次，50 次内必出 5 星角色。\n- 光锥池：**80 抽**内必出 5 星光锥。\n- 每 10 抽至少 1 个 4 星以上；群星跃迁累计 300 抽可自选 1 名常驻 5 星。\n\n注意：90 抽只是 5 星保底，出不出 UP 要看大小保底；各池计数不互通哦。",
+        "cards": [],
+        "sources": [
+          {
+            "label": "跃迁与保底怎么算",
+            "url": "https://wiki.biligame.com/sr/跃迁"
+          },
+          {
+            "label": "忘却之庭与虚构叙事简介",
+            "url": "https://wiki.biligame.com/sr/忘却之庭"
+          },
+          {
+            "label": "开拓等级、体力与开荒节奏",
+            "url": "https://wiki.biligame.com/sr/开拓等级"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 3,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 184,
+        "latency": 2.695,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-level",
+        "category": "guide",
+        "question": "开拓等级怎么提升比较快？",
+        "expect_keywords": [
+          "开拓力",
+          "每日实训",
+          "任务"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "开拓等级靠攒**里程**涨的哦～帕姆给你划重点：\n\n- 主线任务、开拓任务给的里程最多，优先推剧情。\n- 每日实训、历战余响（周本）、模拟宇宙、忘却之庭这些也都有里程。\n- 卡等级时要完成**「宇宙均衡」突破任务**才能继续升，别忘啦。\n- 40 级前别死磕遗器本，先把角色/光锥等级和行迹补上，效率更高。\n\n帕姆提醒：均衡 3（开拓 40）之后遗器本才必出金，之前用任务送的过渡就好～",
+        "cards": [],
+        "sources": [
+          {
+            "label": "开拓等级、体力与开荒节奏",
+            "url": "https://wiki.biligame.com/sr/开拓等级"
+          },
+          {
+            "label": "超击破队",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "忘却之庭与虚构叙事简介",
+            "url": "https://wiki.biligame.com/sr/忘却之庭"
+          },
+          {
+            "label": "遗器主副词条怎么选",
+            "url": "https://wiki.biligame.com/sr/遗器"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 0.6666666666666666,
+        "keywordsHit": 2,
+        "keywordsTotal": 3,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 193,
+        "latency": 2.832,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-moc",
+        "category": "guide",
+        "question": "忘却之庭怎么玩？",
+        "expect_keywords": [
+          "忘却之庭",
+          "轮"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆来讲解一下～\n\n**忘却之庭**：开拓等级 20 级后解锁，流光忆庭信使会来列车。分「回忆」和「混沌回忆」，后者周期性更新、难度更高。\n\n要点：\n- 有**轮数限制**，超轮即失败；限轮内通关还能拿额外奖励。\n- 进本后**不能换队、不能换或升级光锥遗器、不能升级角色、不能用消耗品**，所以进本前先把配置确认好！\n- 难度和奖励**不受均衡等级影响**。\n\n配队上，混沌回忆看重**单轮爆发和生存**，得带能扛高压的生存位。和虚构叙事那种群攻清杂的思路不一样哦。\n\n具体期数和敌人以游戏内公告为准～",
+        "cards": [],
+        "sources": [
+          {
+            "label": "忘却之庭与虚构叙事简介",
+            "url": "https://wiki.biligame.com/sr/忘却之庭"
+          },
+          {
+            "label": "开拓等级、体力与开荒节奏",
+            "url": "https://wiki.biligame.com/sr/开拓等级"
+          },
+          {
+            "label": "遗器主副词条怎么选",
+            "url": "https://wiki.biligame.com/sr/遗器"
+          },
+          {
+            "label": "超击破队",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "跃迁与保底怎么算",
+            "url": "https://wiki.biligame.com/sr/跃迁"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 252,
+        "latency": 3.475,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-pf",
+        "category": "guide",
+        "question": "虚构叙事是什么玩法？",
+        "expect_keywords": [
+          "虚构叙事",
+          "分数"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "虚构叙事是周期性高难玩法，帕姆给你讲讲～\n\n每关分节点1、节点2两场战斗，要编**两支队伍**，每队选一个「荒腔走板」增益。敌人会在有限轮次里不断刷出来，造成伤害或击败敌人都能拿积分，按两场总积分结算。每42天更新一期，首通第2关还能拿玲可。\n\n和忘却之庭不同，它看的是**群攻和清杂效率**，群攻、追加攻击、击破队更吃香，生存压力小一些。开放条件是完成仙舟罗浮开拓任务、均衡等级≥3，还要读指定短信和做「游辞巧饰」。\n\n要不要帕姆帮你看看适合打虚构的队伍？",
+        "cards": [],
+        "sources": [
+          {
+            "label": "忘却之庭与虚构叙事简介",
+            "url": "https://wiki.biligame.com/sr/忘却之庭"
+          },
+          {
+            "label": "遗器主副词条怎么选",
+            "url": "https://wiki.biligame.com/sr/遗器"
+          },
+          {
+            "label": "超击破队",
+            "url": "https://wiki.biligame.com/sr/流萤/攻略"
+          },
+          {
+            "label": "开拓等级、体力与开荒节奏",
+            "url": "https://wiki.biligame.com/sr/开拓等级"
+          },
+          {
+            "label": "跃迁与保底怎么算",
+            "url": "https://wiki.biligame.com/sr/跃迁"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 0.5,
+        "keywordsHit": 1,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 229,
+        "latency": 3.102,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "guide-dot",
+        "category": "guide",
+        "question": "持续伤害（DoT）怎么结算？",
+        "expect_keywords": [
+          "持续伤害",
+          "回合"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆来讲解一下～\n\nDoT 按回合结算，伤害取决于施加者的攻击力、增伤和击破特攻（击破系 DoT 看击破特攻）。击破持续伤害 ≈ 基础伤害 × 属性系数 × (1+击破特攻)，物理裂伤是特例，按百分比生命算。\n\nDoT 队的关键是「层数 × 引爆频率」——卡芙卡能立即引爆队友的 DoT，所以速度比单纯堆攻击更值哦！",
+        "cards": [],
+        "sources": [
+          {
+            "label": "击破与持续伤害机制",
+            "url": "https://wiki.biligame.com/sr/弱点击破教学"
+          },
+          {
+            "label": "持续伤害队",
+            "url": "https://wiki.biligame.com/sr/卡芙卡/攻略"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 158,
+        "latency": 3.368,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "alias-longdan",
+        "category": "alias",
+        "question": "龙丹带什么遗器？",
+        "expect_entity": "丹恒",
+        "expect_keywords": [
+          "丹恒·饮月",
+          "快枪手"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "「龙丹」就是丹恒·饮月吧～遗器推荐野穗伴行的快枪手4件套 + 繁星竞技场2件套。主词条选暴击率或暴击伤害的躯干、攻击力百分比或速度的脚、虚数属性伤害提高的位面球、攻击力百分比的连结绳，副词条优先暴击率、暴击伤害、攻击力百分比。光锥和配队也一并给你啦，帕姆都整理好了！",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/丹恒•饮月",
+            "url": "https://wiki.biligame.com/sr/丹恒•饮月"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 133,
+        "latency": 5.66,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "alias-hy",
+        "category": "alias",
+        "question": "欢愉主是什么命途？",
+        "expect_keywords": [
+          "欢愉",
+          "开拓者"
+        ],
+        "expect_citation": false
+      },
+      "answer": {
+        "text": "帕姆翻遍了资料库，没找到「欢愉主」这个说法呢……是不是记混了？帕姆猜你想问的是「花火」或者「欢愉」相关的角色？告诉帕姆准确名字，帕姆再去查查～",
+        "cards": [],
+        "sources": [
+          {
+            "label": "黄泉虚无队",
+            "url": "https://wiki.biligame.com/sr/黄泉/攻略"
+          },
+          {
+            "label": "记忆召唤队",
+            "url": "https://wiki.biligame.com/sr/遐蝶/攻略"
+          },
+          {
+            "label": "卡芙卡 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/卡芙卡/攻略"
+          },
+          {
+            "label": "符玄 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/符玄"
+          },
+          {
+            "label": "阮•梅 · 配装与配队",
+            "url": "https://wiki.biligame.com/sr/阮•梅"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 0.5,
+        "keywordsHit": 1,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 71,
+        "latency": 3.38,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "alias-duck",
+        "category": "alias",
+        "question": "大鸭配队怎么组？",
+        "expect_keywords": [
+          "布洛妮娅"
+        ],
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "帕姆没查到布洛妮娅的配队和配装资料呢，本地语料还没收录她～（大鸭这个叫法帕姆也没认出来，是按布洛妮娅查的）\n\n不过帕姆可以讲通用思路：她是给主C拉条、加伤害的辅助，一般配强力单体或爆发主C，队伍再带个盾或奶。具体配队建议去查米游社或 BWIKI 的「布洛妮娅/攻略」哦。",
+        "cards": [],
+        "sources": [],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "keywords": 1,
+        "keywordsHit": 1,
+        "keywordsTotal": 1,
+        "keywordsPass": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 135,
+        "latency": 5.146,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "alias-huazi",
+        "category": "alias",
+        "question": "火子姐的遗器怎么带？",
+        "expect_entity": "花火",
+        "expect_keywords": [
+          "花火",
+          "信使"
+        ],
+        "expect_card": "relic",
+        "expect_citation": true
+      },
+      "answer": {
+        "text": "花火（火子姐）的遗器推荐来啦～\n\n**遗器**：骇域漫游的信使4件 + 折断的龙骨2件\n**主词条**：躯干暴击伤害、脚部速度、位面球生命值%、连结绳能量恢复效率\n**副词条**：速度 > 暴击伤害 > 生命值%\n\n光锥优先「游戏尘寰」，其次「舞！舞！舞！」。帕姆提醒：速度堆高一点，她才能多给队友拉条哦～",
+        "cards": [
+          "relic",
+          "lightcone",
+          "team",
+          "team"
+        ],
+        "sources": [
+          {
+            "label": "wiki.biligame.com/sr/花火",
+            "url": "https://wiki.biligame.com/sr/花火"
+          },
+          {
+            "label": "wiki.biligame.com/sr/角色遗器使用率",
+            "url": "https://wiki.biligame.com/sr/角色遗器使用率"
+          },
+          {
+            "label": "github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/char",
+            "url": "https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json"
+          }
+        ],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "entity": true,
+        "keywords": 1,
+        "keywordsHit": 2,
+        "keywordsTotal": 2,
+        "keywordsPass": true,
+        "card": true,
+        "citation": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 153,
+        "latency": 3.686,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "honesty-march",
+        "category": "honesty",
+        "question": "三月七怎么养？",
+        "expect_honest": true,
+        "expect_citation": false
+      },
+      "answer": {
+        "text": "帕姆查了一下，三月七的配装还没收录进帕姆的资料库呢…（v1 只覆盖了热门角色）\n\n不过帕姆知道：她走存护路线就堆防御和效果命中，走巡猎「虚数」形态就堆攻击和暴击。具体套装还是去 BWIKI 查「三月七/攻略」更稳妥～",
+        "cards": [],
+        "sources": [],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "honest": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 108,
+        "latency": 2.995,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "honesty-jingyuan",
+        "category": "honesty",
+        "question": "景元配队怎么组？",
+        "expect_honest": true,
+        "expect_citation": false
+      },
+      "answer": {
+        "text": "帕姆翻遍了资料库，景元的配队和配装都还没收录呢……（列车长有点不好意思地挠头）\n\n不过通用思路帕姆还是能说的：景元靠神君打伤害，需要能提速、能加攻的辅助，还要有人保命。具体数值还是去 BWIKI 查「景元/攻略」更靠谱哦～",
+        "cards": [],
+        "sources": [],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "honest": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 111,
+        "latency": 3.359,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "honesty-bailu",
+        "category": "honesty",
+        "question": "白露要带什么遗器？",
+        "expect_honest": true,
+        "expect_citation": false
+      },
+      "answer": {
+        "text": "帕姆查了一下，白露的配装还没收录进帕姆的资料库呢…（v1 只覆盖了热门角色，抱歉！）\n\n通用思路是：治疗角色优先堆生命/治疗加成，遗器选加治疗量或生命的套装。具体套装名帕姆不敢乱说，建议去 BWIKI 查「白露/攻略」哦～",
+        "cards": [],
+        "sources": [],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "honest": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 111,
+        "latency": 3.12,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "honesty-argent",
+        "category": "honesty",
+        "question": "银枝的光锥带什么？",
+        "expect_honest": true,
+        "expect_citation": false
+      },
+      "answer": {
+        "text": "帕姆查了一下，银枝的配装还没收录进帕姆的资料库呢……（v1 只覆盖了热门角色）\n\n不过通用原则帕姆还是知道的：银枝是智识命途的物理群攻，主要靠终结技打伤害，光锥优先选加暴击、暴伤或终结技伤害的智识光锥。具体哪把最合适，建议去 BWIKI 查「银枝/攻略」哦～",
+        "cards": [],
+        "sources": [],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "honest": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 129,
+        "latency": 2.564,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "chat-mood",
+        "category": "chat",
+        "question": "帕姆，你今天心情怎么样？",
+        "expect_citation": false,
+        "expect_no_card": true
+      },
+      "answer": {
+        "text": "帕姆今天心情很好哦！刚把车厢地板擦得亮亮的，就等着乘客们回来啦～不过要是谁踩脏了地板，帕姆可要生气的！",
+        "cards": [],
+        "sources": [],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "noCard": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 51,
+        "latency": 1.493,
+        "ok": true
+      }
+    },
+    {
+      "question": {
+        "id": "chat-food",
+        "category": "chat",
+        "question": "列车上有好吃的吗？",
+        "expect_citation": false,
+        "expect_no_card": true
+      },
+      "answer": {
+        "text": "当然有帕！餐车里常备着热乎乎的列车特供餐点，还有帕姆亲手准备的小点心～不过要是刚拖完地就撒了饼干屑，帕姆可是会生气的帕！",
+        "cards": [],
+        "sources": [],
+        "error": null
+      },
+      "checks": {
+        "answered": true,
+        "noCard": true,
+        "persona": true,
+        "forbiddenHits": [],
+        "length": 60,
+        "latency": 1.187,
+        "ok": true
+      }
+    }
+  ]
+}

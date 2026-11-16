@@ -1,0 +1,262 @@
+# 评测集：帕姆帮帮 v0.1（游戏数据版本 4.7）
+# 用法：npm run eval   （需要本地服务已启动：npm run build && npm start）
+# 指标：实体命中 / 关键词命中 / 卡片命中 / 引用率 / 人设（禁用词+长度）/ 诚实率 / 延迟
+meta:
+  version: "4.7"
+  updated: 2026-11-17
+  notes: 覆盖配装/配队/材料/机制/黑话/未收录诚实性/闲聊 7 类
+
+questions:
+  # ---------- 配装（10） ----------
+  - id: relic-1310
+    category: relic
+    question: 流萤带什么遗器？
+    expect_entity: 流萤
+    expect_keywords: [荡除蠹灾的铁骑, 劫火莲灯铸炼宫]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1308
+    category: relic
+    question: 黄泉的遗器怎么搭配？
+    expect_entity: 黄泉
+    expect_keywords: [死水深潜的先驱, 出云显世与高天神国]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1306
+    category: relic
+    question: 花火应该带什么遗器和光锥？
+    expect_entity: 花火
+    expect_keywords: [骇域漫游的信使, 折断的龙骨, 游戏尘寰]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1213
+    category: relic
+    question: 丹恒·饮月的遗器怎么选？
+    expect_entity: 丹恒
+    expect_keywords: [野穗伴行的快枪手, 繁星竞技场]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1006
+    category: relic
+    question: 银狼带什么遗器？
+    expect_entity: 银狼
+    expect_keywords: [繁星璀璨的天才, 泛银河商业公司]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1304
+    category: relic
+    question: 砂金的遗器怎么带？
+    expect_entity: 砂金
+    expect_keywords: [净庭教宗的圣骑士, 折断的龙骨]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1309
+    category: relic
+    question: 知更鸟的配装推荐？
+    expect_entity: 知更鸟
+    expect_keywords: [幽锁深牢的系囚, 野穗伴行的快枪手, 夜色流光溢彩]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1303
+    category: relic
+    question: 阮·梅带什么遗器？
+    expect_entity: 阮
+    expect_keywords: [流星追迹的怪盗, 生命的翁瓦克]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1212
+    category: relic
+    question: 镜流的遗器和光锥怎么配？
+    expect_entity: 镜流
+    expect_keywords: [密林卧雪的猎人, 此身为剑]
+    expect_card: relic
+    expect_citation: true
+  - id: relic-1307
+    category: relic
+    question: 黑天鹅的遗器推荐？
+    expect_entity: 黑天鹅
+    expect_keywords: [幽锁深牢的系囚, 泛银河商业公司]
+    expect_card: relic
+    expect_citation: true
+
+  # ---------- 配队（8） ----------
+  - id: team-superbreak
+    category: team
+    question: 超击破队怎么组？
+    expect_keywords: [流萤, 阮, 加拉赫]
+    expect_card: team
+    expect_citation: true
+  - id: team-acheron
+    category: team
+    question: 黄泉队怎么配？
+    expect_entity: 黄泉
+    expect_keywords: [黄泉, 佩拉, 砂金]
+    expect_card: team
+    expect_citation: true
+  - id: team-dot
+    category: team
+    question: 持续伤害队怎么配？
+    expect_keywords: [黑天鹅, 卡芙卡]
+    expect_card: team
+    expect_citation: true
+  - id: team-followup
+    category: team
+    question: 追击队有哪些成员？
+    expect_keywords: [飞霄, 托帕, 知更鸟, 砂金]
+    expect_card: team
+    expect_citation: true
+  - id: team-summon
+    category: team
+    question: 记忆召唤队怎么组？
+    expect_keywords: [记忆]
+    expect_card: team
+    expect_citation: true
+  - id: team-phainon
+    category: team
+    question: 白厄怎么配队？
+    expect_entity: 白厄
+    expect_keywords: [白厄]
+    expect_card: team
+    expect_citation: true
+  - id: team-hypercarry
+    category: team
+    question: 直伤单核队怎么配？
+    expect_keywords: [镜流]
+    expect_card: team
+    expect_citation: true
+  - id: team-break
+    category: team
+    question: 常规击破队怎么组？
+    expect_keywords: [波提欧]
+    expect_card: team
+    expect_citation: true
+
+  # ---------- 材料（4） ----------
+  - id: mat-1310
+    category: material
+    question: 流萤的养成材料在哪刷？
+    expect_entity: 流萤
+    expect_keywords: [忿火之心, 同愿的遗音, 忆域, 拟造花萼]
+    expect_card: material
+    expect_citation: true
+  - id: mat-1308
+    category: material
+    question: 黄泉要刷什么材料？
+    expect_entity: 黄泉
+    expect_keywords: [炼形者雷枝, 蛀星孕灾的旧恶, 梦境]
+    expect_card: material
+    expect_citation: true
+  - id: mat-1306
+    category: material
+    question: 花火的行迹材料在哪刷？
+    expect_entity: 花火
+    expect_keywords: [炙梦喷枪, 蛀星孕灾的旧恶, 拟造花萼]
+    expect_card: material
+    expect_citation: true
+  - id: mat-general
+    category: material
+    question: 行迹材料一般去哪刷？
+    expect_keywords: [拟造花萼, 行迹]
+    expect_citation: true
+
+  # ---------- 机制指南（8） ----------
+  - id: guide-substats
+    category: guide
+    question: 遗器主副词条怎么选？
+    expect_keywords: [主词条, 副词条]
+    expect_citation: true
+  - id: guide-break
+    category: guide
+    question: 击破伤害是怎么算的？
+    expect_keywords: [击破特攻, 韧性]
+    expect_citation: true
+  - id: guide-superbreak
+    category: guide
+    question: 超击破是什么机制？
+    expect_keywords: [超击破]
+    expect_citation: true
+  - id: guide-pity
+    category: guide
+    question: 跃迁保底要多少抽？
+    expect_keywords: [保底, 90, 80]
+    expect_citation: true
+  - id: guide-level
+    category: guide
+    question: 开拓等级怎么提升比较快？
+    expect_keywords: [开拓力, 每日实训, 任务]
+    expect_citation: true
+  - id: guide-moc
+    category: guide
+    question: 忘却之庭怎么玩？
+    expect_keywords: [忘却之庭, 轮]
+    expect_citation: true
+  - id: guide-pf
+    category: guide
+    question: 虚构叙事是什么玩法？
+    expect_keywords: [虚构叙事, 分数]
+    expect_citation: true
+  - id: guide-dot
+    category: guide
+    question: 持续伤害（DoT）怎么结算？
+    expect_keywords: [持续伤害, 回合]
+    expect_citation: true
+
+  # ---------- 黑话别名（4） ----------
+  - id: alias-longdan
+    category: alias
+    question: 龙丹带什么遗器？
+    expect_entity: 丹恒
+    expect_keywords: [丹恒·饮月, 快枪手]
+    expect_card: relic
+    expect_citation: true
+  - id: alias-hy
+    category: alias
+    question: 欢愉主是什么命途？
+    expect_keywords: [欢愉, 开拓者]
+    expect_citation: false
+  - id: alias-duck
+    category: alias
+    question: 大鸭配队怎么组？
+    expect_keywords: [布洛妮娅]
+    expect_citation: true
+  - id: alias-huazi
+    category: alias
+    question: 火子姐的遗器怎么带？
+    expect_entity: 花火
+    expect_keywords: [花火, 信使]
+    expect_card: relic
+    expect_citation: true
+
+  # ---------- 未收录/诚实性（4） ----------
+  - id: honesty-march
+    category: honesty
+    question: 三月七怎么养？
+    expect_honest: true
+    expect_citation: false
+  - id: honesty-jingyuan
+    category: honesty
+    question: 景元配队怎么组？
+    expect_honest: true
+    expect_citation: false
+  - id: honesty-bailu
+    category: honesty
+    question: 白露要带什么遗器？
+    expect_honest: true
+    expect_citation: false
+  - id: honesty-argent
+    category: honesty
+    question: 银枝的光锥带什么？
+    expect_honest: true
+    expect_citation: false
+
+  # ---------- 闲聊（2） ----------
+  - id: chat-mood
+    category: chat
+    question: 帕姆，你今天心情怎么样？
+    expect_citation: false
+    expect_no_card: true
+  - id: chat-food
+    category: chat
+    question: 列车上有好吃的吗？
+    expect_citation: false
+    expect_no_card: true

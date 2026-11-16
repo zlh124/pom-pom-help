@@ -162,6 +162,8 @@ function buildSystemPrompt(): string {
 - 名字可能是黑话/简称/错字（例如「龙丹」「欢愉主」「火花」→ 花火），先调 resolve_entity 再调对应工具。
 - 一次可以调多个工具；查不到就如实说没收录，不要硬编。
 - 工具返回的卡片会自动展示给用户，你不需要在正文重复卡片内所有细节。
+- **涉及游戏内容（角色/配装/配队/材料/机制/版本）必须先调用工具**，不允许凭记忆直接回答；工具说没收录就如实说没收录。
+- **不要编造**等级、数值、版本号、角色名绰号（例如不要给「银狼」加「LV.999」之类没来由的细节）。
 
 【输出】只输出帕姆要说的话（中文，≤120 字为主），不要输出 JSON、不要输出工具名、不要输出"（卡片已生成）"之类的话。`;
 }
@@ -192,6 +194,7 @@ function executeTool(call: ToolCall): ToolResult {
   }
   switch (call.function.name) {
     case "resolve_entity": {
+      // eslint-disable-next-line no-case-declarations
       const entity = resolveEntity(String(args.query ?? ""));
       return entity
         ? { ok: true, summary: `解析结果：${entity.name}（kind=${entity.kind}, id=${entity.id}${entity.alias ? `, 别名=${entity.alias}` : ""}）` }
@@ -199,8 +202,13 @@ function executeTool(call: ToolCall): ToolResult {
     }
     case "get_character":
       return getCharacter(String(args.character ?? ""));
-    case "get_build":
-      return getBuild(String(args.character ?? ""));
+    case "get_build": {
+      const result = getBuild(String(args.character ?? ""));
+      if (process.env.DEBUG_TOOLS === "1") {
+        console.log("[tool] get_build", JSON.stringify(args), "→ ok=", result.ok, "|", result.summary.split("\n")[0].slice(0, 120));
+      }
+      return result;
+    }
     case "get_team":
       return getTeam(String(args.query ?? ""));
     case "get_materials":
@@ -229,6 +237,28 @@ export type RunAgentOptions = {
   signal?: AbortSignal;
 };
 
+
+/** 清洗模型可能漏出的工具调用特殊标记（DeepSeek DSML / 其他） */
+function sanitizeModelText(input: string): string {
+  return input
+    .replace(/<[^>\n]{0,60}?｜[^>\n]{0,60}?>/g, "")
+    .replace(/<\|[^|\n]*\|>/g, "")
+    .replace(/^\s*(invoke|parameter)\s+name=.*$/gm, "")
+    .replace(/^\s*\/?(invoke|parameter)>?\s*$/gm, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+/** 工具全部失败/返回未收录时，用工具结论兜底，避免模型编造 */
+function fallbackFromTools(summaries: Array<{ ok: boolean; summary: string }>): string {
+  const failed = summaries.filter((t) => !t.ok);
+  if (failed.length) {
+    const first = failed[0].summary.split("\n")[0].slice(0, 120);
+    return `帕姆去翻了下手册，这个没能查到：${first}。开拓者可以先看看卡片里的通用思路，或者去 BWIKI 确认帕！`;
+  }
+  return "帕姆翻遍手册也没找到相关资料，开拓者换个说法再问问？";
+}
+
 export async function* runAgent({ messages, signal }: RunAgentOptions): AsyncGenerator<AgentEvent> {
   const history = messages.slice(-config.maxHistory);
   const openaiMessages: OpenAiMessage[] = [{ role: "system", content: buildSystemPrompt() }];
@@ -236,29 +266,43 @@ export async function* runAgent({ messages, signal }: RunAgentOptions): AsyncGen
 
   const cards: Card[] = [];
   const sources: Source[] = [];
+  const toolSummaries: Array<{ ok: boolean; summary: string }> = [];
 
   yield { type: "status", stage: "thinking", text: "帕姆正在翻手册…" };
 
+  const lastUser = [...history].reverse().find((m) => m.role === "user")?.content ?? "";
+  const gameContent = /(遗器|光锥|配队|队伍|材料|行迹|命途|击破|角色|配装|养成|词条|开拓等级|保底|忘却|虚构|刷取|深渊|模拟宇宙|版本|活动)/.test(lastUser);
+
+  let directContent = "";
   let rounds = 0;
   const maxRounds = Math.max(1, config.maxToolRounds);
   while (rounds < maxRounds) {
     rounds += 1;
     const resp = await chatCompletion(
-      { messages: openaiMessages, tools: TOOL_SCHEMAS, tool_choice: "auto", temperature: 0.6, max_tokens: 600, stream: false },
+      {
+        messages: openaiMessages,
+        tools: TOOL_SCHEMAS,
+        // 游戏内容问题首轮强制调工具，避免模型凭记忆直接回答（评测：guide 类曾出现 0 引用）
+        tool_choice: rounds === 1 && gameContent ? "required" : "auto",
+        temperature: 0.2,
+        max_tokens: 600,
+        stream: false,
+      },
       signal,
     );
     const message = resp.choices?.[0]?.message;
     if (!message) throw new Error("模型返回为空");
     const toolCalls = message.tool_calls ?? [];
     if (!toolCalls.length) {
-      // 模型直接给了回答：把它作为额外上下文，交给最终流式轮次润色
-      if (message.content) openaiMessages.push({ role: "assistant", content: message.content });
+      // 模型没调工具：直接采用它的回答，不再追加一轮（否则会变成"续写"）
+      directContent = message.content ?? "";
       break;
     }
     openaiMessages.push({ role: "assistant", content: message.content ?? null, tool_calls: toolCalls });
     yield { type: "status", stage: "retrieving", text: "列车长正在查资料…" };
     for (const call of toolCalls) {
       const result = executeTool(call);
+      toolSummaries.push({ ok: result.ok, summary: result.summary });
       if (result.cards?.length) cards.push(...result.cards);
       if (result.sources?.length) sources.push(...result.sources);
       openaiMessages.push({ role: "tool", tool_call_id: call.id, content: result.summary });
@@ -267,60 +311,71 @@ export async function* runAgent({ messages, signal }: RunAgentOptions): AsyncGen
 
   yield { type: "status", stage: "writing", text: "帕姆正在组织语言…" };
 
-  // 最终流式回答
-  const res = await fetch(`${config.baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: { "content-type": "application/json", authorization: `Bearer ${config.apiKey}` },
-    body: JSON.stringify({
-      model: config.model,
-      thinking: { type: config.thinking },
-      messages: openaiMessages,
-      temperature: 0.8,
-      max_tokens: 500,
-      stream: true,
-      tools: TOOL_SCHEMAS,
-      tool_choice: "none",
-    }),
-    signal,
-  });
-  if (!res.ok || !res.body) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`模型流式接口 ${res.status}: ${text.slice(0, 300)}`);
-  }
+  let answer = sanitizeModelText(directContent);
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-  let full = "";
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split("\n");
-    buffer = lines.pop() ?? "";
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed.startsWith("data:")) continue;
-      const payload = trimmed.slice(5).trim();
-      if (payload === "[DONE]") continue;
-      try {
-        const chunk = JSON.parse(payload) as {
-          choices?: Array<{ delta?: { content?: string } }>;
-        };
-        const delta = chunk.choices?.[0]?.delta?.content;
-        if (delta) {
-          full += delta;
-          yield { type: "text", delta };
+  if (!answer) {
+    // 流式最终回答：只在此前没有拿到完整文本时使用
+    const res = await fetch(`${config.baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${config.apiKey}` },
+      body: JSON.stringify({
+        model: config.model,
+        thinking: { type: config.thinking },
+        messages: openaiMessages,
+        temperature: 0.8,
+        max_tokens: 500,
+        stream: true,
+        tools: TOOL_SCHEMAS,
+        tool_choice: "none",
+      }),
+      signal,
+    });
+    if (!res.ok || !res.body) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`模型流式接口 ${res.status}: ${text.slice(0, 300)}`);
+    }
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let raw = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed.startsWith("data:")) continue;
+        const payload = trimmed.slice(5).trim();
+        if (payload === "[DONE]") continue;
+        try {
+          const chunk = JSON.parse(payload) as { choices?: Array<{ delta?: { content?: string } }> };
+          const delta = chunk.choices?.[0]?.delta?.content;
+          if (delta) {
+            raw += delta;
+            const visible = sanitizeModelText(delta);
+            if (visible) yield { type: "text", delta: visible };
+          }
+        } catch {
+          /* 忽略不完整 JSON */
         }
-      } catch {
-        /* 忽略不完整 JSON */
       }
     }
+    answer = sanitizeModelText(raw);
+  }
+
+  if (!answer) {
+    answer = fallbackFromTools(toolSummaries);
+    yield { type: "text", delta: answer };
+  } else if (directContent) {
+    // 直接回答：整段一次性下发（前端会整体替换为 done.text）
+    yield { type: "text", delta: answer };
   }
 
   const finalCards = dedupeCards(cards);
   const finalSources = sources.filter((s, i, arr) => s.url && arr.findIndex((x) => x.url === s.url) === i).slice(0, 5);
   if (finalCards.length) for (const card of finalCards) yield { type: "card", card };
   if (finalSources.length) yield { type: "sources", sources: finalSources };
-  yield { type: "done", text: full, cards: finalCards, sources: finalSources };
+  yield { type: "done", text: answer, cards: finalCards, sources: finalSources };
 }
