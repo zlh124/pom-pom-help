@@ -50,8 +50,10 @@ const TOON_LOOK = Object.freeze({
   outlineWidthPx: 2.3,
   /** 脚底留白占画面高度的比例（构图：居中偏下） */
   bottomMargin: 0.09,
-  /** 全身入镜：模型最多占画面宽 / 高的比例，不裁帽子与披风 */
-  maxWidthFraction: 1.32,
+  /** 目标：模型高度占画面比例（自适应不同宽高比的左栏，16:9 大屏不会把角色放得过大） */
+  targetHeightFraction: 0.82,
+  /** 全身入镜：模型最多占画面宽 / 高的比例（宽屏/窄屏自适应时会动态计算，这里是上限） */
+  maxWidthFraction: 1.4,
   maxHeightFraction: 0.9,
 });
 
@@ -428,9 +430,17 @@ export function createPomPomStage(options) {
     if (!camera) return;
     const aspect = camera.aspect || 1;
     const tan = Math.tan((camera.fov * Math.PI) / 180 / 2);
+    // 自适应取景：不同宽高比（1280×860 / 1920×1080 / 2K）下模型高度占比保持稳定，
+    // 避免 16:9 大屏左栏把角色放得过大或过小；横向最多允许 1.4 倍裁切（披风边缘）。
+    const modelAspect = modelWidth / modelHeight;
+    const targetHeight = TOON_LOOK.targetHeightFraction;
+    const widthFraction = Math.min(
+      TOON_LOOK.maxWidthFraction,
+      Math.max(1.02, (targetHeight * modelAspect) / Math.max(aspect, 0.01)),
+    );
     // 全身完整入镜（帽子/披风不裁）：宽、高分别限制，取更远的相机距离
     const heightDist = modelHeight / (2 * tan * TOON_LOOK.maxHeightFraction);
-    const widthDist = modelWidth / (2 * tan * aspect * TOON_LOOK.maxWidthFraction);
+    const widthDist = modelWidth / (2 * tan * aspect * widthFraction);
     const dist = Math.max(heightDist, widthDist);
     const halfFrame = tan * dist;
     // 脚底对齐到画面底部 8%：lookAt 点抬高 → 模型居中偏下，顶部留窗光

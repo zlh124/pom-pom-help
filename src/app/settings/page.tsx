@@ -48,7 +48,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="relative z-10 mx-auto w-full max-w-[800px] px-3 py-2 md:px-5 md:py-3">
+    <div className="relative z-10 mx-auto w-full max-w-[1080px] px-3 py-2 md:px-5 md:py-3">
       <header className="glass-dark mb-2.5 flex items-center justify-between gap-2 rounded-2xl px-2.5 py-2">
         <div className="flex items-center gap-1.5">
           <span className="flex items-center gap-1.5 rounded-lg bg-white/12 px-2.5 py-1.5 text-[12px] text-white/70">

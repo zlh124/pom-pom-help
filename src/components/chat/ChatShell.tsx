@@ -41,10 +41,10 @@ export default function ChatShell() {
   const busy = status !== "idle" && status !== "error";
 
   return (
-    <div className="relative z-10 mx-auto flex h-dvh w-full max-w-[1360px] flex-col overflow-hidden px-3 pb-2 pt-2 md:px-5 md:pt-3">
+    <div className="relative z-10 mx-auto flex h-dvh w-full flex-col overflow-hidden px-2 pb-2 pt-2 sm:px-3 md:px-4 md:pt-3 lg:px-5">
       <TopBar />
 
-      <main className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-3 md:grid-cols-[minmax(330px,35%)_1fr] md:gap-4">
+      <main className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-3 md:grid-cols-[clamp(340px,32%,620px)_1fr] md:gap-4">
         {/* 左：帕姆立绘栏（原版左侧角色区） */}
         <aside className="character-panel relative hidden min-h-0 overflow-hidden rounded-[22px] md:block">
           <div className="window-stripes absolute inset-0" />
@@ -89,6 +89,7 @@ export default function ChatShell() {
         {/* 右：聊天主面板（原版浅色对话区） */}
         <section className="chat-panel flex min-h-0 flex-1 flex-col overflow-hidden rounded-[22px]">
           <div className="chat-header flex items-center justify-between gap-3 px-3.5 py-2.5">
+            <div className="flex w-full items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-b from-[#f7e5bd] to-[#e3bd78] text-[13px] font-bold text-[#58400f] shadow-sm ring-2 ring-[#c9a86a]">
                 帕
@@ -111,18 +112,21 @@ export default function ChatShell() {
                 <ChevronIcon />
               </button>
             </div>
+            </div>
           </div>
 
-          <div ref={listRef} className="scrollbar-thin flex-1 space-y-4 overflow-y-auto bg-[#eae8e3] px-3.5 py-4">
-            {messages.length === 0 ? <EmptyState onPick={(p) => submit(p)} /> : null}
-            {messages.map((m) => (
-              <MessageRow key={m.id} message={m} />
-            ))}
-            {error ? (
-              <div className="rounded-xl border border-[#e9c2c2] bg-[#fdf3f3] px-3 py-2 text-[11.5px] text-[#b06a6a]">
-                通讯异常：{error}
-              </div>
-            ) : null}
+          <div ref={listRef} className="scrollbar-thin flex-1 overflow-y-auto bg-[#eae8e3] px-3.5 py-4">
+            <div className="w-full space-y-4">
+              {messages.length === 0 ? <EmptyState onPick={(p) => submit(p)} /> : null}
+              {messages.map((m) => (
+                <MessageRow key={m.id} message={m} />
+              ))}
+              {error ? (
+                <div className="rounded-xl border border-[#e9c2c2] bg-[#fdf3f3] px-3 py-2 text-[11.5px] text-[#b06a6a]">
+                  通讯异常：{error}
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <form
@@ -132,6 +136,7 @@ export default function ChatShell() {
               submit();
             }}
           >
+            <div className="w-full">
             <div className="flex items-end gap-2">
               <div className="flex flex-1 items-end rounded-2xl border border-[#d8d2c6] bg-[#f9f7f2] px-1.5 py-1.5 shadow-sm transition-colors focus-within:border-[#c9a86a]">
                 <textarea
@@ -168,6 +173,7 @@ export default function ChatShell() {
                   {p}
                 </button>
               ))}
+            </div>
             </div>
           </form>
         </section>
@@ -247,7 +253,7 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
           想问配队、遗器、光锥还是材料？直接说就好——帕姆会去翻手册的！
         </div>
       </div>
-      <div className="grid gap-2 sm:grid-cols-2">
+      <div className="grid gap-2 sm:grid-cols-2 lg:max-w-[760px]">
         {QUICK_PROMPTS.map((p) => (
           <button
             key={p}

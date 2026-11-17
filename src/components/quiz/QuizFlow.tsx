@@ -89,7 +89,7 @@ export default function QuizFlow({ week }: { week: QuizWeek }) {
   };
 
   return (
-    <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-[900px] flex-col px-3 py-2 md:px-5 md:py-3">
+    <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-[1480px] flex-col px-3 py-2 md:px-5 md:py-3">
       {/* 顶部栏 */}
       <header className="glass-dark mb-2.5 flex items-center justify-between gap-2 rounded-2xl px-2.5 py-2">
         <div className="flex items-center gap-1.5">
@@ -107,7 +107,7 @@ export default function QuizFlow({ week }: { week: QuizWeek }) {
         </div>
       </header>
 
-      <main className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(460px,600px)] lg:items-stretch lg:gap-5">
+      <main className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,720px)] lg:items-stretch lg:gap-5">
         <aside className="relative hidden min-h-0 overflow-hidden rounded-[22px] lg:block">
           <div className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_20%,rgba(255,255,255,0.14),transparent_70%)]" />
           <PomPomStage className="absolute inset-0 h-full w-full" />
