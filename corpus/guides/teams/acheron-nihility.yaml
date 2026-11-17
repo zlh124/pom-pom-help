@@ -1,0 +1,45 @@
+id: guides/teams/acheron-nihility
+type: guides
+title: 黄泉虚无队
+archetype: 黄泉虚无
+version: "4.7"
+tags:
+  - 黄泉
+  - 虚无
+  - 终结技
+  - 主C队
+confidence: curated
+sources:
+  - https://wiki.biligame.com/sr/黄泉/攻略
+  - https://wiki.biligame.com/sr/角色遗器使用率
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+core: 队友持续施加负面效果为黄泉充能，黄泉开大无视弱点削韧并降抗；尽量凑满虚无命途触发额外能力。
+slots:
+  - name: 黄泉
+    role: 主C
+  - name: 椒丘
+    role: 辅助
+  - name: 佩拉
+    role: 辅助
+  - name: 砂金
+    role: 生存
+variants:
+  - note: 低配：黄泉 + 桂乃芬 + 佩拉 + 加拉赫，缺限定角色时可用
+  - note: 中配（银狼）：把 椒丘 换成 银狼，弱点植入+减防更泛用
+  - note: 2 魂以上高配：黄泉 + 银狼 + 缇宝 + 砂金；同谐位也可换花火/星期日
+  - note: 无生存位：黄泉 + 银狼 + 赛飞儿 + 知更鸟，高压环境不建议
+body: |
+  ## 核心思路
+  黄泉的充能来自敌方身上的负面效果，负面越密集开大越频繁。终结技期间无视弱点属性削韧、
+  降低敌方全体抗性，是主要输出窗口。
+
+  ## 站位与分工
+  黄泉：主C，终结技爆发。
+  椒丘：施加【烬煨】（视为灼烧并提供易伤），结界提高终结技伤害。
+  佩拉：减防与冻结控制，稳定负面来源。
+  砂金：护盾与效果抵抗，终结技提高我方暴伤，同时能施加负面。
+
+  ## 注意
+  2 魂前后队伍构成差别较大；2 魂以下更依赖虚无队友凑数，别为了凑命途牺牲生存。
+subtype: teams

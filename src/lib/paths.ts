@@ -4,7 +4,14 @@ export const ROOT = process.cwd();
 
 export const DATA_DIR = path.join(ROOT, "data");
 export const RAW_DIR = path.join(DATA_DIR, "raw");
-export const CORPUS_DIR = path.join(ROOT, "corpus");
+export const DERIVED_DIR = path.join(DATA_DIR, "derived");
+
+/** 语料目录：默认仓库内 corpus/，可用 CORPUS_DIR 指向独立语料仓库/submodule 挂载点 */
+export const CORPUS_DIR = process.env.CORPUS_DIR
+  ? path.isAbsolute(process.env.CORPUS_DIR)
+    ? process.env.CORPUS_DIR
+    : path.join(ROOT, process.env.CORPUS_DIR)
+  : path.join(ROOT, "corpus");
 
 function resolveEnvPath(value: string | undefined, fallback: string): string {
   if (!value) return fallback;

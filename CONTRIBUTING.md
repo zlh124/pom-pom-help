@@ -6,12 +6,17 @@
 
 | 类型 | 目录 | 内容 |
 | --- | --- | --- |
-| 角色配装 | `corpus/builds/<角色id>.yaml` | 遗器套装/主副词条/光锥/配队模板 |
-| 配队 | `corpus/teams/<slug>.yaml` | 队伍流派（4 人位 + 思路 + 变体） |
-| 机制指南 | `corpus/guides/*.md` | 系统机制、新手 FAQ、资源规划 |
+| 角色配装 | `corpus/characters/builds/<角色id>.yaml` | 遗器套装/主副词条/光锥/配队模板 |
+| 角色设定/语音 | `corpus/characters/profiles/`、`stories/` | 小传、故事、台词 |
+| 配队 | `corpus/guides/teams/<slug>.yaml` | 队伍流派（4 人位 + 思路 + 变体） |
+| 机制指南 | `corpus/systems/<subtype>/*.md` | 战斗/养成/终局/模拟宇宙/抽卡机制 |
+| 世界观 | `corpus/world/{cosmology,regions,factions,history,glossary}/` | 星神命途、星球、阵营、编年史、名词 |
+| 局内文本 | `corpus/ingame/{books,messages,quests,...}/` | 书籍、短信、任务、成就、道具文案 |
+| 敌人 / NPC | `corpus/enemies/*`、`corpus/npcs/*` | 弱点机制、NPC 身份位置 |
+| 版本/活动 | `corpus/live/{versions,events,banners}/` | 版本内容、活动、卡池 |
 | 别名/黑话 | `corpus/aliases.yaml` | 玩家简称 → 官名（如「龙丹 → 丹恒·饮月」） |
 | 题库 | `corpus/quiz/weeks/<年-周>.yaml` | 帕姆问问 10 题（可考据、带讲解） |
-| 人设改进 | `corpus/persona/pampam.yaml` | 帕姆语气/规则/few-shot |
+| 人设改进 | `corpus/persona/card/pampam.yaml` | 帕姆语气/规则/few-shot |
 
 ## 二、硬性规则（CI 会校验）
 

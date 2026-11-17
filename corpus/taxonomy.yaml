@@ -1,0 +1,102 @@
+# 语料库目录注册表（唯一"目录 → 类型/子类型/用途"来源）
+# 代码只读这里：新增板块/子目录 = 改本文件 + 加内容，不改 TypeScript。
+# 文档 schema 见 meta/schema.md
+version: 2
+corpus_root: .
+license_default: CC-BY-SA-4.0
+
+# 一级板块
+blocks:
+  characters:
+    label: 角色
+    subtypes:
+      profiles:  { label: 角色小传/设定, format: md,   retrieval: true,  cards: false }
+      stories:   { label: 角色故事/语音, format: md,   retrieval: true,  cards: false }
+      builds:    { label: 配装,          format: yaml, retrieval: false, cards: true }
+
+  world:
+    label: 背景世界观
+    subtypes:
+      cosmology: { label: 星神/命途,   format: md, retrieval: true }
+      regions:   { label: 星球/地区,   format: md, retrieval: true }
+      factions:  { label: 阵营/组织,   format: md, retrieval: true }
+      history:   { label: 编年史/时间线, format: md, retrieval: true }
+      glossary:  { label: 专有名词,    format: md, retrieval: true }
+
+  ingame:
+    label: 局内文本
+    subtypes:
+      books:        { label: 书籍/阅读物, format: md, retrieval: true }
+      messages:     { label: 短信/群聊/信件, format: md, retrieval: true }
+      quests:       { label: 任务/剧情,   format: md, retrieval: true }
+      achievements: { label: 成就,        format: md, retrieval: true }
+      items:        { label: 道具描述,    format: md, retrieval: true }
+      lightcones:   { label: 光锥描述,    format: md, retrieval: true }
+      relics:       { label: 遗器故事,    format: md, retrieval: true }
+      curios:       { label: 奇物/祝福,   format: md, retrieval: true }
+      events:       { label: 局内事件/彩蛋, format: md, retrieval: true }
+
+  enemies:
+    label: 敌人
+    subtypes:
+      common:    { label: 普通敌人, format: md, retrieval: true }
+      elites:    { label: 精英,     format: md, retrieval: true }
+      bosses:    { label: 首领/周本, format: md, retrieval: true }
+      mechanics: { label: 敌人机制, format: md, retrieval: true }
+
+  npcs:
+    label: NPC
+    subtypes:
+      crew:          { label: 列车组, format: md, retrieval: true }
+      planets:       { label: 各星球 NPC, format: md, retrieval: true }
+      organizations: { label: 组织/商人, format: md, retrieval: true }
+
+  systems:
+    label: 玩法系统
+    subtypes:
+      progression: { label: 等级/体力, format: md, retrieval: true }
+      combat:      { label: 战斗机制, format: md, retrieval: true }
+      gearing:     { label: 遗器/光锥/词条, format: md, retrieval: true }
+      endgame:     { label: 终局玩法, format: md, retrieval: true }
+      universe:    { label: 模拟宇宙, format: md, retrieval: true }
+      gacha:       { label: 跃迁/保底, format: md, retrieval: true }
+
+  guides:
+    label: 攻略
+    subtypes:
+      teams:     { label: 配队, format: yaml, retrieval: true,  cards: true }
+      materials: { label: 材料/刷取, format: md, retrieval: true }
+      newbie:    { label: 新手/回归, format: md, retrieval: true }
+      endgame:   { label: 玩法攻略, format: md, retrieval: true }
+      faq:       { label: 常见问题, format: md, retrieval: true }
+
+  live:
+    label: 版本活动
+    subtypes:
+      versions: { label: 版本内容, format: md,   retrieval: true }
+      events:   { label: 活动,     format: yaml, retrieval: true }
+      banners:  { label: 卡池,     format: yaml, retrieval: true }
+
+  quiz:
+    label: 帕姆问问
+    subtypes:
+      weeks: { label: 每周题组, format: yaml, retrieval: false, quiz: true }
+
+  persona:
+    label: 帕姆人设
+    subtypes:
+      card: { label: 人设卡, format: yaml, retrieval: false }
+
+# 不参与文档扫描的目录/文件
+ignore:
+  - meta
+  - .cache
+  - README.md
+  - taxonomy.yaml
+  - aliases.yaml   # 根级别名表，由 loader 单独读取
+
+# 检索/卡片消费策略
+retrieval:
+  chat_blocks: [guides, systems, characters, world, ingame, enemies, npcs]
+  cards_blocks: [characters, guides]
+  quiz_blocks: [quiz]

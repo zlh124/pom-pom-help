@@ -3,6 +3,7 @@
  * 索引由 scripts/build-index.ts 生成（data/index.sqlite）。
  */
 import { openIndex } from "@/lib/db";
+import { loadTaxonomy } from "@/lib/corpus/taxonomy";
 import { buildDict, expandAliases, toFtsQuery, tokenize, type TokenizerDict } from "@/lib/retrieval/tokenizer";
 
 export type Chunk = {
@@ -105,6 +106,9 @@ export function searchCorpus(query: string, options: SearchOptions = {}): Retrie
   const db = openIndex();
   const seen = new Set<number>();
   const results: Chunk[] = [];
+  // 只检索 taxonomy 白名单里的板块（meta/quiz/persona/builds 不参与自由文本检索）
+  const chatBlocks = loadTaxonomy().retrieval.chat_blocks;
+  const blockFilter = chatBlocks.length ? ` AND c.block IN (${chatBlocks.map(() => "?").join(",")})` : "";
 
   const run = (ftsQuery: string, lim: number) => {
     if (!ftsQuery) return;
@@ -112,10 +116,10 @@ export function searchCorpus(query: string, options: SearchOptions = {}): Retrie
       .prepare(
         `SELECT c.*, bm25(chunks_fts) AS rank
          FROM chunks_fts JOIN chunks c ON c.id = chunks_fts.rowid
-         WHERE chunks_fts MATCH ?
+         WHERE chunks_fts MATCH ?${blockFilter}
          ORDER BY rank ASC LIMIT ?`,
       )
-      .all(ftsQuery, lim) as Chunk[];
+      .all(ftsQuery, ...chatBlocks, lim) as Chunk[];
     for (const row of rows) {
       if (seen.has(row.id)) continue;
       seen.add(row.id);
@@ -130,11 +134,11 @@ export function searchCorpus(query: string, options: SearchOptions = {}): Retrie
     const rows = db
       .prepare(
         `SELECT c.*, 0 AS rank FROM chunks c
-         WHERE c.entity_id IN (${placeholders})
-         ORDER BY CASE c.kind WHEN 'build' THEN 0 WHEN 'team' THEN 1 WHEN 'guide' THEN 2 ELSE 3 END, c.id
+         WHERE c.entity_id IN (${placeholders})${blockFilter}
+         ORDER BY CASE WHEN c.source = 'curated' THEN 0 ELSE 1 END, c.id
          LIMIT ?`,
       )
-      .all(...entityIds, limit) as Chunk[];
+      .all(...entityIds, ...chatBlocks, limit) as Chunk[];
     for (const row of rows) {
       if (seen.has(row.id)) continue;
       seen.add(row.id);

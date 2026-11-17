@@ -30,6 +30,7 @@ async function ask(question) {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ messages: [{ role: "user", content: question }] }),
+    signal: AbortSignal.timeout(150_000),
   });
   if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
   const reader = res.body.getReader();

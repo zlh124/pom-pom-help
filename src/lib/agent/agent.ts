@@ -168,6 +168,14 @@ function buildSystemPrompt(): string {
 【输出】只输出帕姆要说的话（中文，≤120 字为主），不要输出 JSON、不要输出工具名、不要输出"（卡片已生成）"之类的话。`;
 }
 
+const TOOL_ROUND_TIMEOUT_MS = 75_000;
+const STREAM_TIMEOUT_MS = 150_000;
+
+function withTimeout(signal: AbortSignal | undefined, ms: number): AbortSignal {
+  const timeout = AbortSignal.timeout(ms);
+  return signal ? AbortSignal.any([signal, timeout]) : timeout;
+}
+
 async function chatCompletion(body: Record<string, unknown>, signal?: AbortSignal): Promise<ChatResponse> {
   const res = await fetch(`${config.baseUrl}/chat/completions`, {
     method: "POST",
@@ -176,7 +184,7 @@ async function chatCompletion(body: Record<string, unknown>, signal?: AbortSigna
       authorization: `Bearer ${config.apiKey}`,
     },
     body: JSON.stringify({ model: config.model, thinking: { type: config.thinking }, ...body }),
-    signal,
+    signal: withTimeout(signal, TOOL_ROUND_TIMEOUT_MS),
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
@@ -328,7 +336,7 @@ export async function* runAgent({ messages, signal }: RunAgentOptions): AsyncGen
         tools: TOOL_SCHEMAS,
         tool_choice: "none",
       }),
-      signal,
+      signal: withTimeout(signal, STREAM_TIMEOUT_MS),
     });
     if (!res.ok || !res.body) {
       const text = await res.text().catch(() => "");

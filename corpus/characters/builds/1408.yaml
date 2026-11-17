@@ -1,0 +1,111 @@
+id: characters/builds/1408
+type: characters
+title: 白厄 · 配装与配队
+character_id: "1408"
+character_name: 白厄
+position: 主C
+version: "4.7"
+tags:
+  - 毁灭
+  - 物理
+  - 主C
+  - 终结技
+confidence: curated
+sources:
+  - https://wiki.biligame.com/sr/白厄/攻略
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+relics:
+  sets:
+    - name: 恶海逐波的船长
+      pieces: 4
+      note: 外圈 4 件套：提供高额攻击力加成，契合度高
+    - name: 妖精织梦的乐园
+      pieces: 2
+      note: 内圈位面饰品：提供高额增伤
+  main_stats:
+    - slot: 躯干
+      stats:
+        - 暴击率
+    - slot: 脚部
+      stats:
+        - 攻击力百分比
+    - slot: 位面球
+      stats:
+        - 物理属性伤害提高
+    - slot: 连结绳
+      stats:
+        - 攻击力百分比
+  sub_stats:
+    - 暴击率
+    - 暴击伤害
+    - 攻击力百分比
+  alternatives:
+    - name: 繁星竞技场
+      pieces: 2
+      note: 内圈备选：暴击率与增伤
+light_cones:
+  - name: 黎明恰如此燃烧
+    rank: S
+    obtain: 限定跃迁（专武）
+    note: 大量增伤与基础速度，机制契合
+  - name: 比阳光更明亮的
+    rank: A
+    obtain: 限定跃迁（光锥池）
+    note: 五星替代
+  - name: 记一位星神的陨落
+    rank: A
+    obtain: 常驻跃迁 / 星芒兑换
+    note: 五星替代
+  - name: 一行往日的血
+    rank: B
+    obtain: 4星跃迁
+    note: 四星过渡
+teams:
+  - archetype: 三拐一
+    slots:
+      - name: 白厄
+        role: 主C
+      - name: 刻律德菈
+        role: 增益
+      - name: 星期日
+        role: 增益
+      - name: 花火
+        role: 辅助
+    note: 高频对白厄施放技能叠【火种】，变身后队友离场
+  - archetype: 平民低配
+    slots:
+      - name: 白厄
+        role: 主C
+      - name: 停云
+        role: 辅助
+      - name: 开拓者•记忆
+        role: 增益
+      - name: 阮•梅
+        role: 辅助
+    note: 低压环境可用，靠队友技能频率叠层
+body: |
+  ## 定位
+  物理毁灭主C：施放战技或成为任意单位技能目标时积累【火种】，开大变身后队友离场，
+  靠强化技能积累【毁伤】并打出强化战技「支柱·死星天裁」。
+
+  ## 遗器
+  外圈「恶海逐波的船长」4 件；内圈「妖精织梦的乐园」2 件。
+  主词条暴击衣、攻击鞋、物伤球、攻击绳；副词条暴击率 > 暴击伤害 ≥ 攻击力百分比。
+
+  ## 光锥
+  专武「黎明恰如此燃烧」；五星替代「比阳光更明亮的」「记一位星神的陨落」；四星「一行往日的血」。
+
+  ## 注意
+  变身期间队友离场，「三拐一」无生存位是主流；暴击率配平要结合队友提供的暴击加成。
+subtype: builds
+entity:
+  kind: character
+  id: "1408"
+  name: 白厄
+  aliases:
+    - 毁灭
+    - 物理
+    - 主C
+    - 终结技

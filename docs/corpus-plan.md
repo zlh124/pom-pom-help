@@ -323,7 +323,30 @@ scripts/adapters/
 
 ---
 
-## 11. 待你拍板
+## 11. 已确认（2026-11-17）
+
+- ✅ **语料库独立成仓库**：新建 `pom-pom-help-corpus`，app 用 git submodule 挂在 `corpus/`；
+- ✅ **目录英文**（characters / world / ingame / enemies / npcs / systems / guides / live / quiz / persona / meta），frontmatter `title` 用中文；
+- ✅ **配装/配队**：`characters/builds/` + `guides/teams/`；
+- ✅ **P2 试点**：先 `world/`（世界观）+ `enemies/`（敌人）；
+- ✅ **派生数据不进语料仓库**（只写 `data/derived/`，索引时合并，回答标注 curated/derived）。
+
+> 执行顺序：P0/P1 先在 app 仓库内重构（目录 + taxonomy + 代码解耦 + 迁移 33 个文件），验证通过后再拆出独立语料仓库 + submodule（需要先在 GitHub 建空仓库）。
+
+### P0/P1 完成记录（2026-11-17）
+
+- ✅ 目录 v2 已建立：`characters/ world/ ingame/ enemies/ npcs/ systems/ guides/ live/ quiz/ persona/ meta/` + `taxonomy.yaml`（40 个 block/subtype 注册）；
+- ✅ 33 个文件迁移：builds→`characters/builds`(15)、teams→`guides/teams`(9)、guides→`systems/{combat,endgame,gacha,gearing,progression}`(5)、persona→`persona/card`、quiz→`quiz/weeks`；frontmatter 补 `type/subtype/id/entity`；
+- ✅ 代码解耦：`src/lib/corpus/taxonomy.ts`（注册表加载/分类/校验）、`load.ts` 改为 taxonomy 驱动、`build-index.ts` 写入 `block/subtype/source` 列并按 `chat_blocks` 过滤、`check-corpus.ts` 按 schema registry 校验、`search.ts` 按板块白名单检索、`paths.ts` 支持 `CORPUS_DIR`；
+- ✅ 校验：`corpus:check` 0 error（31 文档/116 别名）；`corpus:index` 121 块；`tsc` 通过；`test:ui` 4/4；**评测 40/40（100%）**，引用 100%、人设 100%、P50 3.2s；
+- ✅ 附带修复：模型请求超时（工具轮 75s/流式 150s/整体 180s 看门狗 + eval 单题 150s），避免个别请求挂起 17 分钟；配队查询容错（「常规击破队怎么组」→命中「常规击破」模板）
+- ✅ 迁移脚本留档：`scripts/migrate-corpus-v2.ts`（`--dry-run` / `--apply`）；
+- ⬜ 待办：独立语料仓库 + submodule（需先建 `pom-pom-help-corpus` 空仓库）；P2 内容（world/enemies 试点）。
+
+## 12. 原待拍板项（已全部确认，留档）
+
+> 以下为规划阶段的问题记录，结论见 §11。
+
 
 1. **语料库是否独立成仓库**？（推荐 A：`pom-pom-help-corpus` + submodule；或 B：同仓库 + `CORPUS_DIR`）
 2. **目录命名**：英文（推荐，`characters/world/ingame/enemies/npcs`）还是中文（`角色/世界观/局内文本`）？

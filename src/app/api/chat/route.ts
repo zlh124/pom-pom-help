@@ -24,6 +24,7 @@ export async function POST(req: Request) {
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       let closed = false;
+      let watchdog: ReturnType<typeof setTimeout> | undefined;
       const send = (event: AgentEvent) => {
         if (closed) return;
         try {
@@ -35,6 +36,7 @@ export async function POST(req: Request) {
       try {
         const abort = new AbortController();
         req.signal.addEventListener("abort", () => abort.abort());
+        watchdog = setTimeout(() => abort.abort(new Error("请求超时")), 180_000);
         for await (const event of runAgent({ messages, signal: abort.signal })) {
           send(event);
           if (event.type === "done") break;
@@ -42,6 +44,7 @@ export async function POST(req: Request) {
       } catch (err) {
         send({ type: "error", message: err instanceof Error ? err.message : String(err) });
       } finally {
+        if (watchdog) clearTimeout(watchdog);
         if (!closed) {
           try {
             controller.close();

@@ -15,7 +15,8 @@
     "corpus:index": "tsx scripts/build-index.ts",
     "data:all": "pnpm data:sync && pnpm wiki:sync && pnpm corpus:index",
     "eval": "node scripts/eval.mjs",
-    "test:ui": "node scripts/smoke-ui.mjs"
+    "test:ui": "node scripts/smoke-ui.mjs",
+    "corpus:migrate": "tsx scripts/migrate-corpus-v2.ts"
   },
   "dependencies": {
     "next": "16.4.6",

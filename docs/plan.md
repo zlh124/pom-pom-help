@@ -283,15 +283,20 @@ pompom-helphelp/
 │  │  └─ ui/    (shadcn 组件)
 │  ├─ lib/     (agent, tools, retrieval, db, persona, quiz, memory, env, logger)
 │  └─ styles/
-├─ corpus/                    # 语料即代码（社区贡献入口）
-│  ├─ aliases.yaml            # 别名/黑话词典
-│  ├─ persona/pampam.yaml     # 人设卡
-│  ├─ characters/*.md         # 角色攻略（补充结构化数据讲不清的）
-│  ├─ builds/*.yaml           # 配装（遗器/光锥/词条优先级）
-│  ├─ teams/*.yaml            # 配队模板（按 archetype）
-│  ├─ guides/*.md             # 机制/系统/新手 FAQ
-│  ├─ world/*.md              # 世界观/版本活动（帕姆问问素材）
-│  └─ quiz/weeks/2026-W47.yaml# 每周题组
+├─ corpus/                    # 语料即代码（taxonomy v2；社区贡献入口）
+│  ├─ taxonomy.yaml           # 目录注册表（block/subtype/检索策略）
+│  ├─ meta/                   # schema / 板块说明 / 数据源与许可
+│  ├─ characters/             # profiles · stories · builds（配装）
+│  ├─ world/                  # cosmology · regions · factions · history · glossary
+│  ├─ ingame/                 # books · messages · quests · achievements · items · lightcones · relics · curios · events
+│  ├─ enemies/                # common · elites · bosses · mechanics
+│  ├─ npcs/                   # crew · planets/<region> · organizations
+│  ├─ systems/                # progression · combat · gearing · endgame · universe · gacha
+│  ├─ guides/                 # teams · materials · newbie · endgame · faq
+│  ├─ live/                   # versions · events · banners
+│  ├─ quiz/weeks/             # 每周题组
+│  ├─ persona/card/           # 人设卡
+│  └─ aliases.yaml            # 别名/黑话词典
 ├─ scripts/                   # sync-data / check-corpus / build-index / eval / fetch-icons(可选)
 ├─ data/                      # gitignored: pompom.sqlite, index.sqlite
 ├─ eval/                      # 60 题评测集 + 基线报告

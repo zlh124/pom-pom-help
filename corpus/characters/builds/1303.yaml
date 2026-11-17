@@ -1,0 +1,118 @@
+id: characters/builds/1303
+type: characters
+title: 阮•梅 · 配装与配队
+character_id: "1303"
+character_name: 阮•梅
+position: 辅助
+version: "4.7"
+tags:
+  - 同谐
+  - 冰
+  - 辅助
+  - 击破
+confidence: community
+sources:
+  - https://wiki.biligame.com/sr/阮•梅
+  - https://wiki.biligame.com/sr/角色遗器使用率
+  - https://github.com/Mar-7th/StarRailRes/blob/master/index_min/cn/characters.json
+updated: 2026-11-16
+license: CC-BY-SA-4.0
+relics:
+  sets:
+    - name: 流星追迹的怪盗
+      pieces: 4
+      note: 官方遗器使用率快照中占比最高（击破+回能）
+    - name: 生命的翁瓦克
+      pieces: 2
+      note: 使用率快照中最常用位面饰品
+  main_stats:
+    - slot: 躯干
+      stats:
+        - 生命值百分比
+    - slot: 脚部
+      stats:
+        - 速度
+    - slot: 位面球
+      stats:
+        - 生命值百分比
+        - 击破特攻
+    - slot: 连结绳
+      stats:
+        - 击破特攻
+  sub_stats:
+    - 击破特攻
+    - 速度
+    - 生命值百分比
+  alternatives:
+    - name: 骇域漫游的信使
+      pieces: 4
+      note: 使用率次选（速度套）
+    - name: 机心戏梦的钟表匠
+      pieces: 4
+      note: 使用率第三（击破套）
+    - name: 盗贼公国塔利亚
+      pieces: 2
+      note: 内圈备选（击破）
+    - name: 折断的龙骨
+      pieces: 2
+      note: 内圈备选
+light_cones:
+  - name: 镜中故我
+    rank: S
+    obtain: 限定跃迁（专武）
+    note: 毕业光锥
+  - name: 记忆中的模样
+    rank: A
+    obtain: 4星跃迁
+    note: 四星替代：击破特攻与回能
+  - name: 舞！舞！舞！
+    rank: B
+    obtain: 4星跃迁
+    note: 四星替代：全队拉条
+teams:
+  - archetype: 超击破
+    slots:
+      - name: 流萤
+        role: 主C
+      - name: 开拓者•同谐
+        role: 增益
+      - name: 阮•梅
+        role: 辅助
+      - name: 加拉赫
+        role: 生存
+    note: 提高击破效率与抗性穿透
+  - archetype: 持续伤害（DoT）
+    slots:
+      - name: 黑天鹅
+        role: 主C
+      - name: 卡芙卡
+        role: 副C
+      - name: 阮•梅
+        role: 辅助
+      - name: 藿藿
+        role: 生存
+    note: 长线增伤与穿透，适合 DoT 队
+body: |
+  ## 定位
+  冰同谐辅助：提高全队弱点击破效率、速度与全属性抗性穿透；队友击破弱点时还能追加击破伤害。
+
+  ## 遗器
+  外圈「流星追迹的怪盗」4 件（官方使用率快照最高）；内圈「生命的翁瓦克」2 件。
+  主词条生命衣、速度鞋、生命/击破球、击破绳；副词条击破特攻 > 速度 > 生命。
+
+  ## 光锥
+  专武「镜中故我」；四星「记忆中的模样」；需要拉条可用「舞！舞！舞！」。
+
+  ## 置信度说明
+  BWIKI「阮•梅/攻略」页为空模板。套装来自官方遗器使用率统计快照（2024-12-09），
+  可能滞后于 4.7 版本；击破特攻档位以当前技能说明为准。
+subtype: builds
+entity:
+  kind: character
+  id: "1303"
+  name: 阮•梅
+  aliases:
+    - 同谐
+    - 冰
+    - 辅助
+    - 击破
