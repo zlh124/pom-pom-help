@@ -1,6 +1,8 @@
 # 帕姆帮帮 · 网页复刻（非官方）
 
-[![CI](https://github.com/zlh124/pompom-helphelp/actions/workflows/ci.yml/badge.svg)](https://github.com/zlh124/pompom-helphelp/actions/workflows/ci.yml)
+> **Pom-Pom Help (fan replica)** — 《崩坏：星穹铁道》4.2 陆服限时 AI 助手「帕姆帮帮（测试版）」的非官方网页复刻。
+
+[![CI](https://github.com/zlh124/pom-pom-help/actions/workflows/ci.yml/badge.svg)](https://github.com/zlh124/pom-pom-help/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 
@@ -64,8 +66,8 @@ npm run eval -- --filter=relic --limit=5
 
 ```bash
 npm run data:all                     # 宿主机先准备好 data/（含 sqlite）
-docker build -t pompom-helphelp .
-docker run --rm -p 3000:3000 --env-file .env.local -v "$PWD/data:/app/data" pompom-helphelp
+docker build -t pom-pom-help .
+docker run --rm -p 3000:3000 --env-file .env.local -v "$PWD/data:/app/data" pom-pom-help
 ```
 
 容器内 `corpus/` 随镜像分发（语料即代码）；`data/` 建议挂载卷，避免每次重建索引。健康检查：`GET /api/health`。
