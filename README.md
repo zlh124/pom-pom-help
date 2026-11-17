@@ -51,6 +51,8 @@ npm run build && npm start  # http://127.0.0.1:3000
 
 开发模式：`npm run dev`。数据/索引都是可重建的 `data/`（已 gitignore）。
 
+> ⚠️ 重建索引（`npm run corpus:index` / `data:all`）后需要**重启服务**：SQLite 索引文件被运行中的服务持有，在线重建会报 `disk I/O error`（先停服务再重建，或重建后重启）。
+
 ### 评测
 
 ```bash
