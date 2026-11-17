@@ -301,7 +301,7 @@ function MessageRow({ message }: { message: ChatMessage }) {
               {STATUS_TEXT[message.status ?? "thinking"] ?? "帕姆正在思考…"}
             </div>
           ) : null}
-          {message.cards.map((card, i) => (
+          {(message.cards ?? []).map((card, i) => (
             <CardRenderer key={`${card.kind}-${i}`} card={card} />
           ))}
         </div>

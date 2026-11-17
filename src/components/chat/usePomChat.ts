@@ -95,19 +95,20 @@ export function usePomChat() {
                 patchLast({ content: full, status: "writing" });
                 break;
               case "card":
-                patchLast((m) => ({ cards: [...m.cards, event.card] }));
+                patchLast((m) => ({ cards: [...(m.cards ?? []), event.card] }));
                 break;
               case "sources":
                 patchLast({ sources: event.sources ?? [] });
                 break;
               case "done":
                 if (typeof event.text === "string" && event.text) full = event.text;
-                patchLast({
+                patchLast((m) => ({
                   content: full,
-                  cards: event.cards?.length ? event.cards : undefined,
-                  sources: event.sources ?? [],
+                  // 注意：不能写 cards: undefined —— 会用 undefined 覆盖已有卡片，渲染时 .map 崩溃
+                  cards: Array.isArray(event.cards) ? event.cards : m.cards ?? [],
+                  sources: Array.isArray(event.sources) ? event.sources : m.sources ?? [],
                   status: "idle",
-                });
+                }));
                 break;
               case "error":
                 setError(event.message ?? "未知错误");

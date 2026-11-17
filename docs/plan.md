@@ -673,6 +673,7 @@ chunks_vec USING vec0(chunk_id INTEGER PRIMARY KEY, embedding float[DIM])
 - ✅ 工程：`corpus:check` 0 error、`tsc --noEmit` 通过、生产构建通过、截图回归脚本；
 - ✅ M5 收尾：评测集 `eval/questions.yaml`（40 题）+ `npm run eval` 报告、Dockerfile/.dockerignore、`/api/health`、GitHub Actions CI、移动端适配（390×844 实测无横向溢出）；
 - 📈 评测基线（40 题）：通过 **40/40**，实体 100% / 关键词 94.6% / 卡片 100% / 引用 100% / 诚实 100% / 人设 100%，P50 2.9s、P95 5.7s（`eval/report.md`）；
+- 🐛 修复（12-17）：**闲聊回复无卡片时前端崩溃**——`done` 事件里 `cards: undefined` 覆盖了消息的卡片数组，渲染 `.map` 抛 `TypeError`（攻略问题因为一定有卡片所以没事）。已改为不覆盖 + 渲染兜底，新增全局 `error.tsx` 与 `npm run test:ui` 浏览器冒烟；
 - 🔧 修复记录：实体解析优先精确别名（避免「银狼」被变体「银狼LV.999」、「砂金」被「砂金•戏浪」抢走）；统一「·•・」间隔号；模型直接回答时不再追加一轮导致「续写」；清洗模型漏出的工具标记；
 - ⬜ 待办：向量检索（P1，架构已留位）、更多角色 build、e2e 单测。
 
