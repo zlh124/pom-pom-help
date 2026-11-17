@@ -1,0 +1,21 @@
+name: Bug 反馈
+description: 功能异常 / 页面报错 / 回答明显错误
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 发生了什么
+      description: 操作步骤、输入的问题、预期 vs 实际
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: 浏览器 / 屏幕尺寸
+      placeholder: "Chrome 130 / 1920×1080"
+  - type: textarea
+    id: logs
+    attributes:
+      label: 截图或报错信息（可选）

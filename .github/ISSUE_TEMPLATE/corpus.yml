@@ -1,0 +1,30 @@
+name: 语料纠错 / 补充
+description: 角色配装、配队、机制、题库或别名有误 / 缺失
+title: "[语料] "
+labels: ["corpus"]
+body:
+  - type: input
+    id: entry
+    attributes:
+      label: 涉及条目
+      description: 哪个角色/配队/指南/题目？例如「流萤 build」「2026-W47 第 5 题」
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: 现在的内容
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你认为正确的内容 + 依据
+      description: 请给出可点开的来源（BWIKI / 官方公告 / 实测记录）
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 游戏版本
+      placeholder: "4.7"

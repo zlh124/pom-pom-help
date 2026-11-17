@@ -1,5 +1,9 @@
 # 帕姆帮帮 · 网页复刻（非官方）
 
+[![CI](https://github.com/zlh124/pompom-helphelp/actions/workflows/ci.yml/badge.svg)](https://github.com/zlh124/pompom-helphelp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+
 > 《崩坏：星穹铁道》4.2「帕姆帮帮（测试版）」的粉丝复刻版：帕姆人设聊天 + 养成/遗器/光锥/配队/材料问答 + 「帕姆问问」周常答题。
 >
 > **非官方粉丝项目，与米哈游 /《崩坏：星穹铁道》无关。** AI 生成内容仅供参考，游戏数据与攻略语料版权归各自权利人。
