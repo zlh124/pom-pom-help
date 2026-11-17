@@ -4,7 +4,11 @@
 >
 > **非官方粉丝项目，与米哈游 /《崩坏：星穹铁道》无关。** AI 生成内容仅供参考，游戏数据与攻略语料版权归各自权利人。
 
+![与原版对比（上：游戏内原版 / 下：网页复刻）](docs/screens/compare-before-after.png)
+
 ![聊天界面](docs/screens/chat.png)
+
+界面按原版重做：深色星空大背景 + 左侧浅色窗光中的帕姆立绘（three.js **3渲2 动漫渲染**：3 阶色阶 + 描边 + 明亮打光）+ 右侧浅灰聊天面板（深色标题条、暗金用户气泡、米色数据卡片）。
 
 ## 它是什么
 
@@ -23,7 +27,7 @@
 | 模型 | DeepSeek 官方（`deepseek-flash`，OpenAI 兼容 / tool calling / 流式） |
 | 数据 | SQLite（Node 24 内置 `node:sqlite`）：StarRailRes 数值 + FTS5 中文检索 |
 | 语料 | `corpus/` 语料即代码（YAML/Markdown + frontmatter），PR 贡献；`corpus:index` 建索引 |
-| 3D | 用户提供的 PomPom FBX 模型，three.js 渲染 + 海报降级 |
+| 3D | 用户提供的 PomPom FBX 模型，three.js **3渲2（cel-shading + 描边）** 渲染 + 透明背景/海报降级 |
 | 检索 | 别名归一化 → 游戏词典最大匹配分词 → FTS5 BM25（向量检索预留） |
 
 ## 快速开始
@@ -62,7 +66,7 @@ docker run --rm -p 3000:3000 --env-file .env.local -v "$PWD/data:/app/data" pomp
 
 > 注：仓库内提供了 Dockerfile 与 CI（typecheck/corpus:check/build），但开发机没有 Docker daemon，**镜像构建尚未在本机实测**；如遇问题请反馈。
 
-移动端：390×844 实测无横向溢出、输入框常驻底部（截图 `docs/screens/mobile-home.png`）。
+移动端：390×844 实测无横向溢出、输入框常驻底部，聊天面板全屏（截图 `docs/screens/mobile-home.png`）。
 
 ## 目录
 

@@ -140,3 +140,50 @@ node scripts/record-pompom.mjs \
 5. **`outfit` 换装 prop 仅预留**：`data-outfit` 透传，未做材质/骨骼换装。
 6. **移动端**：<900px 左栏折叠由 Lead 的布局处理；组件本身只按容器尺寸自适应（已用 ResizeObserver + 自适应取景）。
 7. 截图为软件渲染（SwiftShader），真实 GPU 下抗锯齿/各向异性会更细腻；色调可能略有差异。
+
+
+---
+
+## 12. 3渲2（cel-shading）改造记录（2026-11-17）
+
+> 目标：原版立绘是明亮动漫风；旧实现是写实 PBR + 深色背景，与复刻后的亮色左栏不匹配。
+
+### 12.1 渲染改动（`pompomCore.js` 的 `TOON_LOOK` / 材质构建）
+
+- **材质**：`MeshToonMaterial` + 3 阶 `gradientMap`（`DataTexture`，`NearestFilter`、无 mipmap）：`[0.46, 0.74, 1.0]`，暗部/中间调/亮部色带分明；`bodyColor = 1.08` 轻微提亮。
+- **描边**：反向外扩 hull（复制 mesh、`BackSide`、屏幕等宽描边 `outlineWidthPx = 2.3`，深藏青 `#1a1633`，通过 ShaderMaterial 按画布高度换算 NDC，DPR 无关）。
+- **光照**：无 toneMapping、sRGB 输出；暖主光 + 冷色环境光 + 轻微 rim；强度按 toon 漫反射（环境/π + 色阶/π）调到 1.3~2 量级。
+- **透明背景**：`renderer.setClearColor(0x000000, 0)`，叠在页面浅蓝白窗光上。
+- **构图**：`bottomMargin = 0.09`、`maxWidthFraction = 1.32`、`maxHeightFraction = 0.9`；480×640 / 520×760 / 左栏≈450×790 都能全身可见、居中偏下、底部留给按钮。
+- 待机动画保留：浮动/呼吸/Head 微摆/blendShape「まばたき」眨眼（`prefers-reduced-motion` 时冻结，用于截图）。
+
+### 12.2 海报与预览重新生成
+
+`/preview` 支持 `?bg=dark|light|transparent&w=&h=`（`src/app/preview/page.tsx`）。海报=透明底，预览=浅色底：
+
+```bash
+# 需要 headless WebGL（否则会走海报降级，反而截到旧海报）
+node -e '
+const { chromium } = require("playwright-core");
+const env = { ...process.env }; delete env.DISPLAY;
+(async () => {
+  const b = await chromium.launch({ executablePath: "/usr/bin/google-chrome", headless: true, env,
+    args: ["--no-sandbox","--ozone-platform=headless","--use-gl=angle","--use-angle=swiftshader","--enable-unsafe-swiftshader"] });
+  const p = await b.newPage({ viewport: { width: 900, height: 900 } });
+  await p.goto("http://127.0.0.1:3000/preview?bg=transparent&w=520&h=760", { waitUntil: "networkidle" });
+  await p.waitForFunction(() => document.querySelector("[data-status]")?.getAttribute("data-status") === "ready", { timeout: 45000 });
+  await p.waitForTimeout(2500);
+  await (await p.$("#pompom-preview")).screenshot({ path: "public/model/pompom-poster.png", omitBackground: true });
+  await p.goto("http://127.0.0.1:3000/preview?bg=light&w=520&h=760", { waitUntil: "networkidle" });
+  await p.waitForTimeout(2800);
+  await (await p.$("#pompom-preview")).screenshot({ path: "docs/asset-preview.png" });
+  await b.close();
+})();
+'
+```
+
+### 12.3 已知问题 / TODO
+
+- 模型绑定姿势是 A-pose，`poseArmsDown()` 只在手臂接近水平时生效，当前保持 A-pose；如需改成原版站姿需要按骨骼名手动调手臂角度（手臂/肘/腕），有变形风险。
+- 描边为屏幕等宽，极细处（贴图发丝处）可能有锯齿；可在更高 DPR 下观察。
+- 表情/换装（outfit）仍未接入，`PomPomStage` 已留 `outfit`/`setMorph` 接口。

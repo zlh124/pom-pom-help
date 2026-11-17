@@ -4,8 +4,11 @@
  * PomPomStage — 网页左侧「帕姆立绘栏」的 3D 客户端组件。
  *
  * - 用 three.js 原生 API（FBXLoader）加载 public/model/PomPom.fbx；
+ * - 3渲2 动漫风（cel-shading + 深藏青描边 + 明亮打光），渲染器透明背景，
+ *   叠在页面浅蓝白窗光上（组件自身不再画深色底）；
  * - 待机动效：模型自带动画（AnimationMixer）优先，否则程序化浮动/呼吸/眨眼；
- * - WebGL 不可用或模型加载失败时降级为静态海报 public/model/pompom-poster.png；
+ * - WebGL 不可用或模型加载失败时降级为静态海报 public/model/pompom-poster.png
+ *   （海报同样是 3渲2 风格 + 透明背景）；海报 404 时退化为浅色 CSS 占位；
  * - 性能：像素比 ≤1.5、low-power、约 40fps、离屏/切后台暂停、卸载 dispose。
  *
  * 3D 细节都放在 ./pompomCore.js（也供 scripts/record-pompom.mjs 预览页复用），
@@ -101,9 +104,11 @@ export default function PomPomStage({
   return (
     <div
       className={`relative overflow-hidden ${className ?? ""}`}
+      // 透明背景：新版左栏是浅蓝白窗光，3D / 海报（透明 PNG）直接叠在上面。
+      // 只保留一点很淡的白色光晕让角色与窗光自然融合，不画深色底。
       style={{
         background:
-          "radial-gradient(120% 82% at 50% 0%, #1c2557 0%, #0d1330 55%, #070b1c 100%)",
+          "radial-gradient(120% 70% at 50% 88%, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 62%)",
       }}
       role="img"
       aria-label={ariaLabel}
@@ -112,7 +117,7 @@ export default function PomPomStage({
       data-status={status}
     >
       {/* 静态海报：加载中/降级时可见，3D 就绪后淡出（同时留作 WebGL 失败的兜底）。
-          海报 404 时退化为纯 CSS 占位，绝不出现破图图标。 */}
+          海报是 3渲2 风格 + 透明背景；海报 404 时退化为纯 CSS 占位，绝不出现破图图标。 */}
       {posterFailed ? (
         <div
           aria-hidden="true"
@@ -120,9 +125,9 @@ export default function PomPomStage({
             isReady ? "opacity-0" : "opacity-100"
           }`}
         >
-          <div className="relative flex aspect-square w-[46%] max-w-44 items-center justify-center rounded-full border border-gold/40 bg-[radial-gradient(circle_at_50%_38%,rgba(217,180,106,0.20),rgba(11,16,38,0.65)_70%)] shadow-[inset_0_0_40px_rgba(217,180,106,0.18)]">
-            <div className="absolute inset-[12%] rounded-full border border-gold/20" />
-            <span className="font-[family-name:var(--font-display)] text-[clamp(14px,4vw,22px)] tracking-[0.32em] text-gold/90">
+          <div className="relative flex aspect-square w-[46%] max-w-44 items-center justify-center rounded-full border border-[#8ea6d8]/45 bg-[radial-gradient(circle_at_50%_38%,rgba(255,255,255,0.95),rgba(214,228,250,0.55)_72%)] shadow-[inset_0_0_40px_rgba(142,166,216,0.22)]">
+            <div className="absolute inset-[12%] rounded-full border border-[#8ea6d8]/30" />
+            <span className="font-[family-name:var(--font-display)] text-[clamp(14px,4vw,22px)] tracking-[0.32em] text-[#3f4f7d]">
               帕姆
             </span>
           </div>
@@ -150,7 +155,7 @@ export default function PomPomStage({
 
       {status === "loading" && (
         <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
-          <span className="rounded-full border border-gold/40 bg-night-900/70 px-2.5 py-1 font-body text-[10px] tracking-[0.18em] text-gold/90 backdrop-blur-sm">
+          <span className="rounded-full border border-[#8ea6d8]/50 bg-white/80 px-2.5 py-1 font-body text-[10px] tracking-[0.18em] text-[#40507d] shadow-sm backdrop-blur-sm">
             帕姆立绘加载中{progress > 0 ? ` ${Math.round(progress * 100)}%` : "…"}
           </span>
         </div>
@@ -158,7 +163,7 @@ export default function PomPomStage({
 
       {status === "fallback" && (
         <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
-          <span className="rounded-full border border-gold/35 bg-night-900/70 px-2.5 py-1 font-body text-[10px] tracking-[0.18em] text-gold/80 backdrop-blur-sm">
+          <span className="rounded-full border border-[#8ea6d8]/45 bg-white/80 px-2.5 py-1 font-body text-[10px] tracking-[0.18em] text-[#40507d] shadow-sm backdrop-blur-sm">
             静态立绘模式
           </span>
         </div>

@@ -8,15 +8,10 @@ import RichText from "@/components/chat/RichText";
 
 const PomPomStage = dynamic(() => import("@/components/pompom/PomPomStage"), {
   ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse rounded-2xl bg-white/[0.03]" />,
+  loading: () => <div className="h-full w-full animate-pulse rounded-2xl bg-white/30" />,
 });
 
-const QUICK_PROMPTS = [
-  "流萤的遗器怎么选？",
-  "黄泉配队怎么组？",
-  "花火的光锥带什么？",
-  "行迹材料一般在哪刷？",
-];
+const QUICK_PROMPTS = ["流萤的遗器怎么选？", "黄泉配队怎么组？", "花火的光锥带什么？", "行迹材料一般在哪刷？"];
 
 const STATUS_TEXT: Record<string, string> = {
   thinking: "帕姆正在翻手册…",
@@ -28,6 +23,7 @@ export default function ChatShell() {
   const { messages, send, status, reset, error } = usePomChat();
   const [input, setInput] = useState("");
   const listRef = useRef<HTMLDivElement | null>(null);
+  const chatCount = messages.filter((m) => m.role === "user").length;
 
   useEffect(() => {
     const el = listRef.current;
@@ -45,123 +41,129 @@ export default function ChatShell() {
   const busy = status !== "idle" && status !== "error";
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="flex items-center justify-between gap-4 border-b border-gold/20 px-4 py-2.5 md:px-6">
-        <div className="flex items-baseline gap-3">
-          <h1 className="font-[family-name:var(--font-display)] text-[15px] tracking-[0.18em] text-gold md:text-[17px]">
-            帕姆帮帮
-          </h1>
-          <span className="rounded border border-gold/30 px-1.5 py-0.5 text-[10px] text-gold/70">非官方复刻</span>
-        </div>
-        <nav className="flex items-center gap-3 text-[12px] text-white/50">
-          <a href="/quiz" className="transition-colors hover:text-gold">
-            帕姆问问
-          </a>
-          <a href="/settings" className="transition-colors hover:text-gold">
-            设置
-          </a>
-        </nav>
-      </header>
+    <div className="relative z-10 mx-auto flex h-dvh w-full max-w-[1360px] flex-col overflow-hidden px-3 pb-2 pt-2 md:px-5 md:pt-3">
+      <TopBar />
 
-      <main className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col gap-0 md:grid md:grid-cols-[minmax(280px,34%)_1fr] md:gap-5 md:py-5">
-        {/* 左：帕姆立绘栏 */}
-        <aside className="relative hidden overflow-hidden rounded-2xl border border-gold/20 bg-gradient-to-b from-[#0d1330] to-[#0a0e24] md:flex md:flex-col">
-          <div className="relative flex-1">
-            <PomPomStage className="h-full min-h-[380px] w-full" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0e24] to-transparent" />
-            <div className="absolute right-3 top-3 rounded-full border border-gold/30 bg-black/30 px-2.5 py-1 text-[11px] text-gold/80">
-              ✦ 列车长
-            </div>
+      <main className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-3 md:grid-cols-[minmax(330px,35%)_1fr] md:gap-4">
+        {/* 左：帕姆立绘栏（原版左侧角色区） */}
+        <aside className="character-panel relative hidden min-h-0 overflow-hidden rounded-[22px] md:block">
+          <div className="window-stripes absolute inset-0" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-3/5 bg-[radial-gradient(65%_55%_at_50%_32%,rgba(255,255,255,0.9),transparent_72%)]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#b9cdea]/70 to-transparent" />
+          <PomPomStage className="absolute inset-0 h-full w-full" />
+
+          {/* 礼物进度 */}
+          <button
+            type="button"
+            onClick={() => submit("帕姆，问问奖励进度～")}
+            title="对话奖励 · 礼服套装"
+            className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/80 bg-white/85 text-[#a2813c] shadow-[0_2px_10px_rgba(60,80,120,0.18)] backdrop-blur transition-transform hover:scale-105"
+          >
+            <GiftIcon />
+            <span className="absolute -bottom-1.5 rounded-full border border-white bg-[#b5343f] px-1.5 text-[9px] font-semibold leading-4 text-white">
+              {chatCount}
+            </span>
+          </button>
+
+          {/* 底部操作 */}
+          <div className="absolute inset-x-3 bottom-3 z-20 flex gap-2">
+            <button
+              type="button"
+              disabled
+              title="换装功能敬请期待"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/80 bg-white/80 px-3 py-2.5 text-[12px] text-[#5d6b85] shadow-sm backdrop-blur disabled:opacity-70"
+            >
+              <SwapIcon /> 更换
+            </button>
+            <button
+              type="button"
+              onClick={reset}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/80 bg-white/85 px-3 py-2.5 text-[12px] text-[#3c4c68] shadow-sm backdrop-blur transition-colors hover:bg-white"
+            >
+              <RefreshIcon /> 开启新对话
+            </button>
           </div>
-          <div className="relative z-10 space-y-2 p-3">
-            <div className="rounded-lg border border-gold/20 bg-black/20 px-3 py-2 text-[11px] text-white/45">
-              对话计数 <span className="text-gold">{messages.filter((m) => m.role === "user").length}</span> · 距离「礼服」还差{" "}
-              {Math.max(0, 10 - messages.filter((m) => m.role === "user").length)} 次
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                disabled
-                className="rounded-lg border border-gold/25 px-3 py-2 text-[12px] text-white/35"
-                title="换装尚未开放"
-              >
-                更换
-              </button>
-              <button
-                type="button"
-                onClick={reset}
-                className="rounded-lg border border-gold/40 px-3 py-2 text-[12px] text-gold transition-colors hover:bg-gold/10"
-              >
-                开启新对话
-              </button>
-            </div>
-          </div>
+
         </aside>
 
-        {/* 右：对话面板 */}
-        <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-gold/15 bg-[#0b1026]/60">
-          <div className="flex items-center justify-between gap-3 border-b border-white/5 px-4 py-2.5">
+        {/* 右：聊天主面板（原版浅色对话区） */}
+        <section className="chat-panel flex min-h-0 flex-1 flex-col overflow-hidden rounded-[22px]">
+          <div className="chat-header flex items-center justify-between gap-3 px-3.5 py-2.5">
             <div className="flex items-center gap-2.5">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-[12px] text-gold">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-b from-[#f7e5bd] to-[#e3bd78] text-[13px] font-bold text-[#58400f] shadow-sm ring-2 ring-[#c9a86a]">
                 帕
-              </span>
+              </div>
               <div>
-                <div className="text-[13px] text-white/85">帕姆帮帮（复刻版）</div>
-                <div className="text-[10px] text-white/35">回复内容由 AI 生成，不代表官方立场</div>
+                <div className="flex items-center gap-1.5 text-[13.5px] font-semibold text-[#f6f1e6]">
+                  帕姆帮帮
+                  <span className="rounded border border-[#c9a86a]/50 bg-[#c9a86a]/15 px-1.5 py-0.5 text-[9.5px] font-normal text-[#e5c98c]">
+                    非官方复刻
+                  </span>
+                </div>
+                <div className="text-[10.5px] text-[#a89f93]">回复内容由 AI 生成，不代表官方立场</div>
               </div>
             </div>
-            <div className="text-[11px] text-white/30">{busy ? "帕姆在思考…" : "在线"}</div>
+            <div className="flex items-center gap-1 text-[#d8d1c4]">
+              <button type="button" title="更多" className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
+                <DotsIcon />
+              </button>
+              <button type="button" title="收起" className="hidden h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 sm:flex">
+                <ChevronIcon />
+              </button>
+            </div>
           </div>
 
-          <div ref={listRef} className="scrollbar-thin flex-1 space-y-4 overflow-y-auto px-4 py-4">
+          <div ref={listRef} className="scrollbar-thin flex-1 space-y-4 overflow-y-auto bg-[#eae8e3] px-3.5 py-4">
             {messages.length === 0 ? <EmptyState onPick={(p) => submit(p)} /> : null}
             {messages.map((m) => (
               <MessageRow key={m.id} message={m} />
             ))}
             {error ? (
-              <div className="rounded-lg border border-crimson/40 bg-crimson/10 px-3 py-2 text-[12px] text-crimson/90">
+              <div className="rounded-xl border border-[#e9c2c2] bg-[#fdf3f3] px-3 py-2 text-[11.5px] text-[#b06a6a]">
                 通讯异常：{error}
               </div>
             ) : null}
           </div>
 
           <form
-            className="border-t border-white/5 p-3"
+            className="border-t border-[#ddd6c8] bg-[#f2efe9] px-3 py-2.5"
             onSubmit={(e) => {
               e.preventDefault();
               submit();
             }}
           >
             <div className="flex items-end gap-2">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    submit();
-                  }
-                }}
-                rows={1}
-                placeholder="问问帕姆吧，比如「流萤带什么遗器？」"
-                className="max-h-32 min-h-[44px] flex-1 resize-none rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-[13px] text-white/90 outline-none placeholder:text-white/25 focus:border-gold/50"
-              />
+              <div className="flex flex-1 items-end rounded-2xl border border-[#d8d2c6] bg-[#f9f7f2] px-1.5 py-1.5 shadow-sm transition-colors focus-within:border-[#c9a86a]">
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      submit();
+                    }
+                  }}
+                  rows={1}
+                  placeholder="问问帕姆吧，比如「流萤带什么遗器？」"
+                  className="max-h-32 min-h-[34px] flex-1 resize-none bg-transparent px-2 py-1.5 text-[13px] text-[#3b3630] outline-none placeholder:text-[#a9a196]"
+                />
+              </div>
               <button
                 type="submit"
                 disabled={busy || !input.trim()}
-                className="h-[44px] shrink-0 rounded-xl border border-gold/50 bg-gold/15 px-5 text-[13px] text-gold transition-colors hover:bg-gold/25 disabled:cursor-not-allowed disabled:opacity-40"
+                className="h-[44px] shrink-0 rounded-xl border border-[#cfc7b8] bg-[#fbf9f4] px-5 text-[13px] font-semibold text-[#5c5346] shadow-[0_2px_6px_rgba(90,70,40,0.12)] transition-all hover:bg-white disabled:cursor-not-allowed disabled:opacity-45"
               >
                 发送
               </button>
             </div>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {QUICK_PROMPTS.slice(0, 4).map((p) => (
+            <div className={`mt-2 flex flex-wrap gap-1.5 ${messages.length > 0 ? "hidden" : ""}`}>
+              {QUICK_PROMPTS.map((p) => (
                 <button
                   key={p}
                   type="button"
                   onClick={() => submit(p)}
                   disabled={busy}
-                  className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-white/45 transition-colors hover:border-gold/40 hover:text-gold disabled:opacity-40"
+                  className="rounded-full border border-[#dcd5c8] bg-[#fbf9f4] px-2.5 py-1 text-[11px] text-[#7a7264] transition-colors hover:border-[#c9a86a] hover:text-[#8a6d3b] disabled:opacity-45"
                 >
                   {p}
                 </button>
@@ -171,18 +173,75 @@ export default function ChatShell() {
         </section>
       </main>
 
-      <footer className="border-t border-white/5 px-4 py-2 text-center text-[10px] leading-relaxed text-white/25">
-        非官方粉丝复刻项目，与米哈游 /《崩坏：星穹铁道》无关。AI 生成内容仅供参考。素材版权归原作者所有。
+      <footer className="mt-2 text-center text-[10px] leading-relaxed text-white/40">
+        非官方粉丝复刻项目，与米哈游 /《崩坏：星穹铁道》无关。AI 生成内容仅供参考，素材版权归原作者所有。
       </footer>
     </div>
   );
 }
 
+/* ------------------------------ 顶部栏 ------------------------------ */
+
+function TopBar() {
+  return (
+    <header className="glass-dark mb-2.5 flex items-center justify-between gap-2 rounded-2xl px-2.5 py-2">
+      <div className="flex min-w-0 items-center gap-1 sm:gap-1.5">
+        <span className="flex items-center gap-1.5 rounded-lg bg-white/12 px-2.5 py-1.5 text-[12px] font-medium text-[#f2d79b]">
+          <ChatIcon /> 聊天对话
+        </span>
+        <a
+          href="/quiz"
+          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12px] text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <QuizIcon /> 帕姆问问
+        </a>
+        <span className="ml-0.5 hidden rounded border border-white/20 px-1.5 py-0.5 text-[9.5px] text-white/45 sm:inline">
+          v0.1 · 复刻版
+        </span>
+      </div>
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          title="列车长礼物（对话累计奖励）"
+          className="hidden h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/70 transition-colors hover:bg-white/20 sm:flex"
+        >
+          <GiftIcon />
+        </button>
+        <button
+          type="button"
+          title="问题反馈"
+          className="hidden h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/70 transition-colors hover:bg-white/20 sm:flex"
+        >
+          <HelpIcon />
+        </button>
+        <button
+          type="button"
+          title="更换对话框（敬请期待）"
+          className="hidden items-center gap-1.5 rounded-lg border border-white/15 px-2.5 py-1.5 text-[11px] text-white/65 transition-colors hover:bg-white/10 sm:flex"
+        >
+          <SwapIcon /> 更换对话框
+        </button>
+        <a
+          href="/settings"
+          className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] text-white/65 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <GearIcon /> <span className="hidden sm:inline">设置</span>
+        </a>
+      </div>
+    </header>
+  );
+}
+
+/* ------------------------------ 空态 ------------------------------ */
+
 function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
   return (
-    <div className="space-y-4">
-      <div className="flex gap-2.5">
-        <div className="paper-bubble max-w-[86%] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-[13px] leading-relaxed">
+    <div className="space-y-3.5">
+      <div className="flex items-end gap-2">
+        <div className="mb-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#f7e5bd] to-[#e3bd78] text-[11px] font-bold text-[#58400f] ring-2 ring-white">
+          帕
+        </div>
+        <div className="bubble-pom max-w-[88%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-relaxed">
           欢迎回到列车，开拓者！帕姆今天也在列车长室值班帕。
           <br />
           想问配队、遗器、光锥还是材料？直接说就好——帕姆会去翻手册的！
@@ -194,7 +253,7 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
             key={p}
             type="button"
             onClick={() => onPick(p)}
-            className="rounded-xl border border-gold/20 bg-white/[0.02] px-3 py-2.5 text-left text-[12px] text-white/55 transition-colors hover:border-gold/45 hover:bg-gold/5 hover:text-gold"
+            className="rounded-xl border border-[#ddd6c8] bg-[#f4f1eb] px-3 py-2.5 text-left text-[12px] text-[#5f584c] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#c9a86a] hover:shadow"
           >
             {p}
           </button>
@@ -204,11 +263,13 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
   );
 }
 
+/* ------------------------------ 消息 ------------------------------ */
+
 function MessageRow({ message }: { message: ChatMessage }) {
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[86%] rounded-2xl rounded-br-sm bg-gradient-to-br from-[#d8a95f]/25 to-[#b5343f]/15 px-3.5 py-2.5 text-[13px] leading-relaxed text-[#f6efe2] ring-1 ring-gold/25">
+        <div className="bubble-user max-w-[86%] rounded-2xl rounded-br-md px-3.5 py-2.5 text-[13px] leading-relaxed">
           {message.content}
         </div>
       </div>
@@ -218,19 +279,19 @@ function MessageRow({ message }: { message: ChatMessage }) {
   const showStatus = (message.status === "thinking" || message.status === "retrieving") && !message.content;
   return (
     <div className="space-y-1">
-      <div className="flex gap-2.5">
-        <div className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-[11px] text-gold">
+      <div className="flex items-start gap-2">
+        <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#f7e5bd] to-[#e3bd78] text-[11px] font-bold text-[#58400f] ring-2 ring-white">
           帕
         </div>
         <div className="min-w-0 flex-1">
           {message.content ? (
-            <div className="paper-bubble max-w-[94%] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-[13px] leading-relaxed">
+            <div className="bubble-pom max-w-[94%] rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[13px] leading-relaxed">
               <RichText text={message.content} />
             </div>
           ) : null}
           {showStatus ? (
-            <div className="paper-bubble inline-flex items-center gap-2 rounded-2xl rounded-bl-sm px-3.5 py-2 text-[12px] text-ink/60">
-              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-crimson/70" />
+            <div className="bubble-pom inline-flex items-center gap-2 rounded-2xl rounded-bl-md px-3.5 py-2 text-[11.5px] text-[#8b8b97]">
+              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[#d3a94f]" />
               {STATUS_TEXT[message.status ?? "thinking"] ?? "帕姆正在思考…"}
             </div>
           ) : null}
@@ -240,5 +301,95 @@ function MessageRow({ message }: { message: ChatMessage }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ------------------------------ 图标 ------------------------------ */
+
+const stroke = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.7,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
+
+function ChatIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" {...stroke}>
+      <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8Z" />
+    </svg>
+  );
+}
+
+function QuizIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" {...stroke}>
+      <path d="M9 9a3 3 0 1 1 4.2 2.7c-.8.4-1.2 1-1.2 1.8v.5" />
+      <circle cx="12" cy="17.5" r="1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="9" />
+    </svg>
+  );
+}
+
+function GiftIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" {...stroke}>
+      <path d="M20 12v8H4v-8M2 8h20v4H2zM12 8v12" />
+      <path d="M12 8c-1.5-3-3-4-4.5-4A2.5 2.5 0 0 0 5 6.5C5 8 6 8 8 8ZM12 8c1.5-3 3-4 4.5-4A2.5 2.5 0 0 1 19 6.5C19 8 18 8 16 8Z" />
+    </svg>
+  );
+}
+
+function HelpIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" {...stroke}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 9a2.5 2.5 0 1 1 3.6 2.3c-.7.4-1.1.9-1.1 1.7v.5" />
+      <circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function SwapIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" {...stroke}>
+      <path d="M4 8h13l-3-3M20 16H7l3 3" />
+    </svg>
+  );
+}
+
+function GearIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" {...stroke}>
+      <circle cx="12" cy="12" r="3.2" />
+      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
+    </svg>
+  );
+}
+
+function RefreshIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" {...stroke}>
+      <path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6" />
+    </svg>
+  );
+}
+
+function DotsIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <circle cx="5" cy="12" r="1.6" />
+      <circle cx="12" cy="12" r="1.6" />
+      <circle cx="19" cy="12" r="1.6" />
+    </svg>
+  );
+}
+
+function ChevronIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
   );
 }

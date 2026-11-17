@@ -4,6 +4,10 @@
  * 被 `PomPomStage.tsx`（React client component）调用；同时被
  * `scripts/record-pompom.mjs` 生成的独立预览页复用（见 docs/asset-notes.md）。
  *
+ * 风格：**动漫 3渲2（cel-shading）** —— MeshToonMaterial + 3 阶 gradientMap
+ * （明暗色阶分明、无写实高光）、反向外扩描边（inverted hull，深藏青 #1a1633）、
+ * 暖主光 + 冷环境/rim 的明亮打光、渲染器透明背景，可叠在浅蓝白窗光上。
+ *
  * 职责：
  *  1. three.js 原生 API 加载 FBX（FBXLoader），不依赖 @react-three/fiber；
  *  2. 用 LoadingManager.setURLModifier 把 FBX 里失效的中文贴图路径映射到
@@ -12,8 +16,9 @@
  *  3. 程序化待机：上下浮动 + 呼吸缩放 + 轻微摇摆 + 头部小幅摆动 + 眨眼
  *     （blendShape「まばたき」；若模型自带 AnimationClip 则优先播放动画）；
  *  4. 性能：像素比 ≤ 1.5、low-power、~40fps 节流、离屏/不可见时暂停、
- *     卸载时释放全部 GPU 资源；
- *  5. 失败时通过 onError 通知调用方降级到静态海报。
+ *     卸载时释放全部 GPU 资源；描边与本体共用 geometry / skeleton，
+ *     不额外复制顶点、不每帧重建；
+ *  5. 失败时通过 onError 通知调用方降级到静态海报（海报同样是 3渲2 亮色/透明底）。
  */
 
 export const POMPOM_MODEL_URL = "/model/PomPom.fbx";
@@ -28,6 +33,27 @@ const TARGET_FPS = 40;
 const MAX_PIXEL_RATIO = 1.5;
 const TARGET_MODEL_HEIGHT = 2.0; // 归一化后的模型世界高度，取景稳定
 const CAMERA_FOV = 30;
+
+/**
+ * 3渲2 外观参数（明亮动漫风，透明背景叠在浅蓝白窗光上）。
+ * 颜色 / 光强都按「无 toneMapping、sRGB 输出」直接调校：
+ * MeshToonMaterial 的漫反射 ≈ (环境光/π + Σ 色阶/π) × 贴图，故强度普遍在 1.3~2 量级。
+ */
+const TOON_LOOK = Object.freeze({
+  /** 3 阶色阶：暗部 / 中间调 / 亮部（DataTexture 最近邻采样，色带分明） */
+  gradientSteps: Object.freeze([0.46, 0.74, 1.0]),
+  /** 线性空间整体提亮系数：>1 让亮部更通透（贴图本身已是动画配色，不宜过度） */
+  bodyColor: 1.08,
+  /** 描边色 #1a1633（深藏青）。着色器直接输出 sRGB 分量，故这里存 0..1 原始值。 */
+  outlineColor: Object.freeze([0x1a / 255, 0x16 / 255, 0x33 / 255]),
+  /** 屏幕等宽描边：CSS 像素（DPR 无关，按画布高度换算成 NDC） */
+  outlineWidthPx: 2.3,
+  /** 脚底留白占画面高度的比例（构图：居中偏下） */
+  bottomMargin: 0.09,
+  /** 全身入镜：模型最多占画面宽 / 高的比例，不裁帽子与披风 */
+  maxWidthFraction: 1.32,
+  maxHeightFraction: 0.9,
+});
 
 const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
 
@@ -99,14 +125,22 @@ export function createPomPomStage(options) {
       modelHeight,
       modelWidth,
       basePivotY,
+      modelBottomY,
       cameraAspect: camera ? Number(camera.aspect.toFixed(4)) : null,
       cameraZ: camera ? Number(camera.position.z.toFixed(3)) : null,
+      cameraLookY: camera ? Number(camera.position.y.toFixed(3)) : null,
       canvas: renderer?.domElement
         ? [renderer.domElement.clientWidth, renderer.domElement.clientHeight]
         : null,
       blinkChannels: blinkTargets.length,
       armsPosedDown,
       hasAnimation: !!(mixer && mixer._actions && mixer._actions.length),
+      toon: {
+        gradientSteps: TOON_LOOK.gradientSteps.length,
+        outlineMeshes: outlineCount,
+        outlineWidthPx: TOON_LOOK.outlineWidthPx,
+        toneMapping: renderer ? renderer.toneMapping : null,
+      },
     }),
     /** 调试：列出模型全部 blendShape 通道名。 */
     getMorphNames: () => {
@@ -154,6 +188,9 @@ export function createPomPomStage(options) {
   let intersectionObserver = null;
   let shadowTexture = null;
   let shadowMesh = null;
+  let toonGradient = null; // 3 阶梯度贴图（所有 toon 材质共用）
+  let outlineMaterial = null; // 描边 ShaderMaterial（反向外扩 hull）
+  let outlineCount = 0;
 
   /** @type {Map<string, any>} */
   const textures = new Map();
@@ -163,6 +200,7 @@ export function createPomPomStage(options) {
   let modelHeight = TARGET_MODEL_HEIGHT;
   let modelWidth = TARGET_MODEL_HEIGHT * 0.62;
   let basePivotY = TARGET_MODEL_HEIGHT * 0.5;
+  let modelBottomY = 0; // 归一化 + 摆姿势后的世界坐标脚底 y（用于构图对齐）
 
   let armsPosedDown = 0;
   let lastRenderAt = 0;
@@ -206,6 +244,11 @@ export function createPomPomStage(options) {
       if (scene) {
         scene.traverse((obj) => {
           if (!obj || !obj.isMesh) return;
+          // 描边网格与本体共用 geometry，避免重复 dispose
+          if (obj.userData?.isOutline) {
+            obj.material?.dispose?.();
+            return;
+          }
           obj.geometry?.dispose?.();
           const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
           for (const mat of mats) {
@@ -217,6 +260,8 @@ export function createPomPomStage(options) {
           }
         });
       }
+      toonGradient?.dispose?.();
+      outlineMaterial?.dispose?.();
     } catch (_) {
       /* noop */
     }
@@ -240,6 +285,10 @@ export function createPomPomStage(options) {
     textures.clear();
     blinkTargets = [];
     headBone = null;
+    toonGradient = null;
+    outlineMaterial = null;
+    outlineCount = 0;
+    shadowMesh = null;
     idleQuat.value = null;
     idleEuler.value = null;
     idleVec.value = null;
@@ -367,21 +416,27 @@ export function createPomPomStage(options) {
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     frameCamera();
+    // 描边宽度以 CSS 像素定义：NDC 偏移 = 2 * 像素 / CSS 高度（DPR 自动抵消）
+    if (outlineMaterial) {
+      outlineMaterial.uniforms.uAspect.value = camera.aspect || 1;
+      outlineMaterial.uniforms.uOutlineWidth.value = (TOON_LOOK.outlineWidthPx * 2) / height;
+    }
     if (ready) renderFrame(performance.now(), false, 0);
   }
 
   function frameCamera() {
     if (!camera) return;
     const aspect = camera.aspect || 1;
-    const fovRad = (camera.fov * Math.PI) / 180;
-    const tan = Math.tan(fovRad / 2);
-    const heightDist = modelHeight / (2 * tan);
-    const widthDist = modelWidth / (2 * tan * aspect);
-    // 优先填满高度；容器足够宽时完整入镜，竖长栏（游戏内左栏）允许左右裁掉
-    // 少量披风/帽檐——游戏内立绘本来就是这样裁的，手臂与头部保持在画面内。
-    const dist = Math.max(heightDist * 1.06, widthDist * (aspect >= 0.75 ? 0.88 : 0.8));
-    camera.position.set(0, basePivotY, dist);
-    camera.lookAt(0, basePivotY, 0);
+    const tan = Math.tan((camera.fov * Math.PI) / 180 / 2);
+    // 全身完整入镜（帽子/披风不裁）：宽、高分别限制，取更远的相机距离
+    const heightDist = modelHeight / (2 * tan * TOON_LOOK.maxHeightFraction);
+    const widthDist = modelWidth / (2 * tan * aspect * TOON_LOOK.maxWidthFraction);
+    const dist = Math.max(heightDist, widthDist);
+    const halfFrame = tan * dist;
+    // 脚底对齐到画面底部 8%：lookAt 点抬高 → 模型居中偏下，顶部留窗光
+    const lookY = modelBottomY + (1 - TOON_LOOK.bottomMargin * 2) * halfFrame;
+    camera.position.set(0, lookY, dist);
+    camera.lookAt(0, lookY, 0);
     camera.near = Math.max(0.05, dist * 0.02);
     camera.far = dist * 8;
     camera.updateProjectionMatrix();
@@ -439,20 +494,22 @@ export function createPomPomStage(options) {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(CAMERA_FOV, 1, 0.1, 50);
 
-    // 深蓝夜色 + 金色描边的打光（docs/plan.md §7.1 视觉 token）
-    scene.add(new THREE.HemisphereLight(0x9fb0ef, 0x10142e, 1.35));
-    const keyLight = new THREE.DirectionalLight(0xffe4bb, 2.9);
-    keyLight.position.set(1.8, 3.2, 3.4);
+    // 3渲2 明亮打光（无 toneMapping，光强直接决定 3 阶色阶亮度）：
+    //   ambient 1.35 → 基础亮度 ≈0.43；key 1.9 → 亮部再 +0.60；
+    //   冷色环境/rim 让暗部带蓝紫倾向，整体通透、不出现“金属暗部”。
+    scene.add(new THREE.AmbientLight(0xcfe0ff, 1.35)); // 冷色环境光：抬亮暗部
+    const keyLight = new THREE.DirectionalLight(0xfff4de, 1.9); // 暖主光（右上前方）
+    keyLight.position.set(2.2, 3.6, 3.8);
     scene.add(keyLight);
-    const fillLight = new THREE.DirectionalLight(0x8fa6ff, 1.05);
-    fillLight.position.set(-3.2, 1.4, 2.2);
+    const fillLight = new THREE.DirectionalLight(0xa9c4ff, 0.55); // 冷色补光（左侧）
+    fillLight.position.set(-3.4, 1.2, 2.4);
     scene.add(fillLight);
-    const rimLight = new THREE.DirectionalLight(0xd9b46a, 2.5);
-    rimLight.position.set(-2.2, 2.9, -3.1);
+    const rimLight = new THREE.DirectionalLight(0xbfe0ff, 1.35); // 冷色轮廓光（后左上）
+    rimLight.position.set(-1.8, 2.4, -3.6);
     scene.add(rimLight);
-    const rimLight2 = new THREE.DirectionalLight(0x7fd1c8, 0.55);
-    rimLight2.position.set(2.6, 1.2, -2.8);
-    scene.add(rimLight2);
+    const rimWarm = new THREE.DirectionalLight(0xffe6c2, 0.45); // 暖色辅助轮廓（后右）
+    rimWarm.position.set(2.2, 1.0, -2.6);
+    scene.add(rimWarm);
 
     try {
       renderer = new THREE.WebGLRenderer({
@@ -466,9 +523,15 @@ export function createPomPomStage(options) {
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    // 3渲2：不压高光、保留鲜艳的动画配色（ACES 会把亮部压灰、降低饱和度）
+    renderer.toneMapping = THREE.NoToneMapping;
+    renderer.setClearColor(0x000000, 0); // 透明背景：让页面浅蓝白窗光透出来
     renderer.shadowMap.enabled = false;
+
+    // 3 阶色阶贴图 + 描边材质（全场景共用，只创建一次）
+    toonGradient = createToonGradientMap(THREE);
+    outlineMaterial = createOutlineMaterial(THREE);
+
     const canvas = renderer.domElement;
     canvas.style.cssText = "display:block;width:100%;height:100%;outline:none;";
     canvas.setAttribute("aria-hidden", "true");
@@ -479,12 +542,12 @@ export function createPomPomStage(options) {
       return;
     }
 
-    // 脚底柔和投影（程序化 canvas 纹理，不发网络请求）
+    // 脚底柔和投影（程序化 canvas 纹理，不发网络请求；冷蓝灰、很淡，不写实）
     shadowTexture = createShadowTexture(THREE);
     if (shadowTexture) {
       shadowMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(1, 1),
-        new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, opacity: 0.66, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, opacity: 0.5, depthWrite: false }),
       );
       shadowMesh.rotation.x = -Math.PI / 2;
       shadowMesh.position.y = 0.004;
@@ -537,14 +600,193 @@ export function createPomPomStage(options) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
     const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-    gradient.addColorStop(0, "rgba(0,0,0,0.5)");
-    gradient.addColorStop(0.55, "rgba(0,0,0,0.24)");
-    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    // 冷蓝灰软阴影：亮色背景下只是“地面接触光斑”，不追求写实投影
+    gradient.addColorStop(0, "rgba(55,70,132,0.42)");
+    gradient.addColorStop(0.55, "rgba(55,70,132,0.16)");
+    gradient.addColorStop(1, "rgba(55,70,132,0)");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, size, size);
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     return texture;
+  }
+
+  // ---- 3渲2 外观：色阶贴图 / toon 材质 / 描边 ---------------------------
+
+  /** 3 阶 gradientMap（最近邻、无 mipmap，色带分明；所有 toon 材质共用一张）。 */
+  function createToonGradientMap(THREE) {
+    const steps = TOON_LOOK.gradientSteps;
+    const data = new Uint8Array(steps.length * 4);
+    for (let i = 0; i < steps.length; i += 1) {
+      const value = Math.round(THREE.MathUtils.clamp(steps[i], 0, 1) * 255);
+      data[i * 4] = value;
+      data[i * 4 + 1] = value;
+      data[i * 4 + 2] = value;
+      data[i * 4 + 3] = 255;
+    }
+    const gradientMap = new THREE.DataTexture(data, steps.length, 1, THREE.RGBAFormat);
+    gradientMap.name = "PomPomToonGradient3";
+    gradientMap.minFilter = THREE.NearestFilter;
+    gradientMap.magFilter = THREE.NearestFilter;
+    gradientMap.generateMipmaps = false;
+    gradientMap.wrapS = THREE.ClampToEdgeWrapping;
+    gradientMap.wrapT = THREE.ClampToEdgeWrapping;
+    gradientMap.colorSpace = THREE.NoColorSpace; // 色阶是线性倍率，不做 sRGB 解码
+    gradientMap.needsUpdate = true;
+    return gradientMap;
+  }
+
+  /** 本体：MeshToonMaterial（3 阶色阶 + 贴图，略微提亮）。 */
+  function createBodyToonMaterial(THREE, bodyTexture) {
+    const material = new THREE.MeshToonMaterial({
+      map: bodyTexture || null,
+      gradientMap: toonGradient,
+    });
+    material.name = "PomPomBodyToon";
+    if (bodyTexture) {
+      material.color.setRGB(TOON_LOOK.bodyColor, TOON_LOOK.bodyColor, TOON_LOOK.bodyColor);
+    } else {
+      material.color.setHex(0xd8d2c6); // 贴图缺失兜底：亮米色，仍能看清轮廓
+    }
+    material.fog = false;
+    return material;
+  }
+
+  /**
+   * 表情：贴纸式叠加层，用 unlit（MeshBasicMaterial）保持原图颜色。
+   * 它贴在已经 toon 化的脸前，若再参与光照会把黑色眼线/腮红压暗或拉出横向色带。
+   */
+  function createFaceOverlayMaterial(THREE, faceTexture) {
+    const material = new THREE.MeshBasicMaterial({
+      map: faceTexture || null,
+      color: 0xffffff,
+      transparent: true,
+      alphaTest: 0.35,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      toneMapped: false,
+    });
+    material.name = "PomPomFaceOverlay";
+    if (!faceTexture) {
+      material.color.setHex(0x1a1633);
+      material.opacity = 0.001; // 无贴图时不要留黑色色块
+    }
+    return material;
+  }
+
+  /**
+   * 描边材质：inverted hull（BackSide）+ 视空间法线等宽外扩。
+   * 顶点着色器手动做 skinning / morph 变换，保证蒙皮网格的描边跟随骨骼与眨眼；
+   * uOutlineWidth = 2 * CSS 像素 / 画布 CSS 高度，因此任何尺寸下描边视觉宽度一致。
+   */
+  function createOutlineMaterial(THREE) {
+    const vertexShader = /* glsl */ `
+      attribute vec3 outlineNormal;
+
+      #include <common>
+      #include <morphtarget_pars_vertex>
+      #include <skinning_pars_vertex>
+
+      uniform float uOutlineWidth;
+      uniform float uAspect;
+
+      void main() {
+        vec3 objectNormal = outlineNormal;
+
+        #include <skinbase_vertex>
+        #include <skinnormal_vertex>
+        #include <defaultnormal_vertex>
+
+        #include <begin_vertex>
+        #include <morphtarget_vertex>
+        #include <skinning_vertex>
+        #include <project_vertex>
+
+        // 视图空间法线 → 裁剪空间方向；再换回「像素等比」方向后按 NDC 偏移。
+        // 乘以 gl_Position.w，保证透视除法后每个顶点都偏同样的像素数。
+        vec2 ndcNormal = ( projectionMatrix * vec4( normalize( transformedNormal ), 0.0 ) ).xy;
+        vec2 dir = normalize( vec2( ndcNormal.x * uAspect, ndcNormal.y ) + vec2( 1e-6 ) );
+        gl_Position.xy += vec2( dir.x / uAspect, dir.y ) * ( uOutlineWidth * gl_Position.w );
+      }
+    `;
+    const fragmentShader = /* glsl */ `
+      uniform vec3 uOutlineColor;
+      void main() {
+        gl_FragColor = vec4( uOutlineColor, 1.0 );
+      }
+    `;
+    return new THREE.ShaderMaterial({
+      name: "PomPomOutline",
+      uniforms: {
+        uOutlineWidth: { value: (TOON_LOOK.outlineWidthPx * 2) / 640 },
+        uAspect: { value: 0.75 },
+        // 直接给 sRGB 分量（ShaderMaterial 不会自动做输出色彩空间转换）
+        uOutlineColor: { value: new THREE.Vector3(...TOON_LOOK.outlineColor) },
+      },
+      vertexShader,
+      fragmentShader,
+      side: THREE.BackSide,
+      transparent: false,
+      depthWrite: true,
+      toneMapped: false,
+    });
+  }
+
+  /**
+   * 给几何体烘焙一份「按位置平滑」的法线属性 outlineNormal。
+   * 反向外扩描边若直接用 split normal，UV 硬边处会裂开；按位置合并法线后描边均匀。
+   * 属性直接挂在共享 geometry 上（不复制顶点），只有描边 shader 会用到。
+   */
+  function attachSmoothOutlineNormals(THREE, geometry) {
+    if (!geometry || geometry.getAttribute("outlineNormal")) return true;
+    const position = geometry.getAttribute("position");
+    const normal = geometry.getAttribute("normal");
+    if (!position || !normal) return false;
+    const vertexCount = position.count;
+    const smooth = new Float32Array(vertexCount * 3);
+    /** @type {Map<string, {x:number,y:number,z:number}>} */
+    const sums = new Map();
+    const p = new THREE.Vector3();
+    const n = new THREE.Vector3();
+    const keyOf = (vertex) =>
+      `${Math.round(vertex.x * 1e4)},${Math.round(vertex.y * 1e4)},${Math.round(vertex.z * 1e4)}`;
+
+    for (let i = 0; i < vertexCount; i += 1) {
+      p.fromBufferAttribute(position, i);
+      n.fromBufferAttribute(normal, i);
+      const key = keyOf(p);
+      const sum = sums.get(key);
+      if (sum) {
+        sum.x += n.x;
+        sum.y += n.y;
+        sum.z += n.z;
+      } else {
+        sums.set(key, { x: n.x, y: n.y, z: n.z });
+      }
+    }
+    for (const sum of sums.values()) {
+      const length = Math.hypot(sum.x, sum.y, sum.z) || 1;
+      sum.x /= length;
+      sum.y /= length;
+      sum.z /= length;
+    }
+    for (let i = 0; i < vertexCount; i += 1) {
+      p.fromBufferAttribute(position, i);
+      const sum = sums.get(keyOf(p));
+      const i3 = i * 3;
+      if (sum) {
+        smooth[i3] = sum.x;
+        smooth[i3 + 1] = sum.y;
+        smooth[i3 + 2] = sum.z;
+      } else {
+        n.fromBufferAttribute(normal, i);
+        smooth[i3] = n.x;
+        smooth[i3 + 1] = n.y;
+        smooth[i3 + 2] = n.z;
+      }
+    }
+    geometry.setAttribute("outlineNormal", new THREE.BufferAttribute(smooth, 3));
+    return true;
   }
 
   function buildObservers() {
@@ -588,7 +830,7 @@ export function createPomPomStage(options) {
   function prepareModel(THREE, fbx) {
     fbx.updateMatrixWorld(true);
 
-    // 1) 贴图：按材质名映射到英文贴图文件，替换 FBX 内嵌/失效贴图
+    // 1) 贴图 + 3渲2 材质：本体换 MeshToonMaterial（3 阶色阶），表情换 unlit 贴纸层
     const bodyTexture = textures.get("body") || null;
     const faceTexture = textures.get("face") || null;
     let meshCount = 0;
@@ -596,24 +838,17 @@ export function createPomPomStage(options) {
       if (!object || !object.isMesh) return;
       meshCount += 1;
       object.frustumCulled = false; // 蒙皮网格包围盒不可靠，避免被误裁剪
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      const oldMaterials = Array.isArray(object.material) ? object.material : [object.material];
       const isFaceMesh = /表情/.test(object.name || "");
-      for (const material of materials) {
-        if (!material) continue;
-        const materialName = `${material.name || ""} ${object.name || ""}`;
+      disposeMaterialTree(object.material); // FBX 自带 PBR 材质/内嵌贴图不再使用
+      const nextMaterials = oldMaterials.map((oldMaterial) => {
+        const materialName = `${oldMaterial?.name || ""} ${object.name || ""}`;
         const isFaceMaterial = /表情|face/i.test(materialName) || isFaceMesh;
-        if (isFaceMaterial && faceTexture) {
-          material.map = faceTexture;
-          material.transparent = true;
-          material.alphaTest = 0.35;
-          material.depthWrite = false;
-          material.side = THREE.DoubleSide;
-        } else if (bodyTexture) {
-          material.map = bodyTexture;
-        }
-        if (!material.map) material.color?.set(isFaceMaterial ? 0xffffff : 0x8890b8);
-        material.needsUpdate = true;
-      }
+        return isFaceMaterial
+          ? createFaceOverlayMaterial(THREE, faceTexture)
+          : createBodyToonMaterial(THREE, bodyTexture);
+      });
+      object.material = Array.isArray(object.material) ? nextMaterials : nextMaterials[0];
     });
     if (meshCount === 0) throw new Error("FBX 中未找到可渲染网格");
 
@@ -642,6 +877,10 @@ export function createPomPomStage(options) {
     fbx.scale.setScalar(scale);
     fbx.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
     pivot.add(fbx);
+    modelBottomY = (bounds.min.y - center.y) * scale + basePivotY;
+
+    // 3.5) 3渲2 描边：反向外扩 hull，与本体共用 geometry / skeleton / morph influences
+    buildOutline(THREE, fbx);
 
     if (shadowMesh) {
       shadowMesh.scale.set(Math.max(0.5, modelWidth * 0.62), Math.max(0.34, modelWidth * 0.34), 1);
@@ -655,7 +894,7 @@ export function createPomPomStage(options) {
     if (!(fbx.animations && fbx.animations.length)) {
       let shapeCount = 0;
       fbx.traverse((object) => {
-        if (!object || !object.isMesh || !object.morphTargetDictionary) return;
+        if (!object || !object.isMesh || object.userData?.isOutline || !object.morphTargetDictionary) return;
         for (const [channelName, index] of Object.entries(object.morphTargetDictionary)) {
           shapeCount += 1;
           if (/まばたき|blink/i.test(channelName)) {
@@ -671,13 +910,61 @@ export function createPomPomStage(options) {
     }
   }
 
+  /** 释放被替换掉的旧材质及其贴图（FBX 内嵌贴图是 blob，避免内存泄漏）。 */
+  function disposeMaterialTree(material) {
+    const materials = Array.isArray(material) ? material : [material];
+    for (const mat of materials) {
+      if (!mat) continue;
+      for (const value of Object.values(mat)) {
+        if (value && value.isTexture) value.dispose?.();
+      }
+      mat.dispose?.();
+    }
+  }
+
+  /**
+   * 3渲2 描边：为除表情贴纸外的每个网格克隆一个 inverted-hull 网格（BackSide）。
+   * 克隆与本体共用 geometry / skeleton / morph influences，不复制顶点、不每帧重建；
+   * 顶点着色器里按平滑法线做屏幕等宽外扩（见 createOutlineMaterial）。
+   */
+  function buildOutline(THREE, fbx) {
+    if (!outlineMaterial) return;
+    const targets = [];
+    fbx.traverse((object) => {
+      if (!object || !object.isMesh || object.userData?.isOutline) return;
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      const isFaceOverlay = materials.some((mat) => mat && /FaceOverlay/.test(mat.name || ""));
+      if (!isFaceOverlay) targets.push(object);
+    });
+    for (const mesh of targets) {
+      if (!attachSmoothOutlineNormals(THREE, mesh.geometry)) continue;
+      const outline = mesh.clone();
+      if (!outline) continue;
+      outline.name = `${mesh.name || "PomPomMesh"}_outline`;
+      outline.userData.isOutline = true;
+      outline.material = outlineMaterial;
+      outline.frustumCulled = false;
+      outline.castShadow = false;
+      outline.receiveShadow = false;
+      // 与本体共享 morph influences：眨眼/表情变化时描边同步形变
+      outline.morphTargetInfluences = mesh.morphTargetInfluences;
+      outline.morphTargetDictionary = mesh.morphTargetDictionary;
+      mesh.parent?.add(outline);
+      outlineCount += 1;
+    }
+    // eslint-disable-next-line no-console
+    console.info(
+      `[PomPomStage] 3渲2：本体 MeshToonMaterial（${TOON_LOOK.gradientSteps.length} 阶色阶）+ 描边 ${outlineCount} 个（反向外扩 ${TOON_LOOK.outlineWidthPx}px）`,
+    );
+  }
+
   /** 按当前骨骼姿势计算真实 AABB（逐顶点蒙皮，仅加载时一次）。 */
   function computePosedBounds(THREE, fbx) {
     fbx.updateMatrixWorld(true);
     const box = new THREE.Box3();
     const vertex = new THREE.Vector3();
     fbx.traverse((object) => {
-      if (!object || !object.isMesh) return;
+      if (!object || !object.isMesh || object.userData?.isOutline) return;
       const position = object.geometry?.attributes?.position;
       if (!position) return;
       const step = Math.max(1, Math.floor(position.count / 6000)); // 最多采样 6000 点/网格

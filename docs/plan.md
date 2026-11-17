@@ -509,34 +509,36 @@ type Part =
 
 ## 7. 前端实现要点（还原游戏内 UI 风格）
 
+> v0.2 已按原版重做：对照 `refs/ui_main.png`，采用「深色星空大背景 + 左侧亮色窗光立绘栏 + 右侧浅暖灰聊天面板（深色标题条、暗金用户气泡、米色卡片）」。
+
 ### 7.1 视觉 token
 
 ```css
---bg-deep: #0b1026;      /* 深夜蓝 */
---bg-panel: #141a38;     /* 面板 */
---paper: #f6efe2;        /* 气泡纸质感 */
---gold: #d9b46a;         /* 金色描边/分隔 */
---gold-soft: #8a6d3b;
---crimson: #b5343f;      /* 帕姆制服红 / 警示 */
---teal: #7fd1c8;         /* 评級 S / 正确 */
---ink: #2a2320;          /* 纸面文字 */
---radius: 14px;  --shadow: 0 8px 24px rgba(0,0,0,.35);
+/* 页面：星穹列车夜空 */
+--bg-1: #121938; --bg-2: #0a0f2b; --bg-3: #070a1e;   /* 深蓝渐变 + 紫/蓝星云 */
+/* 左栏：列车窗光（亮色，衬托 3 渲 2 立绘） */
+--panel-light-1: #f4f9ff; --panel-light-2: #e2ecfd; --panel-light-3: #cfdff7;
+/* 右栏：暖灰聊天面板（原版取色） */
+--ui-bg: #eae8e3; --ui-head-1: #3d3835; --ui-head-2: #2c2a2b;
+--ui-card: #f2f0eb; --ui-line: #ddd6c8; --ui-text: #3b3630; --ui-sub: #8f877c;
+--ui-cream: #d9c48f; --ui-cream-line: #c9b075;   /* 用户气泡（暗金） */
+--gold: #c9a86a; --crimson: #b5343f; --teal: #2b6f63;
 字体：标题 = Noto Serif SC（自托管子集），正文 = system-ui / Noto Sans SC
 ```
 
 ### 7.2 关键实现
 
-- **左立绘**：自绘帕姆 SVG（列车长帽 + 白胡子 + 大眼 + 红制服），分层支持换装（帽子/礼服/围裙三个 slot）；`<PomPomAvatar outfit="dress" />`。官方截图只做参考比例。
-- **气泡**：帕姆侧纸底圆角 + 左下尖角 + 金细边；用户侧暖橙渐变 + 右对齐；入场 framer-motion（y 8→0, opacity）。
-- **流式文本**：`useChat` 增量 part；打字机效果用 CSS `::after` 光标，不逐字 setState（性能）。
-- **卡片**：统一 `ToolCard` 壳（标题 + 右侧徽标/动作位 + 底部小字"来源"），内嵌 4 种内容；卡片入场 150ms 上浮；`查看/解释/复制` 用 shadcn `Dialog`/`Tooltip`/`toast`。
-- **响应式**：<900px 左栏折叠为顶部头像条；卡片横向滚动；输入区 fixed bottom + `env(safe-area-inset-bottom)`。
-- **无障碍**：焦点环、`aria-live` 流式文本、对比度 ≥4.5:1。
-- **空态/错误态**：4 个引导词条（配队/遗器/光锥/材料）+ 角色快捷选择器。
+- **整体布局**：`h-dvh` 固定视口（避免对话变长把页面撑高）；顶部 `glass-dark` 顶栏（聊天对话/帕姆问问/设置 + 装饰按钮）；主区 `md:grid-cols-[minmax(330px,35%)_1fr]`；左栏 `character-panel`（亮色窗光 + 窗格竖线 + 白晕），右栏 `chat-panel`（深色标题条 `chat-header` + 暖灰消息区 + 米色输入区）。
+- **3D 立绘（3渲2）**：`PomPomStage` + `pompomCore.js`：`MeshToonMaterial` + 3 阶 `gradientMap`、反向外扩描边（深藏青、屏幕等宽）、暖主光 + 冷环境光、**透明背景**；构图参数 `bottomMargin/maxWidthFraction/maxHeightFraction` 让全身在 380×790 左栏完整可见；`prefers-reduced-motion` 冻结待机（截图用）。WebGL 不可用 → 海报（同风格、透明底）→ CSS 占位三级降级。
+- **气泡**：用户 = 暗金渐变 `bubble-user`（右下小圆角）；帕姆 = 米白 `bubble-pom`（左下小圆角）+ 金色圆头像；状态提示 = 同款胶囊 + 跳动金点。
+- **卡片**：`ToolCard` 米色底 + 顶部标题行 + 徽标（人工校对/社区语料/评级 S）+ 底部出处 chips；遗器套装 teal 胶囊、光锥 S/A/B 金徽、配队米金卡、材料清单胶囊。
+- **顶部栏**：原版布局复刻（左侧「聊天对话」高亮 tab + 「帕姆问问」链接；右侧礼物/反馈/更换对话框/设置）；「更换对话框」为装饰性按钮（tooltip 敬请期待）。
+- **响应式**：<md 左栏隐藏、聊天面板全屏、顶栏精简；390×844 实测无横向溢出（`docs/screens/mobile-home.png`）。
+- **空态/错误态**：欢迎气泡 + 4 个引导提问；流式错误保留已生成文本并提示重试。
 
 ### 7.3 素材合规
 
-默认只用自制 SVG/纯 CSS 图形 + 通用图标（lucide）；官方遗器/光锥图标不打包。`public/outfits/` 留空槽位，README 说明"可自行放置同人图用于本地学习"。
+全部图形为自制 CSS/SVG + three.js 渲染；官方遗器/光锥图标不打包。帕姆 3D 模型由用户提供，仓库不重新分发（`public/model` 的 FBX/贴图/海报均 gitignore），缺失时自动降级为占位。
 
 ---
 

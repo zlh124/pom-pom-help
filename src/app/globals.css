@@ -15,11 +15,20 @@
   --color-teal: #7fd1c8;
   --font-display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
   --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+
+  /* 亮色面板（复刻原版聊天界面：暖灰底 + 米色卡片 + 暗金气泡） */
+  --color-ui-bg: #eae8e3;
+  --color-ui-panel: #f9f6f0;
+  --color-ui-line: #ddd6c8;
+  --color-ui-text: #3b3630;
+  --color-ui-sub: #8f877c;
+  --color-ui-cream: #d9c48f;
+  --color-ui-cream-line: #c9b075;
 }
 
 :root {
-  --radius: 14px;
-  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --radius: 16px;
+  --shadow-panel: 0 18px 50px rgba(4, 8, 24, 0.55);
 }
 
 html,
@@ -29,65 +38,147 @@ body {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(1200px 600px at 15% -10%, #1a2350 0%, transparent 60%),
-    radial-gradient(900px 500px at 90% 110%, #1b1533 0%, transparent 55%),
-    #070b1c;
-  color: #e9e4f5;
+  color: #f2f0fb;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1100px 700px at 12% -8%, rgba(86, 78, 196, 0.45) 0%, transparent 62%),
+    radial-gradient(900px 600px at 88% 4%, rgba(46, 96, 176, 0.45) 0%, transparent 60%),
+    radial-gradient(1200px 800px at 70% 108%, rgba(108, 54, 130, 0.35) 0%, transparent 65%),
+    linear-gradient(180deg, #121938 0%, #0a0f2b 45%, #070a1e 100%);
+  background-attachment: fixed;
 }
 
-/* 星轨背景点缀 */
-.starfield::before {
+/* ---------------- 星空 ---------------- */
+.starfield::before,
+.starfield::after {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -20%;
   pointer-events: none;
+  z-index: 0;
+}
+
+.starfield::before {
   background-image:
-    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.8) 50%, transparent 51%),
-    radial-gradient(1px 1px at 70% 15%, rgba(255, 255, 255, 0.6) 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 45% 75%, rgba(217, 180, 106, 0.7) 50%, transparent 51%),
-    radial-gradient(1px 1px at 85% 60%, rgba(255, 255, 255, 0.5) 50%, transparent 51%);
-  opacity: 0.7;
+    radial-gradient(1.4px 1.4px at 8% 12%, rgba(255, 255, 255, 0.95) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 18% 34%, rgba(255, 255, 255, 0.8) 50%, transparent 55%),
+    radial-gradient(1.6px 1.6px at 27% 8%, rgba(255, 246, 214, 0.95) 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 36% 58%, rgba(255, 255, 255, 0.7) 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 44% 22%, rgba(255, 255, 255, 0.9) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 53% 74%, rgba(210, 230, 255, 0.9) 50%, transparent 55%),
+    radial-gradient(1.7px 1.7px at 62% 16%, rgba(255, 255, 255, 0.95) 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 71% 46%, rgba(255, 255, 255, 0.7) 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 79% 28%, rgba(255, 240, 200, 0.9) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 86% 66%, rgba(255, 255, 255, 0.8) 50%, transparent 55%),
+    radial-gradient(1.4px 1.4px at 93% 12%, rgba(255, 255, 255, 0.85) 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 12% 84%, rgba(255, 255, 255, 0.7) 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 31% 92%, rgba(255, 255, 255, 0.75) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 58% 88%, rgba(255, 255, 255, 0.65) 50%, transparent 55%),
+    radial-gradient(1.4px 1.4px at 82% 90%, rgba(255, 255, 255, 0.7) 50%, transparent 55%),
+    radial-gradient(1px 1px at 4% 52%, rgba(255, 255, 255, 0.6) 50%, transparent 55%),
+    radial-gradient(1px 1px at 22% 60%, rgba(255, 255, 255, 0.5) 50%, transparent 55%),
+    radial-gradient(1px 1px at 48% 40%, rgba(255, 255, 255, 0.55) 50%, transparent 55%),
+    radial-gradient(1px 1px at 66% 62%, rgba(255, 255, 255, 0.5) 50%, transparent 55%),
+    radial-gradient(1px 1px at 90% 44%, rgba(255, 255, 255, 0.55) 50%, transparent 55%);
+  animation: twinkle 9s ease-in-out infinite alternate;
 }
 
-.gold-frame {
-  border: 1px solid rgba(217, 180, 106, 0.45);
-  box-shadow: inset 0 0 0 1px rgba(217, 180, 106, 0.12), var(--shadow-card);
+.starfield::after {
+  background-image:
+    radial-gradient(2px 2px at 24% 20%, rgba(255, 255, 255, 0.95) 50%, transparent 55%),
+    radial-gradient(2.4px 2.4px at 68% 34%, rgba(255, 240, 200, 0.9) 50%, transparent 55%),
+    radial-gradient(1.8px 1.8px at 40% 78%, rgba(220, 235, 255, 0.9) 50%, transparent 55%),
+    radial-gradient(2.2px 2.2px at 88% 72%, rgba(255, 255, 255, 0.85) 50%, transparent 55%),
+    radial-gradient(1.8px 1.8px at 6% 66%, rgba(255, 255, 255, 0.8) 50%, transparent 55%);
+  animation: twinkle 6s ease-in-out infinite alternate-reverse;
 }
 
-.paper-bubble {
+@keyframes twinkle {
+  0% { opacity: 0.75; }
+  100% { opacity: 1; }
+}
+
+/* 顶部/面板 */
+.glass-dark {
+  background: rgba(12, 16, 40, 0.55);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.chat-panel {
+  background: linear-gradient(180deg, #eeebe5 0%, #e8e5df 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--shadow-panel);
+}
+
+.chat-header {
+  background: linear-gradient(180deg, #3d3835 0%, #2c2a2b 100%);
+  border-bottom: 1px solid rgba(201, 168, 106, 0.45);
+}
+
+/* 左栏：列车窗光 */
+.character-panel {
   background:
-    linear-gradient(180deg, #f8f2e6 0%, #f1e8d6 100%);
-  color: var(--color-ink);
-  border: 1px solid rgba(138, 109, 59, 0.35);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    radial-gradient(2px 2px at 18% 12%, rgba(255, 255, 255, 0.95) 50%, transparent 55%),
+    radial-gradient(1.6px 1.6px at 72% 8%, rgba(255, 248, 220, 0.9) 50%, transparent 55%),
+    radial-gradient(1.8px 1.8px at 86% 26%, rgba(255, 255, 255, 0.85) 50%, transparent 55%),
+    radial-gradient(1.4px 1.4px at 34% 30%, rgba(255, 255, 255, 0.7) 50%, transparent 55%),
+    radial-gradient(1.6px 1.6px at 60% 46%, rgba(255, 255, 255, 0.6) 50%, transparent 55%),
+    radial-gradient(70% 50% at 50% 22%, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0) 64%),
+    linear-gradient(180deg, #f4f9ff 0%, #e2ecfd 50%, #cfdff7 100%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: var(--shadow-panel);
 }
 
+.window-stripes {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0px,
+    rgba(255, 255, 255, 0) 34px,
+    rgba(255, 255, 255, 0.55) 34px,
+    rgba(255, 255, 255, 0.55) 37px,
+    rgba(160, 190, 230, 0.25) 37px,
+    rgba(160, 190, 230, 0.25) 40px
+  );
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6), transparent 75%);
+}
+
+/* 滚动条 */
 .scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgba(217, 180, 106, 0.35) transparent;
+  scrollbar-color: rgba(120, 130, 160, 0.35) transparent;
 }
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(217, 180, 106, 0.35);
+  background: rgba(120, 130, 160, 0.35);
   border-radius: 999px;
 }
 
-@keyframes pom-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+/* 气泡 */
+.bubble-user {
+  background: linear-gradient(180deg, #ddc994 0%, #d3bd85 100%);
+  color: #46381a;
+  border: 1px solid #c9b075;
+  box-shadow: 0 2px 6px rgba(120, 90, 40, 0.18);
 }
+.bubble-pom {
+  background: #f9f6f0;
+  color: #3b3630;
+  border: 1px solid #e7e0d4;
+  box-shadow: 0 2px 8px rgba(60, 50, 40, 0.08);
+}
+
 @keyframes pom-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-up {
-  animation: pom-fade-up 0.28s ease-out both;
+  animation: pom-fade-up 0.26s ease-out both;
 }
+
 @keyframes blink-caret {
   0%, 100% { opacity: 0; }
   50% { opacity: 1; }
@@ -96,5 +187,12 @@ body {
   content: "▌";
   margin-left: 2px;
   animation: blink-caret 1s step-end infinite;
-  color: var(--color-gold);
+  color: #b5343f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .starfield::before,
+  .starfield::after {
+    animation: none;
+  }
 }

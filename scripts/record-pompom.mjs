@@ -10,10 +10,13 @@
  *      例如：node scripts/record-pompom.mjs --url http://127.0.0.1:3100/ --out docs/asset-preview.png
  *
  * 用法：
- *   node scripts/record-pompom.mjs
- *   node scripts/record-pompom.mjs --size 480x640 --out public/model/pompom-poster.png
- *   node scripts/record-pompom.mjs --url http://127.0.0.1:3100/preview --out docs/asset-preview.png --size 480x640
+ *   node scripts/record-pompom.mjs --bg transparent
+ *   node scripts/record-pompom.mjs --size 480x640 --out public/model/pompom-poster.png --bg transparent
+ *   node scripts/record-pompom.mjs --url http://localhost:3000/preview --out docs/asset-preview.png --size 480x640 --inject-css "..."
  *   node scripts/record-pompom.mjs --keep        # 保留 public/model/.preview/ 便于调试
+ *
+ * 背景：3渲2 新视觉是**透明底**（叠在浅蓝白窗光上）。离线预览页默认 `--bg light`
+ * （浅蓝白窗光，用于验收截图），出海报用 `--bg transparent` 得到带 alpha 的 PNG。
  *
  * 依赖：pnpm install 已装 three；本机有 google-chrome / chromium（可用 CHROME_BIN 覆盖）。
  */
@@ -53,6 +56,8 @@ function parseArgs(argv) {
     url: "",
     keep: false,
     debug: false,
+    bg: "light",
+    injectCss: "",
     chrome: process.env.CHROME_BIN || "google-chrome",
     timeoutMs: 90_000,
   };
@@ -61,6 +66,8 @@ function parseArgs(argv) {
     if (arg === "--out") args.out = path.resolve(argv[++i]);
     else if (arg === "--size") args.size = argv[++i];
     else if (arg === "--url") args.url = argv[++i];
+    else if (arg === "--bg") args.bg = argv[++i];
+    else if (arg === "--inject-css") args.injectCss = argv[++i];
     else if (arg === "--chrome") args.chrome = argv[++i];
     else if (arg === "--timeout") args.timeoutMs = Number(argv[++i]) * 1000;
     else if (arg === "--keep") args.keep = true;
@@ -71,6 +78,9 @@ function parseArgs(argv) {
     } else {
       throw new Error(`未知参数：${arg}`);
     }
+  }
+  if (!["light", "dark", "transparent"].includes(args.bg)) {
+    throw new Error(`--bg 只支持 light / dark / transparent（收到 ${args.bg}）`);
   }
   const match = /^(\d+)x(\d+)$/.exec(args.size);
   if (!match) throw new Error(`--size 需要 WxH 格式，例如 480x640（收到 ${args.size}）`);
@@ -87,7 +97,10 @@ function printHelp() {
 
   --out <path>     输出 PNG 路径（默认 public/model/pompom-poster.png）
   --size <WxH>     截图尺寸（默认 480x640）
+  --bg <type>      离线预览页背景：light（浅蓝白窗光，默认）/ dark / transparent
+                   （transparent 会输出带 alpha 的 PNG，用于降级海报）
   --url <url>      截取已运行的 dev server 页面（跳过离线预览页）
+  --inject-css <css>  截图前向页面 <head> 注入一段 CSS（可临时把 /preview 改成浅色底）
   --chrome <bin>   Chrome 可执行文件（默认 google-chrome / CHROME_BIN）
   --timeout <sec>  Chrome 超时秒数（默认 90）
   --keep           保留 public/model/.preview/ 临时预览页
@@ -144,30 +157,61 @@ async function copyModuleGraph(entryAbsPath) {
   return vendorRel;
 }
 
-function previewHtml() {
+/** 预览页背景：light = 新版左栏的浅蓝白窗光；dark = 旧调试底；transparent = 出带 alpha 海报。 */
+function previewBackground(bg) {
+  if (bg === "transparent") {
+    return `
+  :root { color-scheme: light; }
+  html, body, #stage { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+  body { display: flex; }
+  #stage { position: relative; flex: 1; }`;
+  }
+  if (bg === "dark") {
+    return `
+  :root { color-scheme: dark; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #070b1c; }
+  body { display: flex; }
+  #stage {
+    position: relative; flex: 1;
+    background: radial-gradient(120% 82% at 50% 0%, #1c2557 0%, #0d1330 55%, #070b1c 100%);
+  }
+  #stage::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(58% 38% at 50% 88%, rgba(217,180,106,.16), transparent 72%);
+  }
+  #status { color: #d9b46a; }`;
+  }
+  // light：对齐新版左栏「浅蓝白窗光」：顶部白光晕 + 白色窗格竖线 + 蓝白渐变
+  return `
+  :root { color-scheme: light; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #eef5ff; }
+  body { display: flex; }
+  #stage {
+    position: relative; flex: 1;
+    background:
+      radial-gradient(110% 55% at 50% 0%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 62%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 88px, rgba(255,255,255,.72) 88px, rgba(255,255,255,.72) 92px),
+      linear-gradient(180deg, #f4f9ff 0%, #e2ecfd 50%, #cfdff7 100%);
+  }
+  #stage::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(60% 32% at 50% 100%, rgba(190,212,245,.4), transparent 72%);
+  }
+  #status { color: #5b6a99; }`;
+}
+
+function previewHtml(bg) {
   return `<!doctype html>
 <html lang="zh-CN" data-ready="0">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PomPom stage preview</title>
-<style>
-  :root { color-scheme: dark; }
-  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #070b1c; }
-  body { display: flex; }
-  #stage {
-    position: relative; flex: 1;
-    background:
-      radial-gradient(120% 82% at 50% 0%, #1c2557 0%, #0d1330 55%, #070b1c 100%);
-  }
-  #stage::before {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(58% 38% at 50% 88%, rgba(217,180,106,.16), transparent 72%);
-  }
+<style>${previewBackground(bg)}
   #status {
     position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
     font: 12px/1.5 system-ui, "Noto Sans SC", sans-serif;
-    letter-spacing: .18em; color: #d9b46a; opacity: .85; white-space: nowrap;
+    letter-spacing: .18em; opacity: .85; white-space: nowrap;
   }
 </style>
 <script type="importmap">
@@ -219,7 +263,7 @@ function previewHtml() {
 }
 
 /** 生成临时预览页：vendor 模块图 + pompomCore.js + preview.html */
-async function preparePreview() {
+async function preparePreview(bg) {
   copiedModules.clear();
   await fs.rm(PREVIEW_DIR, { recursive: true, force: true });
   await fs.mkdir(PREVIEW_DIR, { recursive: true });
@@ -227,7 +271,7 @@ async function preparePreview() {
   await copyModuleGraph(path.join(THREE_DIR, "build", "three.module.js"));
   await copyModuleGraph(path.join(THREE_DIR, "examples", "jsm", "loaders", "FBXLoader.js"));
   await fs.copyFile(CORE_FILE, path.join(PREVIEW_DIR, "pompomCore.js"));
-  await fs.writeFile(path.join(PREVIEW_DIR, "preview.html"), previewHtml(), "utf8");
+  await fs.writeFile(path.join(PREVIEW_DIR, "preview.html"), previewHtml(bg), "utf8");
 }
 
 function startStaticServer() {
@@ -292,7 +336,7 @@ function chromeEnv() {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** 极简 CDP 客户端：等页面里的组件 data-status="ready" 后再截图，避免截到加载中。 */
-async function captureWithCdp({ chrome, url, out, width, height, timeoutMs, debug }) {
+async function captureWithCdp({ chrome, url, out, width, height, timeoutMs, debug, bg, injectCss }) {
   const profileDir = path.join(os.tmpdir(), `pompom-chrome-${process.pid}-${Date.now()}`);
   await fs.mkdir(profileDir, { recursive: true });
   const args = [
@@ -454,6 +498,19 @@ async function captureWithCdp({ chrome, url, out, width, height, timeoutMs, debu
         console.log("[record-pompom] debug 读取失败:", error.message);
       }
     }
+    // 5.5) 临时注入 CSS（例如把 /preview 的深色容器改成新版浅蓝白窗光；不改 src/app）
+    if (injectCss) {
+      const cssLiteral = JSON.stringify(injectCss);
+      await evaluate(
+        `(() => { const style = document.createElement('style'); style.setAttribute('data-record-inject', '1'); style.textContent = ${cssLiteral}; document.head.appendChild(style); return true; })()`,
+      );
+    }
+    // 5.6) 透明底：海报需要带 alpha，让 PNG 叠在浅色左栏上而不是一块深色矩形
+    if (bg === "transparent") {
+      await send("Emulation.setDefaultBackgroundColorOverride", {
+        color: { r: 0, g: 0, b: 0, a: 0 },
+      });
+    }
     // 再等 650ms 让海报淡出过渡结束（poster fade 500ms），同时避开首次眨眼
     await sleep(650);
     const shot = await send("Page.captureScreenshot", { format: "png", fromSurface: true });
@@ -487,12 +544,12 @@ async function main() {
         );
       }
     } else {
-      await preparePreview();
+      await preparePreview(args.bg);
       preparedPreview = true;
       const started = await startStaticServer();
       server = started.server;
       targetUrl = `http://127.0.0.1:${started.port}/model/.preview/preview.html`;
-      console.log(`[record-pompom] 离线模式：临时静态服务器 ${targetUrl}`);
+      console.log(`[record-pompom] 离线模式（bg=${args.bg}）：临时静态服务器 ${targetUrl}`);
     }
 
     const result = await captureWithCdp({
@@ -503,6 +560,8 @@ async function main() {
       height: args.height,
       timeoutMs: args.timeoutMs,
       debug: args.debug,
+      bg: args.bg,
+      injectCss: args.injectCss,
     });
 
     const stat = await fs.stat(args.out);
