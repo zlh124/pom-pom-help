@@ -39,6 +39,8 @@
 ## 快速开始
 
 ```bash
+git clone --recurse-submodules git@github.com:zlh124/pom-pom-help.git
+cd pom-pom-help
 npm install                 # 或 pnpm install
 cp .env.example .env.local  # 填入 DEEPSEEK_API_KEY
 npm run data:sync           # StarRailRes → data/pompom.sqlite
@@ -82,7 +84,7 @@ docker run --rm -p 3000:3000 --env-file .env.local -v "$PWD/data:/app/data" pom-
 src/app/            # / 聊天、/quiz 帕姆问问、/settings、/api/chat(SSE)、/preview(3D 调试)
 src/components/     # chat/（气泡、卡片、富文本）、pompom/（3D 立绘）、quiz/、settings/
 src/lib/            # agent/（工具循环+流式）、tools/（确定性查询）、retrieval/（分词+BM25）、db/、corpus/
-corpus/             # 语料即代码（taxonomy v2）：characters/ world/ ingame/ enemies/ npcs/ systems/ guides/ live/ quiz/ persona/ + taxonomy.yaml
+corpus/             # 独立语料仓库（git submodule → zlh124/pom-pom-help-corpus）
 scripts/            # sync-data.ts、sync-wiki.ts、build-index.ts、check-corpus.ts、screenshot-*.mjs
 data/               # 本地生成：pompom.sqlite / index.sqlite / raw/（gitignored）
 docs/               # plan.md 方案、research/ 调研、screens/ 截图
@@ -91,11 +93,11 @@ assets/model/       # 用户提供的 PomPom FBX 模型（版权归原作者，�
 
 ## 语料贡献（PR 欢迎）
 
-`corpus/` 是知识库的唯一人工来源，目录由 [corpus/taxonomy.yaml](corpus/taxonomy.yaml) 注册、规则见 [corpus/README.md](corpus/README.md)：
+`corpus/` 是独立语料仓库（[zlh124/pom-pom-help-corpus](https://github.com/zlh124/pom-pom-help-corpus)）的 submodule，目录由 `corpus/taxonomy.yaml` 注册、规则见语料仓库 README：
 
 - 每条必须有 `sources`（可点开 URL）、`version`、`license: CC-BY-SA-4.0`；
 - 允许：事实提炼、短引用（≤100 字）、自己的配队思路；禁止：整篇转载、图片、未标注来源的数值；
-- 校验：`python3 corpus/scripts/check_corpus.py`；重建索引 `npm run corpus:index`。
+- 校验/重建索引：`npm run corpus:check && npm run corpus:index`（在 app 仓库）；语料 PR 请提到 [语料仓库](https://github.com/zlh124/pom-pom-help-corpus)。
 
 v1 已收录 15 个热门角色配装、9 套配队、5 篇机制指南、1 周题库（详见 `corpus/`）。其余角色欢迎按模板补齐。
 

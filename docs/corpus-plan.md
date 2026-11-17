@@ -341,7 +341,8 @@ scripts/adapters/
 - ✅ 校验：`corpus:check` 0 error（31 文档/116 别名）；`corpus:index` 121 块；`tsc` 通过；`test:ui` 4/4；**评测 40/40（100%）**，引用 100%、人设 100%、P50 3.2s；
 - ✅ 附带修复：模型请求超时（工具轮 75s/流式 150s/整体 180s 看门狗 + eval 单题 150s），避免个别请求挂起 17 分钟；配队查询容错（「常规击破队怎么组」→命中「常规击破」模板）
 - ✅ 迁移脚本留档：`scripts/migrate-corpus-v2.ts`（`--dry-run` / `--apply`）；
-- ⬜ 待办：独立语料仓库 + submodule（需先建 `pom-pom-help-corpus` 空仓库）；P2 内容（world/enemies 试点）。
+- ✅ 独立语料仓库已完成（2026-11-17）：`zlh124/pom-pom-help-corpus`（保留 corpus 路径历史，含自包含校验/CI/CC-BY-SA 许可），app 仓库通过 **git submodule** 挂载到 `corpus/`；app CI 已加 `submodules: recursive`；
+- ⬜ 待办：P2 内容（world/enemies 试点）。
 
 ## 12. 原待拍板项（已全部确认，留档）
 

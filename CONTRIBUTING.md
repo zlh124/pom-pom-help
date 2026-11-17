@@ -1,22 +1,26 @@
 # 贡献指南
 
-感谢你愿意帮帕姆补充知识库！本项目采用「语料即代码」：`corpus/` 下的每个文件都是一条可检索的知识，修改后跑一遍索引即可生效。
+感谢你愿意帮帕姆补充知识库！
+
+> **语料 PR 请提到独立语料仓库**：[zlh124/pom-pom-help-corpus](https://github.com/zlh124/pom-pom-help-corpus)
+> 本仓库只接受代码/文档 PR；`corpus/` 是挂载该语料仓库的 git submodule。
+> 本地开发：`git submodule update --init --recursive` 后再 `npm run corpus:check && npm run corpus:index`。
 
 ## 一、可以贡献什么
 
 | 类型 | 目录 | 内容 |
 | --- | --- | --- |
-| 角色配装 | `corpus/characters/builds/<角色id>.yaml` | 遗器套装/主副词条/光锥/配队模板 |
-| 角色设定/语音 | `corpus/characters/profiles/`、`stories/` | 小传、故事、台词 |
-| 配队 | `corpus/guides/teams/<slug>.yaml` | 队伍流派（4 人位 + 思路 + 变体） |
-| 机制指南 | `corpus/systems/<subtype>/*.md` | 战斗/养成/终局/模拟宇宙/抽卡机制 |
-| 世界观 | `corpus/world/{cosmology,regions,factions,history,glossary}/` | 星神命途、星球、阵营、编年史、名词 |
-| 局内文本 | `corpus/ingame/{books,messages,quests,...}/` | 书籍、短信、任务、成就、道具文案 |
-| 敌人 / NPC | `corpus/enemies/*`、`corpus/npcs/*` | 弱点机制、NPC 身份位置 |
-| 版本/活动 | `corpus/live/{versions,events,banners}/` | 版本内容、活动、卡池 |
-| 别名/黑话 | `corpus/aliases.yaml` | 玩家简称 → 官名（如「龙丹 → 丹恒·饮月」） |
-| 题库 | `corpus/quiz/weeks/<年-周>.yaml` | 帕姆问问 10 题（可考据、带讲解） |
-| 人设改进 | `corpus/persona/card/pampam.yaml` | 帕姆语气/规则/few-shot |
+| 角色配装 | `characters/builds/<角色id>.yaml`（语料仓库） | 遗器套装/主副词条/光锥/配队模板 |
+| 角色设定/语音 | `characters/profiles/`、`stories/`（语料仓库） | 小传、故事、台词 |
+| 配队 | `guides/teams/<slug>.yaml`（语料仓库） | 队伍流派（4 人位 + 思路 + 变体） |
+| 机制指南 | `systems/<subtype>/*.md`（语料仓库） | 战斗/养成/终局/模拟宇宙/抽卡机制 |
+| 世界观 | `world/{cosmology,regions,factions,history,glossary}/`（语料仓库） | 星神命途、星球、阵营、编年史、名词 |
+| 局内文本 | `ingame/{books,messages,quests,...}/`（语料仓库） | 书籍、短信、任务、成就、道具文案 |
+| 敌人 / NPC | `enemies/*`、`npcs/*`（语料仓库） | 弱点机制、NPC 身份位置 |
+| 版本/活动 | `live/{versions,events,banners}/`（语料仓库） | 版本内容、活动、卡池 |
+| 别名/黑话 | `aliases.yaml`（语料仓库） | 玩家简称 → 官名（如「龙丹 → 丹恒·饮月」） |
+| 题库 | `quiz/weeks/<年-周>.yaml`（语料仓库） | 帕姆问问 10 题（可考据、带讲解） |
+| 人设改进 | `persona/card/pampam.yaml`（语料仓库） | 帕姆语气/规则/few-shot |
 
 ## 二、硬性规则（CI 会校验）
 
@@ -40,7 +44,7 @@ npm run build && npm start        # 本地验证
 ## 四、提交 PR
 
 1. Fork → 新建分支 `corpus/<简述>`；
-2. 只改 `corpus/**`（如需改代码请另开 PR）；
+2. 语料改动请提到语料仓库；本仓库只改代码/文档；
 3. PR 描述里写：改了哪些角色/条目、数据来源、你如何验证；
 4. 维护者会检查：来源是否真实、版本是否匹配当前游戏版本、是否有版权风险；
 5. 合并后重建索引发布。

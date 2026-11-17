@@ -1,5 +1,5 @@
 name: 语料纠错 / 补充
-description: 角色配装、配队、机制、题库或别名有误 / 缺失
+description: 角色配装、配队、机制、题库或别名有误 / 缺失（语料 PR 请提到 pom-pom-help-corpus）
 title: "[语料] "
 labels: ["corpus"]
 body:
